@@ -1,0 +1,41 @@
+#!/bin/sh
+#
+#  runGeneModelQC
+###########################################################################
+
+#
+# A copy of this script is intended to reside in /usr/local/bin on all
+# servers to make it available in the common PATH. Its purpose is to
+# allow anyone to run the gene model QC reports without having to provide
+# the full path to where the wrapper script is installed.
+#
+
+USAGE="Usage: runGeneModelQC {ensembl | ncbi | vega}"
+
+WRAPPER=/usr/local/mgi/live/dataload/genemodelload/bin/genemodelQC.sh
+
+#
+# Make sure a valid provider name was passed as an argument.
+#
+if [ $# -ne 1 ]
+then
+    echo ${USAGE}; exit 1
+elif [ "`echo $1 | egrep -i '^ensembl$|^ncbi$|^vega$'`" = "" ]
+then
+    echo ${USAGE}; exit 1
+fi
+
+#
+# The genemodelload product is not installed on all servers, so make sure
+# the wrapper script exists on this one.
+#
+if [ ! -x ${WRAPPER} ]
+then
+    echo "QC report script does not exist on this server"; exit 1
+fi
+
+#
+# Invoke the gene model QC report wrapper script with the argument that
+# was passed to this script.
+#
+${WRAPPER} $*

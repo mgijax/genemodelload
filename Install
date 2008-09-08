@@ -1,0 +1,93 @@
+#!/bin/sh
+#
+# Installation script for the genemodelload product
+#
+###########################################################################
+
+cd `dirname $0`
+
+COMMON_CONFIG=genemodel_common.config
+PROVIDER_CONFIGS="genemodel_ensembl.config genemodel_ncbi.config genemodel_vega.config"
+
+#
+#  Function called when the install fails.
+#
+installFailed ()
+{
+    echo "Installation Failed: `date`"
+    exit 1
+}
+
+
+#
+# Make sure all the configuration files exist.
+#
+for i in ${COMMON_CONFIG} ${PROVIDER_CONFIGS}
+do
+    if [ ! -r ${i} ]
+    then
+        echo "Missing configuration file: ${i}"
+        installFailed
+    fi
+done
+
+#
+# Source the common configuration file.
+#
+. ${COMMON_CONFIG}
+
+#
+# Check to see if this is a development installation.
+#
+DEV=""
+if [ "${INSTALL_TYPE}" = "dev" ]
+then
+    DEV="-d"
+fi
+
+#
+# Run the DLAInstall.
+#
+${DLAINSTALL} ${DEV}
+
+#
+# Create the input directory.
+#
+if [ ! -d ${INPUTDIR} ]
+then
+    mkdir -p ${INPUTDIR}
+fi
+
+#
+# If this installation is being done on shire, make sure the directory exists
+# where the curators will put the input files (this should be on hobbiton).
+# Make symbolic links to the input files.
+#
+if [ ${SERVER_NAME} = "shire" ]
+then
+    if [ ! -d ${CURATOR_INPUTDIR} ]
+    then
+        mkdir -p ${CURATOR_INPUTDIR}
+    fi
+
+    #
+    # Each provider configuration file has the paths to the gene model and
+    # association input files. Use those paths to create links to the
+    # corresponding input files in the curator input directory.
+    #
+    for i in ${PROVIDER_CONFIGS}
+    do
+        . ${i}
+
+        GM_FILENAME=`basename ${GM_FILE}`
+        ASSOC_FILENAME=`basename ${ASSOC_FILE}`
+
+        rm -f ${GM_FILE}
+        rm -f ${ASSOC_FILE}
+
+        ln -s ${CURATOR_INPUTDIR}/${GM_FILENAME} ${GM_FILE}
+        ln -s ${CURATOR_INPUTDIR}/${ASSOC_FILENAME} ${ASSOC_FILE}
+    done
+fi
+
+exit 0

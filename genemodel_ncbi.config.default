@@ -1,0 +1,87 @@
+#format: sh
+#
+#  genemodel_ncbi.config.default
+#
+#  This file sets up the environment variables that are needed by the
+#  gene model QC reports and loader that are specific to NCBI.
+#
+###########################################################################
+
+# Gene model provider name
+#
+GM_PROVIDER=NCBI
+
+export GM_PROVIDER
+
+# Full path to the gene model and association files
+#
+GM_FILE=${INPUTDIR}/ncbi_genemodels.txt
+ASSOC_FILE=${INPUTDIR}/ncbi_assoc.txt
+
+export GM_FILE ASSOC_FILE
+
+# Full path to the load-ready association file that will be created.
+#
+ASSOC_LOAD_FILE=${OUTPUTDIR}/ncbi_assoc_load.txt
+
+export ASSOC_LOAD_FILE
+
+# Minimum number of lines expected for the input files (for sanity check)
+#
+GM_FILE_MINIMUM_SIZE=30000
+ASSOC_FILE_MINIMUM_SIZE=30000
+
+export GM_FILE_MINIMUM_SIZE ASSOC_FILE_MINIMUM_SIZE
+
+# The logical DB for the header of the load-ready association file.
+#
+ASSOC_FILE_LOGICALDB="NCBI Gene Model"
+
+export ASSOC_FILE_LOGICALDB
+
+# Full path to the log files
+#
+GENEMODELQC_LOGFILE=${LOGDIR}/ncbi_genemodelQC.log
+GENEMODELLOAD_LOGFILE=${LOGDIR}/ncbi_genemodelload.log
+
+export GENEMODELQC_LOGFILE GENEMODELLOAD_LOGFILE
+
+# Temp table that will be loaded from the input files
+#
+TEMP_GM_TABLE=NCBI_GM
+TEMP_ASSOC_TABLE=NCBI_Assoc
+
+export TEMP_GM_TABLE TEMP_ASSOC_TABLE
+
+# Full path to the bcp files for loading the input files into temp tables
+#
+TEMP_GM_BCPFILE=${OUTPUTDIR}/temp_ncbi_gm.bcp
+TEMP_ASSOC_BCPFILE=${OUTPUTDIR}/temp_ncbi_assoc.bcp
+
+export TEMP_GM_BCPFILE TEMP_ASSOC_BCPFILE
+
+# Full path to the sanity/QC reports
+#
+GM_SANITY_RPT=${RPTDIR}/ncbi_gm_sanity.rpt
+ASSOC_SANITY_RPT=${RPTDIR}/ncbi_assoc_sanity.rpt
+INVALID_MARKER_RPT=${RPTDIR}/ncbi_invalid_marker.rpt
+SEC_MARKER_RPT=${RPTDIR}/ncbi_sec_marker.rpt
+MISSING_GMID_RPT=${RPTDIR}/ncbi_missing_gmid.rpt
+CHR_DISCREP_RPT=${RPTDIR}/ncbi_chr_discrep.rpt
+
+export GM_SANITY_RPT ASSOC_SANITY_RPT
+export INVALID_MARKER_RPT SEC_MARKER_RPT
+export MISSING_GMID_RPT CHR_DISCREP_RPT
+
+# Name of the configuration file for the assemblyseqload.
+#
+ASSEMBLY_CONFIG=ncbi_assemblyseqload.config
+
+export ASSEMBLY_CONFIG
+
+# Reload the gene models (true/false)?  If false, only the associations
+# will be deleted/reloaded.
+#
+RELOAD_GENEMODELS=false
+
+export RELOAD_GENEMODELS
