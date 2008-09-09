@@ -51,6 +51,17 @@ fi
 ${DLAINSTALL} ${DEV}
 
 #
+# The DLAInstall script removes all permissions from shell scripts for
+# group "other" on non-development servers. The gene model QC report wrapper
+# script needs to have permissions restored on hobbiton to allow the
+# curation staff to run it.
+#
+if [ ${SERVER_NAME} = "hobbiton" ]
+then
+    chmod -f 755 ${GENEMODEL_QC_SH}
+fi
+
+#
 # Create the input directory.
 #
 if [ ! -d ${INPUTDIR} ]
