@@ -177,12 +177,14 @@ fi
 # If the gene models are to be reloaded in addition to the associations, call
 # the assemblyseqload. Otherwise, call the wrapper for the association load.
 #
+echo "" >> ${LOG}
+date >> ${LOG}
 if [ ${RELOAD_GENEMODELS} = "true" ]
 then
-    echo "Delete/reload gene models and associations" | tee -a ${LOG}
+    echo "Load gene models and associations" | tee -a ${LOG}
     ${ASSEMBLY_WRAPPER} ${ASSEMBLY_CONFIG} >> ${LOG}
 else
-    echo "Delete/reload gene model associations" | tee -a ${LOG}
+    echo "Load gene model associations" | tee -a ${LOG}
     ${ASSOCLOAD_WRAPPER} ${ASSEMBLY_CONFIG} >> ${LOG}
 fi
 
@@ -191,6 +193,9 @@ TIMESTAMP=`date '+%Y%m%d.%H%M'`
 #
 # Archive a copy of each of the input files, adding a timestamp suffix.
 #
+echo "" >> ${LOG}
+date >> ${LOG}
+echo "Archive input files" | tee -a ${LOG}
 for FILE in ${GM_FILE} ${ASSOC_FILE}
 do
     ARC_FILE=`basename ${FILE}`.${TIMESTAMP}
