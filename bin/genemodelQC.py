@@ -165,6 +165,10 @@ assoc = {}
 # Throws: Nothing
 #
 def init ():
+    print 'DB Server:' + db.get_sqlServer()
+    print 'DB Name:  ' + db.get_sqlDatabase()
+    sys.stdout.flush()
+
     db.set_sqlUser(user)
     db.set_sqlPasswordFromFile(passwordFile)
 
