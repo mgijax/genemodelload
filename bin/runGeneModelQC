@@ -2,40 +2,71 @@
 #
 #  runGeneModelQC
 ###########################################################################
-
 #
 # A copy of this script is intended to reside in /usr/local/bin on all
-# servers to make it available in the common PATH. Its purpose is to
-# allow anyone to run the gene model QC reports without having to provide
-# the full path to where the wrapper script is installed.
+# servers to make it available in the common PATH.
 #
-
-USAGE="Usage: runGeneModelQC {ensembl | ncbi | vega}"
-
-WRAPPER=/usr/local/mgi/live/dataload/genemodelload/bin/genemodelQC.sh
-
+# Its allows someone to run the gene model QC reports without having to
+# provide the full path to where the wrapper script is installed.
 #
-# Make sure a valid provider name was passed as an argument.
-#
-if [ $# -ne 1 ]
-then
-    echo ${USAGE}; exit 1
-elif [ "`echo $1 | egrep -i '^ensembl$|^ncbi$|^vega$'`" = "" ]
-then
-    echo ${USAGE}; exit 1
-fi
+###########################################################################
+
+usage ()
+{
+    echo "Usage: runGeneModelQC provider assoc_file [ -gm gm_file ]"
+    echo "       where"
+    echo "           provider = ensembl, ncbi or vega"
+    echo "           assoc_file = path to the association file"
+    echo "           gm_file = path to the gene model file (optional)"
+    exit 1
+}
+
+GENEMODELLOADDIR=/usr/local/mgi/live/dataload/genemodelload
+WRAPPER=${GENEMODELLOADDIR}/bin/genemodelQC.sh
 
 #
 # The genemodelload product is not installed on all servers, so make sure
-# the wrapper script exists on this one.
+# it exists on this one.
 #
-if [ ! -x ${WRAPPER} ]
+if [ ! -d ${GENEMODELLOADDIR} ]
 then
-    echo "QC report script does not exist on this server"; exit 1
+    echo "The gene model load software does not exist on this server"; exit 1
 fi
 
 #
-# Invoke the gene model QC report wrapper script with the argument that
-# was passed to this script.
+# Make sure a valid provider name and association file were passed as
+# arguments to the script. Optionally, a gene model file can be given.
+#
+if [ $# -ne 2 -a $# -ne 4 ]
+then
+    usage
+else
+    if [ "`echo $1 | egrep -i '^ensembl$|^ncbi$|^vega$'`" = "" ]
+    then
+        usage
+    fi
+
+    if [ ! -r $2 ]
+    then
+        echo "Association file does not exist: $2"; exit 1
+    fi
+
+    if [ $# -eq 4 ]
+    then
+        if [ $3 != "-gm" ]
+        then
+            usage
+        fi
+
+        if [ ! -r $4 ]
+        then
+            echo "Gene model file does not exist: $4"; exit 1
+        fi
+    fi
+fi
+
+#
+# Invoke the gene model QC report wrapper script with the arguments that
+# were passed to this script.
 #
 ${WRAPPER} $*

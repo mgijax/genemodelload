@@ -7,26 +7,43 @@
 #
 ###########################################################################
 
-# Gene model provider name
+# Gene model provider name.
 #
 GM_PROVIDER=Ensembl
 
 export GM_PROVIDER
 
-# Full path to the gene model and association files
+# Full path to the current gene model file (on hobbiton).
 #
-GM_FILE=${INPUTDIR}/ensembl_genemodels.txt
-ASSOC_FILE=${INPUTDIR}/ensembl_assoc.txt
+GM_FILE_CURRENT=${GENEMODELDIR}/ensembl_genemodels.txt
 
-export GM_FILE ASSOC_FILE
+export GM_FILE_CURRENT
 
-# Full path to the load-ready association file that will be created.
+# Full path to the default gene model and association files.
 #
-ASSOC_LOAD_FILE=${OUTPUTDIR}/ensembl_assoc_load.txt
+GM_FILE_DEFAULT=${INPUTDIR}/ensembl_genemodels.txt
+ASSOC_FILE_DEFAULT=${INPUTDIR}/ensembl_assoc.txt
 
-export ASSOC_LOAD_FILE
+export GM_FILE_DEFAULT ASSOC_FILE_DEFAULT
 
-# Minimum number of lines expected for the input files (for sanity check)
+# Full path to the "cleaned up" gene model and association files that
+# are created and used by the sanity/QC report script.
+#
+GM_FILE_TEMP=${OUTPUTDIR}/ensembl_genemodels_temp.txt
+ASSOC_FILE_TEMP=${OUTPUTDIR}/ensembl_assoc_temp.txt
+
+export GM_FILE_TEMP ASSOC_FILE_TEMP
+
+# Full path to the load-ready gene model and association file that are
+# created by the sanity/QC report script and used as input by the assembly
+# seq loader and the association loader.
+#
+GM_FILE_LOAD=${OUTPUTDIR}/ensembl_genemodels_load.txt
+ASSOC_FILE_LOAD=${OUTPUTDIR}/ensembl_assoc_load.txt
+
+export GM_FILE_LOAD ASSOC_FILE_LOAD
+
+# Minimum number of lines expected for the input files (for sanity check).
 #
 GM_FILE_MINIMUM_SIZE=25000
 ASSOC_FILE_MINIMUM_SIZE=25000
@@ -39,30 +56,30 @@ ASSOC_FILE_LOGICALDB="Ensembl Gene Model"
 
 export ASSOC_FILE_LOGICALDB
 
-# Full path to the log files
+# Full path to the log files.
 #
 GENEMODELQC_LOGFILE=${LOGDIR}/ensembl_genemodelQC.log
 GENEMODELLOAD_LOGFILE=${LOGDIR}/ensembl_genemodelload.log
 
 export GENEMODELQC_LOGFILE GENEMODELLOAD_LOGFILE
 
-# Temp table that will be loaded from the input files
+# Temp table that will be loaded from the input files.
 #
 TEMP_GM_TABLE=Ensembl_GM
 TEMP_ASSOC_TABLE=Ensembl_Assoc
 
 export TEMP_GM_TABLE TEMP_ASSOC_TABLE
 
-# Full path to the bcp files for loading the input files into temp tables
+# Full path to the bcp files for loading the input files into temp tables.
 #
 TEMP_GM_BCPFILE=${OUTPUTDIR}/temp_ensembl_gm.bcp
 TEMP_ASSOC_BCPFILE=${OUTPUTDIR}/temp_ensembl_assoc.bcp
 
 export TEMP_GM_BCPFILE TEMP_ASSOC_BCPFILE
 
-# Full path to the sanity/QC reports
+# Full path to the sanity/QC reports.
 #
-GM_SANITY_RPT=${RPTDIR}/ensembl_gm_sanity.rpt
+GM_SANITY_RPT=${RPTDIR}/ensembl_genemodels_sanity.rpt
 ASSOC_SANITY_RPT=${RPTDIR}/ensembl_assoc_sanity.rpt
 INVALID_MARKER_RPT=${RPTDIR}/ensembl_invalid_marker.rpt
 SEC_MARKER_RPT=${RPTDIR}/ensembl_sec_marker.rpt

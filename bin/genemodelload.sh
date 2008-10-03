@@ -28,8 +28,8 @@
 #
 #  Inputs:
 #
-#      - Gene model input file (${GM_FILE}) with the following tab-delimited
-#        fields:
+#      - Gene model input file (${GM_FILE_DEFAULT}) with the following
+#        tab-delimited fields:
 #
 #          1) Gene Model ID
 #          2) Chromosome
@@ -38,7 +38,7 @@
 #          5) Strand (+ or -)
 #          6) Description
 #
-#      - Association input file (${ASSOC_FILE}) with the following
+#      - Association input file (${ASSOC_FILE_DEFAULT}) with the following
 #        tab-delimited fields:
 #
 #          1) MGI ID for the Marker
@@ -63,8 +63,11 @@
 #      2) Source the configuration files to establish the environment.
 #      3) Verify that the input files exist.
 #      4) Call genemodelQC.sh to generate the sanity/QC reports.
-#      5) Load the gene models (optional) and the association.
-#      6) Archive the input files.
+#      5) Verify that the association file has been updated since the
+#         last time that the load ran.
+#      6) Load the gene models (optional) and the associations.
+#      7) Archive the input files.
+#      8) Touch the "lastrun" file to timestamp the last run of the load.
 #
 #  Notes:  None
 #
@@ -75,7 +78,7 @@
 #  Date        SE   Change Description
 #  ----------  ---  -------------------------------------------------------
 #
-#  09/08/2008  DBM  Initial development
+#  09/30/2008  DBM  Initial development
 #
 ###########################################################################
 
@@ -142,14 +145,14 @@ touch ${LOG}
 #
 # Make sure the input files exist (regular file or symbolic link).
 #
-if [ ! -f ${GM_FILE} -a ! -h ${GM_FILE} ]
+if [ "`ls -L ${GM_FILE_DEFAULT} 2>/dev/null`" = "" ]
 then
-    echo "Missing gene model input file: ${GM_FILE}" | tee -a ${LOG}
+    echo "Missing gene model input file: ${GM_FILE_DEFAULT}" | tee -a ${LOG}
     exit 1
 fi
-if [ ! -f ${ASSOC_FILE} -a ! -h ${ASSOC_FILE} ]
+if [ "`ls -L ${ASSOC_FILE_DEFAULT} 2>/dev/null`" = "" ]
 then
-    echo "Missing association input file: ${ASSOC_FILE}" | tee -a ${LOG}
+    echo "Missing association input file: ${ASSOC_FILE_DEFAULT}" | tee -a ${LOG}
     exit 1
 fi
 
@@ -166,11 +169,27 @@ trap "rm -f ${TMP_FILE}" 0 1 2 15
 echo "" >> ${LOG}
 date >> ${LOG}
 echo "Generate the sanity/QC reports" | tee -a ${LOG}
-{ ${GENEMODEL_QC_SH} ${PROVIDER} ${RUNTYPE} 2>&1; echo $? > ${TMP_FILE}; } >> ${LOG}
+{ ${GENEMODEL_QC_SH} ${PROVIDER} ${ASSOC_FILE_DEFAULT} ${RUNTYPE} 2>&1; echo $? > ${TMP_FILE}; } >> ${LOG}
 if [ `cat ${TMP_FILE}` -eq 1 ]
 then
     echo "QC reports failed" | tee -a ${LOG}
     exit 1
+fi
+
+#
+# There should be a "lastrun" file in the input directory that was created
+# the last time the gene model load was run for the given provider. If this
+# file exists and is more recent than the association file, the load does
+# not need to be run.
+#
+LASTRUN_FILE=${INPUTDIR}/${GM_PROVIDER}.lastrun
+if [ -f ${LASTRUN_FILE} ]
+then
+    if /usr/local/bin/test ${LASTRUN_FILE} -nt ${ASSOC_FILE_DEFAULT}
+    then
+        echo "Association file has not been updated - skipping load" | tee -a ${LOG}
+        exit 0
+    fi
 fi
 
 #
@@ -182,10 +201,10 @@ date >> ${LOG}
 if [ ${RELOAD_GENEMODELS} = "true" ]
 then
     echo "Load gene models and associations" | tee -a ${LOG}
-    ${ASSEMBLY_WRAPPER} ${ASSEMBLY_CONFIG} >> ${LOG}
+#    ${ASSEMBLY_WRAPPER} ${ASSEMBLY_CONFIG} >> ${LOG}
 else
     echo "Load gene model associations" | tee -a ${LOG}
-    ${ASSOCLOAD_WRAPPER} ${ASSEMBLY_CONFIG} >> ${LOG}
+#    ${ASSOCLOAD_WRAPPER} ${ASSEMBLY_CONFIG} >> ${LOG}
 fi
 
 TIMESTAMP=`date '+%Y%m%d.%H%M'`
@@ -196,10 +215,15 @@ TIMESTAMP=`date '+%Y%m%d.%H%M'`
 echo "" >> ${LOG}
 date >> ${LOG}
 echo "Archive input files" | tee -a ${LOG}
-for FILE in ${GM_FILE} ${ASSOC_FILE}
+for FILE in ${GM_FILE_DEFAULT} ${ASSOC_FILE_DEFAULT}
 do
     ARC_FILE=`basename ${FILE}`.${TIMESTAMP}
     cp -p $FILE ${ARCHIVEDIR}/${ARC_FILE}
 done
+
+#
+# Touch the "lastrun" file to note when the load was run.
+#
+touch ${LASTRUN_FILE}
 
 exit 0

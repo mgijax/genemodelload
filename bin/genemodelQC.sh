@@ -10,21 +10,15 @@
 #
 #  Usage:
 #
-#      genemodelQC.sh  provider_name  [ "live" ]
+#      genemodelQC.sh  provider_name  assoc_file [ -gm gm_file ] [ "live" ]
 #
 #      where
 #          provider_name = ensembl, ncbi or vega
+#          assoc_file = path to the association file
+#          gm_file = path to the gene model file (optional)
 #          live = option to let the script know that this is a "live" run
-#                 so the input/output files should be under the /data/loads
+#                 so the output files are created under the /data/loads
 #                 directory instead of the current directory
-#
-#      NOTE:
-#          When someone invokes this script to test a pair of input files,
-#          they should invoke it from the directory where the input files
-#          exist and the "live" option should NOT be used. This tells the
-#          script to look in the current directory for the input files and
-#          to create the reports and other output files in the current
-#          directory too.
 #
 #  Env Vars:
 #
@@ -39,8 +33,7 @@
 #
 #  Inputs:
 #
-#      - Gene model input file (${GM_FILE}) with the following tab-delimited
-#        fields:
+#      - Gene model input file with the following tab-delimited fields:
 #
 #          1) Gene Model ID
 #          2) Chromosome
@@ -49,8 +42,7 @@
 #          5) Strand (+ or -)
 #          6) Description
 #
-#      - Association input file (${ASSOC_FILE}) with the following
-#        tab-delimited fields:
+#      - Association input file with the following tab-delimited fields:
 #
 #          1) MGI ID for the Marker
 #          2) Gene Model ID
@@ -76,13 +68,15 @@
 #
 #      1) Validate the arguments to the script.
 #      2) Source the configuration files to establish the environment.
-#      3) Verify that the input files exist.
-#      4) Initialize the report files.
-#      5) Generate the sanity reports.
-#      6) Create temp tables for the input data.
-#      7) Load the input files into temp tables.
-#      8) Call genemodelQC.py to generate the QC reports.
-#      9) Drop the temp tables.
+#      3) Determine which gene model file to use.
+#      4) Verify that the input files exist.
+#      5) Initialize the report files.
+#      6) Clean up the input files by removing blank lines, Ctrl-M, etc.
+#      7) Generate the sanity reports.
+#      8) Create temp tables for the input data.
+#      9) Load the input files into temp tables.
+#      10) Call genemodelQC.py to generate the QC reports.
+#      11) Drop the temp tables.
 #
 #  Notes:  None
 #
@@ -93,7 +87,7 @@
 #  Date        SE   Change Description
 #  ----------  ---  -------------------------------------------------------
 #
-#  09/08/2008  DBM  Initial development
+#  09/30/2008  DBM  Initial development
 #
 ###########################################################################
 
@@ -103,17 +97,19 @@ cd `dirname $0`
 
 COMMON_CONFIG=genemodel_common.config
 
-USAGE="Usage: genemodelQC.sh {ensembl | ncbi | vega}"
+USAGE='Usage: genemodelQC.sh  provider_name  assoc_file [ -gm gm_file ] [ "live" ]'
 
+GM_FILE_ARG=""
 LIVE_RUN=0; export LIVE_RUN
 
 #
-# Make sure a valid provider name was passed as the first argument to
-# determine which configuration file to use.  If the second optional
-# argument is "live", that means that the data files are located in the
+# Make sure a valid provider name and association file were passed as
+# arguments to the script. If the optional gene model file is given, it is
+# used instead of the default gene model file. If the optional "live"
+# argument is given, that means that the output files are located in the
 # /data/loads/... directory, not in the current directory.
 #
-if [ $# -lt 1 -o $# -gt 2 ]
+if [ $# -lt 2 -o $# -gt 5 ]
 then
     echo ${USAGE}; exit 1
 else
@@ -130,15 +126,22 @@ else
         echo ${USAGE}; exit 1
     fi
 
-    if [ $# -eq 2 ]
-    then
-        if [ "$2" = "live" ]
+    ASSOC_FILE=$2
+
+    while [ $# -gt 2 ]
+    do
+        if [ "$3" = "-gm" ]
+        then
+            GM_FILE_ARG=$4
+            shift 2
+        elif [ "$3" = "live" ]
         then
             LIVE_RUN=1
+            shift 1
         else
             echo ${USAGE}; exit 1
         fi
-    fi
+    done
 fi
 
 #
@@ -153,7 +156,7 @@ else
 fi
 
 #
-# If this is not a "live" run, the input/output files should reside in the
+# If this is not a "live" run, the output files should reside in the
 # current directory, so override the directory settings from the common
 # configuration file before sourcing the provider-specific configuration
 # file. This allows the file paths in the provider-specific configuration
@@ -161,10 +164,9 @@ fi
 #
 if [ ${LIVE_RUN} -eq 0 ]
 then
-    INPUTDIR=${CURRENT_DIR}
+    OUTPUTDIR=${CURRENT_DIR}
     LOGDIR=${CURRENT_DIR}
     RPTDIR=${CURRENT_DIR}
-    OUTPUTDIR=${CURRENT_DIR}
 fi
 
 #
@@ -179,21 +181,50 @@ else
 fi
 
 #
+# Go to the directory where the script was invoked from, in case the
+# input files are relative paths.
+#
+cd ${CURRENT_DIR}
+
+#
+# If the gene model file was provided as an argument to the script, use it.
+# Otherwise, use the current gene model file (on hobbiton) if this is not
+# a "live" run or use the default gene model file if this is a "live" run.
+#
+if [ "${GM_FILE_ARG}" != "" ]
+then
+    GM_FILE=${GM_FILE_ARG}
+elif [ ${LIVE_RUN} -eq 0 ]
+then
+    GM_FILE=${GM_FILE_CURRENT}
+else
+    GM_FILE=${GM_FILE_DEFAULT}
+fi
+
+#
 # Initialize the log file.
 #
 LOG=${GENEMODELQC_LOGFILE}
 rm -rf ${LOG}
 touch ${LOG}
 
+echo "CURRENT_DIR: ${CURRENT_DIR}"
+echo "OUTPUTDIR:   ${OUTPUTDIR}"
+echo "LOGDIR:      ${LOGDIR}"
+echo "RPTDIR:      ${RPTDIR}"
+echo "GM FILE:     ${GM_FILE}"
+echo "ASSOC FILE:  ${ASSOC_FILE}"
+echo "LIVE_RUN:    ${LIVE_RUN}"
+
 #
 # Make sure the input files exist (regular file or symbolic link).
 #
-if [ ! -f ${GM_FILE} -a ! -h ${GM_FILE} ]
+if [ "`ls -L ${GM_FILE} 2>/dev/null`" = "" ]
 then
     echo "Missing gene model input file: ${GM_FILE}" | tee -a ${LOG}
     exit 1
 fi
-if [ ! -f ${ASSOC_FILE} -a ! -h ${ASSOC_FILE} ]
+if [ "`ls -L ${ASSOC_FILE} 2>/dev/null`" = "" ]
 then
     echo "Missing association input file: ${ASSOC_FILE}" | tee -a ${LOG}
     exit 1
@@ -216,26 +247,38 @@ done
 TMP_FILE=/tmp/`basename $0`.$$
 trap "rm -f ${TMP_FILE}" 0 1 2 15
 
+#
+# Make sure the association file has a header record that starts with
+# "MGI ID" to indicate the the columns are in the proper order.
+#
+if [ "`head -1 ${ASSOC_FILE} | grep -i '^MGI ID'`" = "" ]
+then
+    echo "Invalid header record in association file." >> ${REPORT}
+    echo "Sanity errors detected in association file" | tee -a ${LOG}
+    exit 1
+fi
 
 #
-# FUNCTION: Check for blank lines in an input file and write the line numbers
-#           to the sanity report.
+# Convert the gene model file into a version that can be used to run the
+# sanity/QC reports against. This involves doing the following:
+# 1) Extract columns 1 thru 6
+# 2) Extract only lines that have alphanumerics (excludes blank lines)
+# 3) Remove any Ctrl-M characters (dos2unix)
 #
-checkBlankLines ()
-{
-    FILE=$1    # The input file to check
-    REPORT=$2  # The sanity report to write to
+cat ${GM_FILE} | cut -d'	' -f1-6 | grep '[0-9A-Za-z]' > ${GM_FILE_TEMP}
+dos2unix ${GM_FILE_TEMP} ${GM_FILE_TEMP} 2>/dev/null
 
-    echo "Blank Line Numbers" >> ${REPORT}
-    echo "------------------" >> ${REPORT}
-    RC=0
-    for i in `sed 's/ 	//g' ${FILE} | grep -n '^$' | cut -d':' -f1`
-    do
-        echo "Line $i" >> ${REPORT}
-        RC=1
-    done
-    return ${RC}
-}
+#
+# Convert the association file into a version that can be used to run the
+# sanity/QC reports against. This involves doing the following:
+# 1) Remove the header record
+# 2) Extract columns 1 & 2
+# 3) Remove any spaces
+# 4) Extract only lines that have alphanumerics (excludes blank lines)
+# 5) Remove any Ctrl-M characters (dos2unix)
+#
+cat ${ASSOC_FILE} | tail +2 | cut -d'	' -f1,2 | sed 's/ //g' | grep '[0-9A-Za-z]' > ${ASSOC_FILE_TEMP}
+dos2unix ${ASSOC_FILE_TEMP} ${ASSOC_FILE_TEMP} 2>/dev/null
 
 
 #
@@ -247,9 +290,9 @@ checkDupLines ()
     FILE=$1    # The input file to check
     REPORT=$2  # The sanity report to write to
 
-    echo "\n\nDuplicate Lines" >> ${REPORT}
+    echo "Duplicate Lines" >> ${REPORT}
     echo "---------------" >> ${REPORT}
-    grep -v '^$' ${FILE} | sort | uniq -d > ${TMP_FILE}
+    sort ${FILE} | uniq -d > ${TMP_FILE}
     cat ${TMP_FILE} >> ${REPORT}
     if [ `cat ${TMP_FILE} | wc -l` -eq 0 ]
     then
@@ -273,7 +316,7 @@ checkDupFields ()
 
     echo "\n\nDuplicate ${FIELD_NAME}" >> ${REPORT}
     echo "------------------------------" >> ${REPORT}
-    grep -v '^$' ${FILE} | cut -d'	' -f${FIELD_NUM} | sort | uniq -d > ${TMP_FILE}
+    cut -d'	' -f${FIELD_NUM} ${FILE} | sort | uniq -d > ${TMP_FILE}
     cat ${TMP_FILE} >> ${REPORT}
     if [ `cat ${TMP_FILE} | wc -l` -eq 0 ]
     then
@@ -303,7 +346,7 @@ checkColumns ()
             break
         for ( i=1; i<=columns; i++ ) {
             if ( $i == "" ) {
-                printf("Line %d: %s\n", NR, $0)
+                printf("%s\n", $0)
                 error=1
                 break
                 }
@@ -344,31 +387,25 @@ date >> ${LOG}
 echo "Run sanity checks on the gene model input file" >> ${LOG}
 GM_FILE_ERROR=0
 
-checkBlankLines ${GM_FILE} ${GM_SANITY_RPT}
+checkDupLines ${GM_FILE_TEMP} ${GM_SANITY_RPT}
 if [ $? -ne 0 ]
 then
     GM_FILE_ERROR=1
 fi
 
-checkDupLines ${GM_FILE} ${GM_SANITY_RPT}
+checkDupFields ${GM_FILE_TEMP} ${GM_SANITY_RPT} 1 "Gene Model IDs"
 if [ $? -ne 0 ]
 then
     GM_FILE_ERROR=1
 fi
 
-checkColumns ${GM_FILE} ${GM_SANITY_RPT} ${GM_FILE_COLUMNS}
+checkColumns ${GM_FILE_TEMP} ${GM_SANITY_RPT} ${GM_FILE_COLUMNS}
 if [ $? -ne 0 ]
 then
     GM_FILE_ERROR=1
 fi
 
-checkLineCount ${GM_FILE} ${GM_SANITY_RPT} ${GM_FILE_MINIMUM_SIZE}
-if [ $? -ne 0 ]
-then
-    GM_FILE_ERROR=1
-fi
-
-checkDupFields ${GM_FILE} ${GM_SANITY_RPT} 1 "Gene Model IDs"
+checkLineCount ${GM_FILE_TEMP} ${GM_SANITY_RPT} ${GM_FILE_MINIMUM_SIZE}
 if [ $? -ne 0 ]
 then
     GM_FILE_ERROR=1
@@ -387,25 +424,19 @@ date >> ${LOG}
 echo "Run sanity checks on the association input file" >> ${LOG}
 ASSOC_FILE_ERROR=0
 
-checkBlankLines ${ASSOC_FILE} ${ASSOC_SANITY_RPT}
+checkDupLines ${ASSOC_FILE_TEMP} ${ASSOC_SANITY_RPT}
 if [ $? -ne 0 ]
 then
     ASSOC_FILE_ERROR=1
 fi
 
-checkDupLines ${ASSOC_FILE} ${ASSOC_SANITY_RPT}
+checkColumns ${ASSOC_FILE_TEMP} ${ASSOC_SANITY_RPT} ${ASSOC_FILE_COLUMNS}
 if [ $? -ne 0 ]
 then
     ASSOC_FILE_ERROR=1
 fi
 
-checkColumns ${ASSOC_FILE} ${ASSOC_SANITY_RPT} ${ASSOC_FILE_COLUMNS}
-if [ $? -ne 0 ]
-then
-    ASSOC_FILE_ERROR=1
-fi
-
-checkLineCount ${ASSOC_FILE} ${ASSOC_SANITY_RPT} ${ASSOC_FILE_MINIMUM_SIZE}
+checkLineCount ${ASSOC_FILE_TEMP} ${ASSOC_SANITY_RPT} ${ASSOC_FILE_MINIMUM_SIZE}
 if [ $? -ne 0 ]
 then
     ASSOC_FILE_ERROR=1
@@ -478,7 +509,7 @@ EOSQL
 echo "" >> ${LOG}
 date >> ${LOG}
 echo "Generate the QC reports" >> ${LOG}
-{ ${GENEMODEL_QC} 2>&1; echo $? > ${TMP_FILE}; } >> ${LOG}
+{ ${GENEMODEL_QC} ${ASSOC_FILE_TEMP} ${GM_FILE_TEMP} 2>&1; echo $? > ${TMP_FILE}; } >> ${LOG}
 if [ `cat ${TMP_FILE}` -eq 1 ]
 then
     echo "An error occurred while generating the QC reports"
@@ -515,12 +546,25 @@ EOSQL
 date >> ${LOG}
 
 #
-# If this is not a "live" run, remove the files that are not needed from
-# the current directory.
+# Remove the temporary bcp files.
 #
-if [ ${LIVE_RUN} -eq 0 ]
+rm -f ${TEMP_GM_BCPFILE} ${TEMP_ASSOC_BCPFILE}
+
+#
+# Remove the temporary association file.
+#
+rm -f ${ASSOC_FILE_TEMP}
+
+#
+# If this is a "live" run, move the temporary gene model file to the
+# load-ready gene model file. Otherwise, remove it.
+# 
+#
+if [ ${LIVE_RUN} -eq 1 ]
 then
-    rm -f ${TEMP_GM_BCPFILE} ${TEMP_ASSOC_BCPFILE}
+    mv ${GM_FILE_TEMP} ${GM_FILE_LOAD}
+else
+    rm -f ${GM_FILE_TEMP}
 fi
 
 exit ${RC}

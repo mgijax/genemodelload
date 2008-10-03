@@ -10,7 +10,11 @@
 #
 #  Usage:
 #
-#      genemodelQC.py
+#      genemodelQC.py  assoc_file  gm_file
+#
+#      where:
+#          assoc_file = path to the association file
+#          gm_file = path to the gene model file
 #
 #  Env Vars:
 #
@@ -20,8 +24,6 @@
 #          MGI_PUBLICUSER
 #          MGI_PUBPASSWORDFILE
 #          GM_PROVIDER
-#          GM_FILE
-#          ASSOC_FILE
 #          TEMP_GM_BCPFILE
 #          TEMP_ASSOC_BCPFILE
 #          TEMP_GM_TABLE
@@ -30,7 +32,7 @@
 #          SEC_MARKER_RPT
 #          MISSING_GMID_RPT
 #          CHR_DISCREP_RPT
-#          ASSOC_LOAD_FILE
+#          ASSOC_FILE_LOAD
 #          ASSOC_FILE_LOGICALDB
 #
 #      The following environment variable is set by the wrapper script:
@@ -39,8 +41,7 @@
 #
 #  Inputs:
 #
-#      - Gene model input file (${GM_FILE}) with the following tab-delimited
-#        fields:
+#      - Gene model input file with the following tab-delimited fields:
 #
 #          1) Gene Model ID
 #          2) Chromosome
@@ -49,8 +50,7 @@
 #          5) Strand (+ or -)
 #          6) Description
 #
-#      - Association input file (${ASSOC_FILE}) with the following
-#        tab-delimited fields:
+#      - Association input file with the following tab-delimited fields:
 #
 #          1) MGI ID for the Marker
 #          2) Gene Model ID
@@ -63,7 +63,7 @@
 #      - BCP file (${TEMP_ASSOC_BCPFILE}) for loading the gene model file
 #        into a temp table
 #
-#      - Load-ready association file (${ASSOC_LOAD_FILE})
+#      - Load-ready association file (${ASSOC_FILE_LOAD})
 #
 #      - QC report (${INVALID_MARKER_RPT})
 #
@@ -91,12 +91,13 @@
 #
 #      This script will perform following steps:
 #
-#      1) Perform initialization steps.
-#      2) Open the input/output files.
-#      3) Load the records from the input files into the temp tables.
-#      4) Generate the QC reports.
-#      5) Close the input/output files.
-#      6) If this is a "live" run, create the load-ready association file
+#      1) Validate the arguments to the script.
+#      2) Perform initialization steps.
+#      3) Open the input/output files.
+#      4) Load the records from the input files into the temp tables.
+#      5) Generate the QC reports.
+#      6) Close the input/output files.
+#      7) If this is a "live" run, create the load-ready association file
 #         from the associations that do not have any discrepancies.
 #
 #  Notes:  None
@@ -108,7 +109,7 @@
 #  Date        SE   Change Description
 #  ----------  ---  -------------------------------------------------------
 #
-#  09/08/2008  DBM  Initial development
+#  09/30/2008  DBM  Initial development
 #
 ###########################################################################
 
@@ -125,6 +126,8 @@ import db
 TAB = '\t'
 NL = '\n'
 
+USAGE = 'genemodelQC.py  assoc_file  gm_file'
+
 #
 #  GLOBALS
 #
@@ -133,9 +136,6 @@ passwordFile = os.environ['MGI_PUBPASSWORDFILE']
 
 provider = os.environ['GM_PROVIDER']
 liveRun = os.environ['LIVE_RUN']
-
-gmFile = os.environ['GM_FILE']
-assocFile = os.environ['ASSOC_FILE']
 
 gmBCPFile = os.environ['TEMP_GM_BCPFILE']
 assocBCPFile = os.environ['TEMP_ASSOC_BCPFILE']
@@ -147,7 +147,7 @@ secMrkRptFile = os.environ['SEC_MARKER_RPT']
 missGMRptFile = os.environ['MISSING_GMID_RPT']
 chrDiscrepRptFile = os.environ['CHR_DISCREP_RPT']
 
-assocLoadFile = os.environ['ASSOC_LOAD_FILE']
+assocLoadFile = os.environ['ASSOC_FILE_LOAD']
 logicalDB = os.environ['ASSOC_FILE_LOGICALDB']
 
 timestamp = mgi_utils.date()
@@ -155,6 +155,26 @@ timestamp = mgi_utils.date()
 errorCount = 0
 
 assoc = {}
+
+
+#
+# Purpose: Validate the arguments to the script.
+# Returns: Nothing
+# Assumes: Nothing
+# Effects: Sets global variables.
+# Throws: Nothing
+#
+def checkArgs ():
+    global assocFile, gmFile
+
+    if len(sys.argv) != 3:
+        print USAGE
+        sys.exit(1)
+
+    assocFile = sys.argv[1]
+    gmFile = sys.argv[2]
+
+    return
 
 
 #
@@ -745,6 +765,7 @@ def createAssocLoadFile ():
 #
 # Main
 #
+checkArgs()
 init()
 openFiles()
 loadTempTables()

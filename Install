@@ -70,35 +70,61 @@ then
 fi
 
 #
-# If this installation is being done on shire, make sure the directory exists
-# where the curators will put the input files (this should be on hobbiton).
-# Make symbolic links to the input files.
+# Handle installation tasks specific to each provider.
 #
-if [ ${SERVER_NAME} = "shire" ]
-then
-    if [ ! -d ${CURATOR_INPUTDIR} ]
+for i in ${PROVIDER_CONFIGS}
+do
+    #
+    # Source the provider configuration file.
+    #
+    . ${i}
+
+    #
+    # If this installation is being done on shire, create symbolic links to
+    # the current gene model file and association file on hobbiton from the
+    # input directory. This is where the load will look for both files.
+    #
+    if [ ${SERVER_NAME} = "shire" ]
     then
-        mkdir -p ${CURATOR_INPUTDIR}
+        rm -f ${GM_FILE_DEFAULT}
+        ln -s /hobbiton${GM_FILE_CURRENT} ${GM_FILE_DEFAULT}
+
+        rm -f ${ASSOC_FILE_DEFAULT}
+        ln -s /hobbiton${ASSOC_FILE_DEFAULT} ${ASSOC_FILE_DEFAULT}
     fi
 
     #
-    # Each provider configuration file has the paths to the gene model and
-    # association input files. Use those paths to create links to the
-    # corresponding input files in the curator input directory.
+    # If this installation is being done on hobbiton and the association
+    # file does not exist already, create one that is writable.
     #
-    for i in ${PROVIDER_CONFIGS}
-    do
-        . ${i}
+    if [ ${SERVER_NAME} = "hobbiton" ]
+    then
+        if [ ! -f ${ASSOC_FILE_DEFAULT} ]
+        then
+            touch ${ASSOC_FILE_DEFAULT}
+            chmod 664 ${ASSOC_FILE_DEFAULT}
+            chgrp mgi ${ASSOC_FILE_DEFAULT}
+        fi
+    fi
+done
 
-        GM_FILENAME=`basename ${GM_FILE}`
-        ASSOC_FILENAME=`basename ${ASSOC_FILE}`
+#
+# If this installation is being done on shire, the input directory should
+# be locked down to protect the symbolic links that were created there.
+#
+if [ ${SERVER_NAME} = "shire" ]
+then
+    chmod -f 755 ${INPUTDIR}
+fi
 
-        rm -f ${GM_FILE}
-        rm -f ${ASSOC_FILE}
-
-        ln -s ${CURATOR_INPUTDIR}/${GM_FILENAME} ${GM_FILE}
-        ln -s ${CURATOR_INPUTDIR}/${ASSOC_FILENAME} ${ASSOC_FILE}
-    done
+#
+# If this installation is being done on hobbiton, the input directory should
+# be opened up to allow the curation staff to publish new association files.
+#
+if [ ${SERVER_NAME} = "hobbiton" ]
+then
+    chmod -f 775 ${INPUTDIR}
+    chgrp mgi ${INPUTDIR}
 fi
 
 exit 0
