@@ -1,0 +1,90 @@
+#!/bin/sh
+#
+#  publishAssocFile
+###########################################################################
+#
+# A copy of this script is intended to reside in /usr/local/bin on all
+# servers to make it available in the common PATH.
+#
+# Its allows someone to run publish a new gene model association file
+# to the directory where the gene model load will look for it.
+#
+###########################################################################
+
+usage ()
+{
+    echo "Usage: publishAssocFile provider assoc_file"
+    echo "       where"
+    echo "           provider = ensembl, ncbi or vega"
+    echo "           assoc_file = path to the association file"
+    exit 1
+}
+
+CURRENT_DIR=`pwd`
+
+GENEMODELLOADDIR=/usr/local/mgi/live/dataload/genemodelload
+
+COMMON_CONFIG=genemodel_common.config
+
+#
+# The genemodelload product is not installed on all servers, so make sure
+# it exists on this one.
+#
+if [ ! -d ${GENEMODELLOADDIR} ]
+then
+    echo "The gene model load software does not exist on this server"; exit 1
+fi
+
+#
+# Make sure a valid provider name and association file were passed as
+# arguments to the script.
+#
+if [ $# -ne 2 ]
+then
+    usage
+else
+    if [ "`echo $1 | grep -i '^ensembl$'`" != "" ]
+    then
+        CONFIG=genemodel_ensembl.config
+    elif [ "`echo $1 | grep -i '^ncbi$'`" != "" ]
+    then
+        CONFIG=genemodel_ncbi.config
+    elif [ "`echo $1 | grep -i '^vega$'`" != "" ]
+    then
+        CONFIG=genemodel_vega.config
+    else
+        usage
+    fi
+
+    ASSOC_FILE=$2
+
+    if [ ! -r ${ASSOC_FILE} ]
+    then
+        echo "Association file does not exist: ${ASSOC_FILE}"; exit 1
+    fi
+fi
+
+#
+# Source the configuration files.
+#
+cd ${GENEMODELLOADDIR}
+. ${COMMON_CONFIG}
+. ${CONFIG}
+
+#
+# Copy the association file to the input directory where it will be
+# picked up by the load.
+#
+cd ${CURRENT_DIR}
+echo "Publishing File"
+echo "Source File:      ${ASSOC_FILE}"
+echo "Destination File: ${ASSOC_FILE_DEFAULT}"
+cp ${ASSOC_FILE} ${ASSOC_FILE_DEFAULT}
+if [ $? -eq 0 ]
+then
+    echo "Copy successful"
+    exit 0
+else
+    echo "Copy failed"
+    exit 1
+fi
