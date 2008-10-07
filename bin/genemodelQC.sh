@@ -208,13 +208,13 @@ LOG=${GENEMODELQC_LOGFILE}
 rm -rf ${LOG}
 touch ${LOG}
 
-echo "CURRENT_DIR: ${CURRENT_DIR}"
-echo "OUTPUTDIR:   ${OUTPUTDIR}"
-echo "LOGDIR:      ${LOGDIR}"
-echo "RPTDIR:      ${RPTDIR}"
-echo "GM FILE:     ${GM_FILE}"
-echo "ASSOC FILE:  ${ASSOC_FILE}"
-echo "LIVE_RUN:    ${LIVE_RUN}"
+#echo "CURRENT_DIR: ${CURRENT_DIR}"
+#echo "OUTPUTDIR:   ${OUTPUTDIR}"
+#echo "LOGDIR:      ${LOGDIR}"
+#echo "RPTDIR:      ${RPTDIR}"
+#echo "GM FILE:     ${GM_FILE}"
+#echo "ASSOC FILE:  ${ASSOC_FILE}"
+#echo "LIVE_RUN:    ${LIVE_RUN}"
 
 #
 # Make sure the input files exist (regular file or symbolic link).
@@ -253,8 +253,7 @@ trap "rm -f ${TMP_FILE}" 0 1 2 15
 #
 if [ "`head -1 ${ASSOC_FILE} | grep -i '^MGI ID'`" = "" ]
 then
-    echo "Invalid header record in association file." >> ${REPORT}
-    echo "Sanity errors detected in association file" | tee -a ${LOG}
+    echo "Invalid header record in association file" | tee -a ${LOG}
     exit 1
 fi
 
@@ -452,6 +451,7 @@ fi
 #
 if [ ${GM_FILE_ERROR} -ne 0 -o ${ASSOC_FILE_ERROR} -ne 0 ]
 then
+    rm -f ${GM_FILE_TEMP} ${ASSOC_FILE_TEMP}
     exit 1
 fi
 

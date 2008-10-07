@@ -201,10 +201,10 @@ date >> ${LOG}
 if [ ${RELOAD_GENEMODELS} = "true" ]
 then
     echo "Load gene models and associations" | tee -a ${LOG}
-#    ${ASSEMBLY_WRAPPER} ${ASSEMBLY_CONFIG} >> ${LOG}
+    ${ASSEMBLY_WRAPPER} ${ASSEMBLY_CONFIG} >> ${LOG}
 else
     echo "Load gene model associations" | tee -a ${LOG}
-#    ${ASSOCLOAD_WRAPPER} ${ASSEMBLY_CONFIG} >> ${LOG}
+    ${ASSOCLOAD_WRAPPER} ${ASSEMBLY_CONFIG} >> ${LOG}
 fi
 
 TIMESTAMP=`date '+%Y%m%d.%H%M'`

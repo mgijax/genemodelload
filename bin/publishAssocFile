@@ -76,7 +76,6 @@ cd ${GENEMODELLOADDIR}
 # picked up by the load.
 #
 cd ${CURRENT_DIR}
-echo "Publishing File"
 echo "Source File:      ${ASSOC_FILE}"
 echo "Destination File: ${ASSOC_FILE_DEFAULT}"
 cp ${ASSOC_FILE} ${ASSOC_FILE_DEFAULT}
