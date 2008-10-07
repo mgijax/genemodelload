@@ -26,17 +26,17 @@ ASSOC_FILE_DEFAULT=${INPUTDIR}/ncbi_assoc.txt
 
 export GM_FILE_DEFAULT ASSOC_FILE_DEFAULT
 
-# Full path to the "cleaned up" gene model and association files that
-# are created and used by the sanity/QC report script.
+# Full path to the "cleaned up" QC-ready gene model and association files
+# that are created and used by the sanity/QC report script.
 #
-GM_FILE_TEMP=${OUTPUTDIR}/ncbi_genemodels_temp.txt
-ASSOC_FILE_TEMP=${OUTPUTDIR}/ncbi_assoc_temp.txt
+GM_FILE_QC=${OUTPUTDIR}/ncbi_genemodels_qc.txt
+ASSOC_FILE_QC=${OUTPUTDIR}/ncbi_assoc_qc.txt
 
-export GM_FILE_TEMP ASSOC_FILE_TEMP
+export GM_FILE_QC ASSOC_FILE_QC
 
 # Full path to the load-ready gene model and association file that are
 # created by the sanity/QC report script and used as input by the assembly
-# seq loader and the association loader.
+# sequence loader and the association loader.
 #
 GM_FILE_LOAD=${OUTPUTDIR}/ncbi_genemodels_load.txt
 ASSOC_FILE_LOAD=${OUTPUTDIR}/ncbi_assoc_load.txt
@@ -65,17 +65,17 @@ export GENEMODELQC_LOGFILE GENEMODELLOAD_LOGFILE
 
 # Temp table that will be loaded from the input files.
 #
-TEMP_GM_TABLE=NCBI_GM
-TEMP_ASSOC_TABLE=NCBI_Assoc
+GM_TEMP_TABLE=NCBI_GM
+ASSOC_TEMP_TABLE=NCBI_Assoc
 
-export TEMP_GM_TABLE TEMP_ASSOC_TABLE
+export GM_TEMP_TABLE ASSOC_TEMP_TABLE
 
 # Full path to the bcp files for loading the input files into temp tables.
 #
-TEMP_GM_BCPFILE=${OUTPUTDIR}/temp_ncbi_gm.bcp
-TEMP_ASSOC_BCPFILE=${OUTPUTDIR}/temp_ncbi_assoc.bcp
+GM_FILE_BCP=${OUTPUTDIR}/ncbi_genemodels.bcp
+ASSOC_FILE_BCP=${OUTPUTDIR}/ncbi_assoc.bcp
 
-export TEMP_GM_BCPFILE TEMP_ASSOC_BCPFILE
+export GM_FILE_BCP ASSOC_FILE_BCP
 
 # Full path to the sanity/QC reports.
 #

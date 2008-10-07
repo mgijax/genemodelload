@@ -24,10 +24,10 @@
 #          MGI_PUBLICUSER
 #          MGI_PUBPASSWORDFILE
 #          GM_PROVIDER
-#          TEMP_GM_BCPFILE
-#          TEMP_ASSOC_BCPFILE
-#          TEMP_GM_TABLE
-#          TEMP_ASSOC_TABLE
+#          GM_FILE_BCP
+#          ASSOC_FILE_BCP
+#          GM_TEMP_TABLE
+#          ASSOC_TEMP_TABLE
 #          INVALID_MARKER_RPT
 #          SEC_MARKER_RPT
 #          MISSING_GMID_RPT
@@ -57,10 +57,10 @@
 #
 #  Outputs:
 #
-#      - BCP file (${TEMP_GM_BCPFILE}) for loading the gene model file
+#      - BCP file (${GM_FILE_BCP}) for loading the gene model file
 #        into a temp table
 #
-#      - BCP file (${TEMP_ASSOC_BCPFILE}) for loading the gene model file
+#      - BCP file (${ASSOC_FILE_BCP}) for loading the gene model file
 #        into a temp table
 #
 #      - Load-ready association file (${ASSOC_FILE_LOAD})
@@ -83,8 +83,8 @@
 #
 #      This script assumes that the wrapper script has already created the
 #      tables in tempdb for loading the input records into. The table
-#      names are defined by the environment variables ${TEMP_GM_TABLE} and
-#      ${TEMP_ASSOC_TABLE}. The wrapper script will also take care of
+#      names are defined by the environment variables ${GM_TEMP_TABLE} and
+#      ${ASSOC_TEMP_TABLE}. The wrapper script will also take care of
 #      dropping the table after this script terminates.
 #
 #  Implementation:
@@ -137,10 +137,10 @@ passwordFile = os.environ['MGI_PUBPASSWORDFILE']
 provider = os.environ['GM_PROVIDER']
 liveRun = os.environ['LIVE_RUN']
 
-gmBCPFile = os.environ['TEMP_GM_BCPFILE']
-assocBCPFile = os.environ['TEMP_ASSOC_BCPFILE']
-gmTempTable = os.environ['TEMP_GM_TABLE']
-assocTempTable = os.environ['TEMP_ASSOC_TABLE']
+gmBCPFile = os.environ['GM_FILE_BCP']
+assocBCPFile = os.environ['ASSOC_FILE_BCP']
+gmTempTable = os.environ['GM_TEMP_TABLE']
+assocTempTable = os.environ['ASSOC_TEMP_TABLE']
 
 invMrkRptFile = os.environ['INVALID_MARKER_RPT']
 secMrkRptFile = os.environ['SEC_MARKER_RPT']

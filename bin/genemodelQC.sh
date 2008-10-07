@@ -258,26 +258,26 @@ then
 fi
 
 #
-# Convert the gene model file into a version that can be used to run the
-# sanity/QC reports against. This involves doing the following:
+# Convert the gene model file into a QC-ready version that can be used to
+# run the sanity/QC reports against. This involves doing the following:
 # 1) Extract columns 1 thru 6
 # 2) Extract only lines that have alphanumerics (excludes blank lines)
 # 3) Remove any Ctrl-M characters (dos2unix)
 #
-cat ${GM_FILE} | cut -d'	' -f1-6 | grep '[0-9A-Za-z]' > ${GM_FILE_TEMP}
-dos2unix ${GM_FILE_TEMP} ${GM_FILE_TEMP} 2>/dev/null
+cat ${GM_FILE} | cut -d'	' -f1-6 | grep '[0-9A-Za-z]' > ${GM_FILE_QC}
+dos2unix ${GM_FILE_QC} ${GM_FILE_QC} 2>/dev/null
 
 #
-# Convert the association file into a version that can be used to run the
-# sanity/QC reports against. This involves doing the following:
+# Convert the association file into a QC-ready version that can be used to
+# run the sanity/QC reports against. This involves doing the following:
 # 1) Remove the header record
 # 2) Extract columns 1 & 2
 # 3) Remove any spaces
 # 4) Extract only lines that have alphanumerics (excludes blank lines)
 # 5) Remove any Ctrl-M characters (dos2unix)
 #
-cat ${ASSOC_FILE} | tail +2 | cut -d'	' -f1,2 | sed 's/ //g' | grep '[0-9A-Za-z]' > ${ASSOC_FILE_TEMP}
-dos2unix ${ASSOC_FILE_TEMP} ${ASSOC_FILE_TEMP} 2>/dev/null
+cat ${ASSOC_FILE} | tail +2 | cut -d'	' -f1,2 | sed 's/ //g' | grep '[0-9A-Za-z]' > ${ASSOC_FILE_QC}
+dos2unix ${ASSOC_FILE_QC} ${ASSOC_FILE_QC} 2>/dev/null
 
 
 #
@@ -386,25 +386,25 @@ date >> ${LOG}
 echo "Run sanity checks on the gene model input file" >> ${LOG}
 GM_FILE_ERROR=0
 
-checkDupLines ${GM_FILE_TEMP} ${GM_SANITY_RPT}
+checkDupLines ${GM_FILE_QC} ${GM_SANITY_RPT}
 if [ $? -ne 0 ]
 then
     GM_FILE_ERROR=1
 fi
 
-checkDupFields ${GM_FILE_TEMP} ${GM_SANITY_RPT} 1 "Gene Model IDs"
+checkDupFields ${GM_FILE_QC} ${GM_SANITY_RPT} 1 "Gene Model IDs"
 if [ $? -ne 0 ]
 then
     GM_FILE_ERROR=1
 fi
 
-checkColumns ${GM_FILE_TEMP} ${GM_SANITY_RPT} ${GM_FILE_COLUMNS}
+checkColumns ${GM_FILE_QC} ${GM_SANITY_RPT} ${GM_FILE_COLUMNS}
 if [ $? -ne 0 ]
 then
     GM_FILE_ERROR=1
 fi
 
-checkLineCount ${GM_FILE_TEMP} ${GM_SANITY_RPT} ${GM_FILE_MINIMUM_SIZE}
+checkLineCount ${GM_FILE_QC} ${GM_SANITY_RPT} ${GM_FILE_MINIMUM_SIZE}
 if [ $? -ne 0 ]
 then
     GM_FILE_ERROR=1
@@ -423,19 +423,19 @@ date >> ${LOG}
 echo "Run sanity checks on the association input file" >> ${LOG}
 ASSOC_FILE_ERROR=0
 
-checkDupLines ${ASSOC_FILE_TEMP} ${ASSOC_SANITY_RPT}
+checkDupLines ${ASSOC_FILE_QC} ${ASSOC_SANITY_RPT}
 if [ $? -ne 0 ]
 then
     ASSOC_FILE_ERROR=1
 fi
 
-checkColumns ${ASSOC_FILE_TEMP} ${ASSOC_SANITY_RPT} ${ASSOC_FILE_COLUMNS}
+checkColumns ${ASSOC_FILE_QC} ${ASSOC_SANITY_RPT} ${ASSOC_FILE_COLUMNS}
 if [ $? -ne 0 ]
 then
     ASSOC_FILE_ERROR=1
 fi
 
-checkLineCount ${ASSOC_FILE_TEMP} ${ASSOC_SANITY_RPT} ${ASSOC_FILE_MINIMUM_SIZE}
+checkLineCount ${ASSOC_FILE_QC} ${ASSOC_SANITY_RPT} ${ASSOC_FILE_MINIMUM_SIZE}
 if [ $? -ne 0 ]
 then
     ASSOC_FILE_ERROR=1
@@ -447,11 +447,12 @@ then
 fi
 
 #
-# If either input file had sanity errors, skip the QC reports.
+# If either input file had sanity errors, remove the QC-ready files and
+# skip the QC reports.
 #
 if [ ${GM_FILE_ERROR} -ne 0 -o ${ASSOC_FILE_ERROR} -ne 0 ]
 then
-    rm -f ${GM_FILE_TEMP} ${ASSOC_FILE_TEMP}
+    rm -f ${GM_FILE_QC} ${ASSOC_FILE_QC}
     exit 1
 fi
 
@@ -466,7 +467,7 @@ cat - <<EOSQL | isql -S${MGD_DBSERVER} -D${MGD_DBNAME} -U${MGI_PUBLICUSER} -P`ca
 use tempdb
 go
 
-create table ${TEMP_GM_TABLE} (
+create table ${GM_TEMP_TABLE} (
     gmID varchar(80) not null,
     chromosome varchar(8) not null,
     startCoordinate float not null,
@@ -476,28 +477,28 @@ create table ${TEMP_GM_TABLE} (
 )
 go
 
-create nonclustered index idx_gmID on ${TEMP_GM_TABLE} (gmID)
+create nonclustered index idx_gmID on ${GM_TEMP_TABLE} (gmID)
 go
 
-create nonclustered index idx_chromosome on ${TEMP_GM_TABLE} (chromosome)
+create nonclustered index idx_chromosome on ${GM_TEMP_TABLE} (chromosome)
 go
 
-grant all on ${TEMP_GM_TABLE} to public
+grant all on ${GM_TEMP_TABLE} to public
 go
 
-create table ${TEMP_ASSOC_TABLE} (
+create table ${ASSOC_TEMP_TABLE} (
     mgiID varchar(80) not null,
     gmID varchar(80) not null
 )
 go
 
-create nonclustered index idx_mgiID on ${TEMP_ASSOC_TABLE} (mgiID)
+create nonclustered index idx_mgiID on ${ASSOC_TEMP_TABLE} (mgiID)
 go
 
-create nonclustered index idx_gmID on ${TEMP_ASSOC_TABLE} (gmID)
+create nonclustered index idx_gmID on ${ASSOC_TEMP_TABLE} (gmID)
 go
 
-grant all on ${TEMP_ASSOC_TABLE} to public
+grant all on ${ASSOC_TEMP_TABLE} to public
 go
 
 quit
@@ -509,7 +510,7 @@ EOSQL
 echo "" >> ${LOG}
 date >> ${LOG}
 echo "Generate the QC reports" >> ${LOG}
-{ ${GENEMODEL_QC} ${ASSOC_FILE_TEMP} ${GM_FILE_TEMP} 2>&1; echo $? > ${TMP_FILE}; } >> ${LOG}
+{ ${GENEMODEL_QC} ${ASSOC_FILE_QC} ${GM_FILE_QC} 2>&1; echo $? > ${TMP_FILE}; } >> ${LOG}
 if [ `cat ${TMP_FILE}` -eq 1 ]
 then
     echo "An error occurred while generating the QC reports"
@@ -534,10 +535,10 @@ cat - <<EOSQL | isql -S${MGD_DBSERVER} -D${MGD_DBNAME} -U${MGI_PUBLICUSER} -P`ca
 use tempdb
 go
 
-drop table ${TEMP_GM_TABLE}
+drop table ${GM_TEMP_TABLE}
 go
 
-drop table ${TEMP_ASSOC_TABLE}
+drop table ${ASSOC_TEMP_TABLE}
 go
 
 quit
@@ -546,25 +547,25 @@ EOSQL
 date >> ${LOG}
 
 #
-# Remove the temporary bcp files.
+# Remove the bcp files.
 #
-rm -f ${TEMP_GM_BCPFILE} ${TEMP_ASSOC_BCPFILE}
+rm -f ${GM_FILE_BCP} ${ASSOC_FILE_BCP}
 
 #
-# Remove the temporary association file.
+# Remove the QC-ready association file.
 #
-rm -f ${ASSOC_FILE_TEMP}
+rm -f ${ASSOC_FILE_QC}
 
 #
-# If this is a "live" run, move the temporary gene model file to the
+# If this is a "live" run, move the QC-ready gene model file to the
 # load-ready gene model file. Otherwise, remove it.
 # 
 #
 if [ ${LIVE_RUN} -eq 1 ]
 then
-    mv ${GM_FILE_TEMP} ${GM_FILE_LOAD}
+    mv ${GM_FILE_QC} ${GM_FILE_LOAD}
 else
-    rm -f ${GM_FILE_TEMP}
+    rm -f ${GM_FILE_QC}
 fi
 
 exit ${RC}
