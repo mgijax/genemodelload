@@ -1,3 +1,9 @@
+TAG: genemodelload-4-1-2-4
+DATE: 10/14/2008
+STAFF: dbm
+CHANGES: Changed wrapper script to determine if the input files needs to
+         be processed before running the reports.
+
 TAG: genemodelload-4-1-2-3
 TAG: genemodelload-4-1-2-2
 DATE: 10/07/2008
