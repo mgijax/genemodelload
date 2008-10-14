@@ -157,6 +157,22 @@ then
 fi
 
 #
+# There should be a "lastrun" file in the input directory that was created
+# the last time the gene model load was run for the given provider. If this
+# file exists and is more recent than the association file, the load does
+# not need to be run.
+#
+LASTRUN_FILE=${INPUTDIR}/${GM_PROVIDER}.lastrun
+if [ -f ${LASTRUN_FILE} ]
+then
+    if /usr/local/bin/test ${LASTRUN_FILE} -nt ${ASSOC_FILE_DEFAULT}
+    then
+        echo "Association file has not been updated - skipping load" | tee -a ${LOG}
+        exit 0
+    fi
+fi
+
+#
 # Create a temporary file and make sure the it is removed when this script
 # terminates.
 #
@@ -174,22 +190,6 @@ if [ `cat ${TMP_FILE}` -eq 1 ]
 then
     echo "QC reports failed" | tee -a ${LOG}
     exit 1
-fi
-
-#
-# There should be a "lastrun" file in the input directory that was created
-# the last time the gene model load was run for the given provider. If this
-# file exists and is more recent than the association file, the load does
-# not need to be run.
-#
-LASTRUN_FILE=${INPUTDIR}/${GM_PROVIDER}.lastrun
-if [ -f ${LASTRUN_FILE} ]
-then
-    if /usr/local/bin/test ${LASTRUN_FILE} -nt ${ASSOC_FILE_DEFAULT}
-    then
-        echo "Association file has not been updated - skipping load" | tee -a ${LOG}
-        exit 0
-    fi
 fi
 
 #
