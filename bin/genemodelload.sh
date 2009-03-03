@@ -218,7 +218,7 @@ echo "Archive input files" | tee -a ${LOG}
 for FILE in ${GM_FILE_DEFAULT} ${ASSOC_FILE_DEFAULT}
 do
     ARC_FILE=`basename ${FILE}`.${TIMESTAMP}
-    cp -p $FILE ${ARCHIVEDIR}/${ARC_FILE}
+    cp -p ${FILE} ${ARCHIVEDIR}/${ARC_FILE}
 done
 
 #

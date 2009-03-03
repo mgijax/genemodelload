@@ -208,14 +208,6 @@ LOG=${GENEMODELQC_LOGFILE}
 rm -rf ${LOG}
 touch ${LOG}
 
-#echo "CURRENT_DIR: ${CURRENT_DIR}"
-#echo "OUTPUTDIR:   ${OUTPUTDIR}"
-#echo "LOGDIR:      ${LOGDIR}"
-#echo "RPTDIR:      ${RPTDIR}"
-#echo "GM FILE:     ${GM_FILE}"
-#echo "ASSOC FILE:  ${ASSOC_FILE}"
-#echo "LIVE_RUN:    ${LIVE_RUN}"
-
 #
 # Make sure the input files exist (regular file or symbolic link).
 #
@@ -241,7 +233,7 @@ do
 done
 
 #
-# Create a temporary file and make sure the it is removed when this script
+# Create a temporary file and make sure it is removed when this script
 # terminates.
 #
 TMP_FILE=/tmp/`basename $0`.$$
@@ -559,7 +551,6 @@ rm -f ${ASSOC_FILE_QC}
 #
 # If this is a "live" run, move the QC-ready gene model file to the
 # load-ready gene model file. Otherwise, remove it.
-# 
 #
 if [ ${LIVE_RUN} -eq 1 ]
 then

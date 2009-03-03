@@ -6,7 +6,7 @@
 # A copy of this script is intended to reside in /usr/local/bin on all
 # servers to make it available in the common PATH.
 #
-# Its allows someone to run publish a new gene model association file
+# Its allows someone to publish a new gene model association file
 # to the directory where the gene model load will look for it.
 #
 ###########################################################################

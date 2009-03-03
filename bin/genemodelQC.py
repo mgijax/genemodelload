@@ -60,7 +60,7 @@
 #      - BCP file (${GM_FILE_BCP}) for loading the gene model file
 #        into a temp table
 #
-#      - BCP file (${ASSOC_FILE_BCP}) for loading the gene model file
+#      - BCP file (${ASSOC_FILE_BCP}) for loading the association file
 #        into a temp table
 #
 #      - Load-ready association file (${ASSOC_FILE_LOAD})
