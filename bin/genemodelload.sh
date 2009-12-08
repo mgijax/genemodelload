@@ -200,11 +200,34 @@ echo "" >> ${LOG}
 date >> ${LOG}
 if [ ${RELOAD_GENEMODELS} = "true" ]
 then
-    echo "Load gene models and associations" | tee -a ${LOG}
+    echo "Load gene models and associations for ${PROVIDER}" | tee -a ${LOG}
     ${ASSEMBLY_WRAPPER} ${ASSEMBLY_CONFIG} >> ${LOG}
+    if [ ${PROVIDER} = "ensembl" ]
+    then
+	echo "Load protein/transcript sequences and marker associations for ${PROVIDER}" | tee -a ${LOG}
+	${VEGA_ENS_WRAPPER} ensembl_proteinseqload.config  >> ${LOG}
+	${VEGA_ENS_WRAPPER} ensembl_transcriptseqload.config >> ${LOG}
+    elif [ ${PROVIDER} = "vega" ]
+    then
+	echo "Load protein/transcript sequences and marker associations for ${PROVIDER}" | tee -a ${LOG}
+        ${VEGA_ENS_WRAPPER} vega_proteinseqload.config >> ${LOG}
+        ${VEGA_ENS_WRAPPER} vega_transcriptseqload.config >> ${LOG}
+    fi
 else
-    echo "Load gene model associations" | tee -a ${LOG}
+    echo "Load gene model associations for ${PROVIDER}" | tee -a ${LOG}
     ${ASSOCLOAD_WRAPPER} ${ASSEMBLY_CONFIG} >> ${LOG}
+
+    if [ ${PROVIDER} = "ensembl" ]
+    then
+	echo "Load protein/transcript marker associations for ${PROVIDER}" | tee -a ${LOG}
+        ${VEGA_ENS_ASSOC_WRAPPER} ensembl_proteinassocload.config >> ${LOG}
+        ${VEGA_ENS_ASSOC_WRAPPER} ensembl_transcriptassocload.config >> ${LOG}
+    elif [ ${PROVIDER} = "vega" ]
+    then
+	echo "Load protein/transcript marker associations for ${PROVIDER}" | tee -a ${LOG}
+        ${VEGA_ENS_ASSOC_WRAPPER} vega_proteinassocload.config >> ${LOG}
+        ${VEGA_ENS_ASSOC_WRAPPER} vega_transcriptassocload.config >> ${LOG}
+    fi
 fi
 
 TIMESTAMP=`date '+%Y%m%d.%H%M'`

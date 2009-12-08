@@ -1,4 +1,13 @@
-TAG: genemodelload-tr9774=BP
+TAG: genemodelload-tr9774-1
+DATE: 12/08/2009
+STAFF: sc
+CHANGES: 
+1) genemodel_common.config.default - added  VEGA_ENS_WRAPPER
+   and VEGA_ENS_ASSOC_WRAPPER
+2) Added processing of transcripts/protein sequences and 
+   associating them with gene model markers
+
+TAG: genemodelload-tr9774-BP
 DATE: 12/08/2009
 STAFF: sc
 CHANGES: 

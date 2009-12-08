@@ -68,6 +68,13 @@ ASSEMBLY_WRAPPER=${ASSEMBLYSEQLOAD}/bin/assemblyseqload.sh
 
 export ASSOCLOAD_WRAPPER ASSEMBLY_WRAPPER
 
+# Full path to Vega/Ensembl seqload scripts.
+#
+VEGA_ENS_WRAPPER=${VEGA_ENSEMBLSEQLOAD}/bin/vega_ensemblseqload.sh
+VEGA_ENS_ASSOC_WRAPPER=${VEGA_ENSEMBLSEQLOAD}/bin/run_assocload.sh
+
+export VEGA_ENS_WRAPPER VEGA_ENS_ASSOC_WRAPPER
+
 # Installation directory for the gene model load.
 #
 INSTALLDIR=${GENEMODELLOAD}
