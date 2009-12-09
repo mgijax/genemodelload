@@ -205,13 +205,13 @@ then
     if [ ${PROVIDER} = "ensembl" ]
     then
 	echo "Load protein/transcript sequences and marker associations for ${PROVIDER}" | tee -a ${LOG}
-	${VEGA_ENS_WRAPPER} ensembl_proteinseqload.config  >> ${LOG}
-	${VEGA_ENS_WRAPPER} ensembl_transcriptseqload.config >> ${LOG}
+	${VEGA_ENS_WRAPPER} ensembl_proteinseqload.config  true >> ${LOG}
+	${VEGA_ENS_WRAPPER} ensembl_transcriptseqload.config true >> ${LOG}
     elif [ ${PROVIDER} = "vega" ]
     then
 	echo "Load protein/transcript sequences and marker associations for ${PROVIDER}" | tee -a ${LOG}
-        ${VEGA_ENS_WRAPPER} vega_proteinseqload.config >> ${LOG}
-        ${VEGA_ENS_WRAPPER} vega_transcriptseqload.config >> ${LOG}
+        ${VEGA_ENS_WRAPPER} vega_proteinseqload.config true >> ${LOG}
+        ${VEGA_ENS_WRAPPER} vega_transcriptseqload.config true >> ${LOG}
     fi
 else
     echo "Load gene model associations for ${PROVIDER}" | tee -a ${LOG}
@@ -220,13 +220,13 @@ else
     if [ ${PROVIDER} = "ensembl" ]
     then
 	echo "Load protein/transcript marker associations for ${PROVIDER}" | tee -a ${LOG}
-        ${VEGA_ENS_ASSOC_WRAPPER} ensembl_proteinassocload.config >> ${LOG}
-        ${VEGA_ENS_ASSOC_WRAPPER} ensembl_transcriptassocload.config >> ${LOG}
+        ${VEGA_ENS_WRAPPER} ensembl_proteinseqload.config false >> ${LOG}
+        ${VEGA_ENS_WRAPPER} ensembl_transcriptseqload.config false >> ${LOG}
     elif [ ${PROVIDER} = "vega" ]
     then
 	echo "Load protein/transcript marker associations for ${PROVIDER}" | tee -a ${LOG}
-        ${VEGA_ENS_ASSOC_WRAPPER} vega_proteinassocload.config >> ${LOG}
-        ${VEGA_ENS_ASSOC_WRAPPER} vega_transcriptassocload.config >> ${LOG}
+        ${VEGA_ENS_WRAPPER} vega_proteinseqload.config false >> ${LOG}
+        ${VEGA_ENS_WRAPPER} vega_transcriptseqload.config false >> ${LOG}
     fi
 fi
 

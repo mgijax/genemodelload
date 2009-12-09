@@ -1,3 +1,11 @@
+TAG: genemodelload-tr9774-2
+DATE: 12/09/2009
+STAFF: sc
+CHANGES: I realized that the associatins were only getting redone
+  when reloading sequences, thus the following changes:
+1) genemodelload.sh - call only VEGA_ENS_WRAPPER and pass new boolean
+   param indicating to load sequences and assocs or just assocs.
+
 TAG: genemodelload-tr9774-1
 DATE: 12/08/2009
 STAFF: sc
@@ -40,4 +48,5 @@ TAG: genemodelload-4-1-1-1
 DATE: 09/09/2008
 STAFF: dbm
 CHANGES: New load (TR9095)
-
+TE: 12/08/2009
+STAFF: sc
