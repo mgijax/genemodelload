@@ -102,3 +102,22 @@ export ASSEMBLY_CONFIG
 RELOAD_GENEMODELS=false
 
 export RELOAD_GENEMODELS
+
+#
+# seqgenemodelload.sh configuration
+#
+
+# path to input file used to create gene model ID to biotype mapping 
+INFILE_NAME_BIOTYPE=${DATADOWNLOADS}/vega_mus_gtf/gtf_file.gz
+
+# path to bcp file
+BCP_FILE_PATH=${OUTPUTDIR}/SEQ_GeneModel.vega.bcp
+
+# full path to the log file
+SEQGENEMODELLOAD_LOGFILE=${LOGDIR}/vega_seqgenemodelload.log
+
+# logicalDB of the gene model sequence provider
+PROVIDER_LOGICALDB=${ASSOC_FILE_LOGICALDB}
+
+export INFILE_NAME_BIOTYPE BCP_FILE_PATH SEQGENEMODELLOAD_LOGFILE
+export PROVIDER_LOGICALDB

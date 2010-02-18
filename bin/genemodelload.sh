@@ -193,8 +193,11 @@ then
 fi
 
 #
-# If the gene models are to be reloaded in addition to the associations, call
-# the assemblyseqload. Otherwise, call the wrapper for the association load.
+# If the gene models are to be reloaded:
+# 1) call the assemblyseqload which reloads genemodels AND associations
+# 2) if VEGA or Ensembl, call the vega_ensemblseqload to reload 
+#    transcript and protein sequences and associations
+# 3) call the seqgenemodelload
 #
 echo "" >> ${LOG}
 date >> ${LOG}
@@ -213,6 +216,14 @@ then
         ${VEGA_ENS_WRAPPER} vega_proteinseqload.config true >> ${LOG}
         ${VEGA_ENS_WRAPPER} vega_transcriptseqload.config true >> ${LOG}
     fi
+    echo "Load raw biotypes to SEQ_GeneModel for ${PROVIDER}" | tee -a ${LOG}
+    ./seqgenemodelload.sh ${PROVIDER} | tee -a ${LOG}
+#
+# If only the gene model associations are to be reloaded:
+# 1) reload gene model associations
+# 2) if VEGA or Ensembl, call the vega_ensemblseqload to reload 
+#    transcript and protein marker associations
+#
 else
     echo "Load gene model associations for ${PROVIDER}" | tee -a ${LOG}
     ${ASSOCLOAD_WRAPPER} ${ASSEMBLY_CONFIG} >> ${LOG}
@@ -238,7 +249,7 @@ TIMESTAMP=`date '+%Y%m%d.%H%M'`
 echo "" >> ${LOG}
 date >> ${LOG}
 echo "Archive input files" | tee -a ${LOG}
-for FILE in ${GM_FILE_DEFAULT} ${ASSOC_FILE_DEFAULT}
+for FILE in ${GM_FILE_DEFAULT} ${ASSOC_FILE_DEFAULT} ${INFILE_NAME_BIOTYPE}
 do
     ARC_FILE=`basename ${FILE}`.${TIMESTAMP}
     cp -p ${FILE} ${ARCHIVEDIR}/${ARC_FILE}

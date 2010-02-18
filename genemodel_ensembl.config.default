@@ -102,3 +102,23 @@ export ASSEMBLY_CONFIG
 RELOAD_GENEMODELS=false
 
 export RELOAD_GENEMODELS
+
+#
+# seqgenemodelload.sh configuration
+#
+
+# path to input file used to create gene model ID to biotype mapping
+# for createSeqGeneTrapInput.py
+INFILE_NAME_BIOTYPE=${DATADOWNLOADS}/ensembl_mus_gtf/Mus_musculus.*.gtf.gz
+
+# path to bcp file
+BCP_FILE_PATH=${OUTPUTDIR}/SEQ_GeneModel.ensembl.bcp
+
+# full path to the log file
+SEQGENEMODELLOAD_LOGFILE=${LOGDIR}/ensembl_seqgenemodelload.log
+
+# logicalDB of the gene model sequence provider
+PROVIDER_LOGICALDB=${ASSOC_FILE_LOGICALDB}
+
+export INFILE_NAME_BIOTYPE BCP_FILE_PATH SEQGENEMODELLOAD_LOGFILE
+export PROVIDER_LOGICALDB
