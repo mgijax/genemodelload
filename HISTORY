@@ -1,10 +1,11 @@
+TAG: genemodelload-tr9774-4
 TAG: genemodelload-tr9774-3
 DATE: 02/18/2010
 STAFF: sc
 CHANGES:
 1) added seqgenemodelload.sh seqgenemodelload.py
 2) genemodelload.sh - added archiving of gm biotype
-   input file
+   input file. Added call to seqgenemodelload.sh.
 3) ensembl and vega config files added settings to 
    support seqgenemodelload
 

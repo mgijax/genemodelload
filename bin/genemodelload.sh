@@ -215,9 +215,9 @@ then
 	echo "Load protein/transcript sequences and marker associations for ${PROVIDER}" | tee -a ${LOG}
         ${VEGA_ENS_WRAPPER} vega_proteinseqload.config true >> ${LOG}
         ${VEGA_ENS_WRAPPER} vega_transcriptseqload.config true >> ${LOG}
+	echo "Load raw biotypes for ${PROVIDER}" | tee -a ${LOG}
+	./seqgenemodelload.sh ${PROVIDER} | tee -a ${LOG}
     fi
-    echo "Load raw biotypes to SEQ_GeneModel for ${PROVIDER}" | tee -a ${LOG}
-    ./seqgenemodelload.sh ${PROVIDER} | tee -a ${LOG}
 #
 # If only the gene model associations are to be reloaded:
 # 1) reload gene model associations
