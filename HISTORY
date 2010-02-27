@@ -1,3 +1,9 @@
+TAG: genemodelload-tr9774-5
+DATE: 02/27/2010
+STAFF: sc
+CHANGES: Need to load transcripts before proteins for seq to seq
+associations To work properly
+
 TAG: genemodelload-tr9774-4
 TAG: genemodelload-tr9774-3
 DATE: 02/18/2010

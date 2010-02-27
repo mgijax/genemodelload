@@ -208,16 +208,18 @@ then
     if [ ${PROVIDER} = "ensembl" ]
     then
 	echo "Load protein/transcript sequences and marker associations for ${PROVIDER}" | tee -a ${LOG}
+        # order is important, transcripts must be loaded first so proteins can be associated
+	# with them
+        ${VEGA_ENS_WRAPPER} ensembl_transcriptseqload.config true >> ${LOG}
 	${VEGA_ENS_WRAPPER} ensembl_proteinseqload.config  true >> ${LOG}
-	${VEGA_ENS_WRAPPER} ensembl_transcriptseqload.config true >> ${LOG}
     elif [ ${PROVIDER} = "vega" ]
     then
 	echo "Load protein/transcript sequences and marker associations for ${PROVIDER}" | tee -a ${LOG}
-        ${VEGA_ENS_WRAPPER} vega_proteinseqload.config true >> ${LOG}
         ${VEGA_ENS_WRAPPER} vega_transcriptseqload.config true >> ${LOG}
+        ${VEGA_ENS_WRAPPER} vega_proteinseqload.config true >> ${LOG}
 	echo "Load raw biotypes for ${PROVIDER}" | tee -a ${LOG}
-	./seqgenemodelload.sh ${PROVIDER} | tee -a ${LOG}
     fi
+    ./seqgenemodelload.sh ${PROVIDER} | tee -a ${LOG}
 #
 # If only the gene model associations are to be reloaded:
 # 1) reload gene model associations
@@ -231,13 +233,13 @@ else
     if [ ${PROVIDER} = "ensembl" ]
     then
 	echo "Load protein/transcript marker associations for ${PROVIDER}" | tee -a ${LOG}
-        ${VEGA_ENS_WRAPPER} ensembl_proteinseqload.config false >> ${LOG}
         ${VEGA_ENS_WRAPPER} ensembl_transcriptseqload.config false >> ${LOG}
+        ${VEGA_ENS_WRAPPER} ensembl_proteinseqload.config false >> ${LOG}
     elif [ ${PROVIDER} = "vega" ]
     then
 	echo "Load protein/transcript marker associations for ${PROVIDER}" | tee -a ${LOG}
-        ${VEGA_ENS_WRAPPER} vega_proteinseqload.config false >> ${LOG}
         ${VEGA_ENS_WRAPPER} vega_transcriptseqload.config false >> ${LOG}
+        ${VEGA_ENS_WRAPPER} vega_proteinseqload.config false >> ${LOG}
     fi
 fi
 
