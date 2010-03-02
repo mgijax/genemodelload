@@ -18,9 +18,15 @@ Usage='createSeqGeneModelInput.py provider (vega | ensembl | ncbi)'
 # Outputs:
 #	 1. SEQ_GeneModel bcp file, tab-delimited
 #           1. _Sequence_key
-#	    3. _MarkerType_key
-#	    4. raw biotype (null)
+#	    2. _GMMarkerType_key
+#	    3. raw biotype 
+#	    4. exonCount (null)
 #	    5. transcriptCount (null)
+#	    6. _CreatedBy_key
+#	    7. _ModifiedBy_key
+#	    8. creation_date
+#	    9. modification_date
+#
 # 	 2. Log file
 #
 # Exit Codes:
@@ -61,6 +67,9 @@ SCOLON = ';'
 # Biotype Translation Type
 TRANSTYPE='Raw Biotype to Marker Type'
 
+# MGI_User key for the load
+CREATEDBY_KEY = os.environ['USERKEY']
+
 #
 # GLOBALS
 #
@@ -71,6 +80,9 @@ bcpFilePath = ''
 # file descriptors
 inFile = ''
 bcpFile = ''
+
+# timestamp for creation/modification date
+cdate = mgi_utils.date('%m/%d/%Y')      # current date
 
 #
 # lookups
@@ -218,8 +230,8 @@ def run ():
 	    noTranslationCtr = noTranslationCtr + 1
 	    continue
 
-	bcpFile.write('%s%s%s%s%s%s%s%s' % \
-	    (sequenceKey, TAB, markerTypeKey, TAB, rawBioType, TAB, TAB, CRT) )
+	bcpFile.write('%s%s%s%s%s%s%s%s%s%s%s%s%s%s%s%s' % \
+	    (sequenceKey, TAB, markerTypeKey, TAB, rawBioType, TAB, TAB, TAB, CREATEDBY_KEY, TAB, CREATEDBY_KEY, TAB, cdate, TAB, cdate, CRT) )
 
     print '\n%s %s gene model Ids in the database but not in the input file' % \
 	(notInInputCtr, provider)

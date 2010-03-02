@@ -107,6 +107,11 @@ export RELOAD_GENEMODELS
 # seqgenemodelload.sh configuration
 #
 
+# use the Ensembl Genomic Sequence Load user
+USERKEY=1410
+
+export USERKEY
+
 # path to input file used to create gene model ID to biotype mapping
 # for createSeqGeneTrapInput.py
 INFILE_NAME_BIOTYPE=${DATADOWNLOADS}/ensembl_mus_gtf/Mus_musculus.*.gtf.gz

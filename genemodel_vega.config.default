@@ -107,6 +107,11 @@ export RELOAD_GENEMODELS
 # seqgenemodelload.sh configuration
 #
 
+# use the VEGA Genomic Sequence Load user
+USERKEY=1439
+
+export USERKEY
+
 # path to input file used to create gene model ID to biotype mapping 
 INFILE_NAME_BIOTYPE=${DATADOWNLOADS}/vega_mus_gtf/gtf_file.gz
 

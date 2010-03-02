@@ -1,3 +1,12 @@
+TAG: genemodelload-tr9774-6
+DATE: 03/02/2010
+STAFF: sc
+CHANGES:
+1) vega/ensembl/ncib config files - added USERKEY for seqgenemodelload.py
+   I am using the '* Genomic Sequence Load' user key
+2) seqgenemodelload.py - added createdBy/modifiedBy key and 
+   and creation/modification date as this has been added to the schema
+
 TAG: genemodelload-tr9774-5
 DATE: 02/27/2010
 STAFF: sc
