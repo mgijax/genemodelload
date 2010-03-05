@@ -10,6 +10,7 @@ Usage='createSeqGeneModelInput.py provider (vega | ensembl | ncbi)'
 # Env Vars:
 #        1. BCP_FILE_PATH
 #	 2. PROVIDER_LOGICALDB
+#	 3. USERKEY
 # Inputs: 
 #	1. mgd database to resolve gmId to sequence key and
 #	      translate raw biotype to _MarkerType_key 
@@ -99,9 +100,17 @@ seqKeyByGMIDLookup = {} # {gmId:_Sequence_key, ...}
 # Provider we are loading 'ncbi', 'ensembl', or 'vega'
 provider = ''
 
+# Purpose:  Load biotype translation Lookup; Lookup raw biotype
+#           to get MGI Marker Type Key
+# Returns: nothing
+# Assumes: there is a connection to the database
+# Effects: nothing 
+# Throws: nothing
+
 def loadMarkerTypeKeyLookup():
     global markerTypeKeyByRawBioTypeLookup
 
+    # get the biotype translation type key
     results = db.sql('''SELECT _TranslationType_key
         FROM MGI_TranslationType
         WHERE translationType = '%s' ''' % TRANSTYPE, 'auto')
@@ -110,11 +119,19 @@ def loadMarkerTypeKeyLookup():
         sys.exit(1)
     transTypeKey = results[0]['_TranslationType_key']
 
+    # load the biotype translation into a lookup
     results = db.sql('''SELECT badName, _Object_key as markerTypeKey
         FROM MGI_Translation
         WHERE _TranslationType_key = %s''' % transTypeKey, 'auto')
     for r in results:
         markerTypeKeyByRawBioTypeLookup[ r['badName'] ] = r['markerTypeKey']
+
+# Purpose:  Load  sequence key lookup by seqId for a given provider
+# Returns: nothing
+# Assumes: there is a connection to the database
+# Effects: nothing
+# Throws: nothing
+
 
 def loadSequenceKeyLookup():
     global seqKeyByGMIDLookup
@@ -134,6 +151,13 @@ def loadSequenceKeyLookup():
                 AND preferred = 1''' % ldbKey, 'auto')
     for r in results:
         seqKeyByGMIDLookup[r['accId']] = r['seqKey']
+
+# Purpose:  Load lookup of raw biotype by gene model ID for
+#	    either VEGA or Ensembl (file format the same)
+# Returns: nothing
+# Assumes: inFile is a valid file descriptor
+# Effects: nothing
+# Throws: nothing
 
 def loadVegaEnsemblRawBioTypeByGMIDLookup():
     global rawBioTypeByGMIDLookup
@@ -156,6 +180,12 @@ def loadVegaEnsemblRawBioTypeByGMIDLookup():
         rawBioTypeByGMIDLookup[gmId] = biotype
         #print '%s %s %s' % (gmId, biotype, CRT)
 
+# Purpose:  Load lookup of raw biotype by gene model ID for
+#           either NCBI
+# Returns: nothing
+# Assumes: inFile is a valid file descriptor
+# Effects: nothing
+# Throws: nothing
 
 def loadNCBIRawBioTypeByGMIDLookup():
     global rawBioTypeByGMIDLookup
@@ -170,6 +200,12 @@ def loadNCBIRawBioTypeByGMIDLookup():
             gmId = columnList[1]
             biotype = columnList[9]
             rawBioTypeByGMIDLookup[gmId] = biotype
+
+# Purpose: Initialize globals; load lookups 
+# Returns: nothing
+# Assumes: nothing
+# Effects: nothing
+# Throws: nothing
 
 def init():
     global inFile, provider, bcpFilePath, bcpFile
@@ -203,8 +239,14 @@ def init():
     loadSequenceKeyLookup()
     loadMarkerTypeKeyLookup()
 
+# Purpose: create the bcp file
+# Returns: nothing
+# Assumes: nothing
+# Effects: creates file in the filesystem
+# Throws: nothing
 
 def run ():
+    print 'Creating bcp file for %s ' % provider
     # current count of gm IDs found in database, but not in input
     notInInputCtr = 0
 
@@ -231,7 +273,9 @@ def run ():
 	    continue
 
 	bcpFile.write('%s%s%s%s%s%s%s%s%s%s%s%s%s%s%s%s' % \
-	    (sequenceKey, TAB, markerTypeKey, TAB, rawBioType, TAB, TAB, TAB, CREATEDBY_KEY, TAB, CREATEDBY_KEY, TAB, cdate, TAB, cdate, CRT) )
+	    (sequenceKey, TAB, markerTypeKey, TAB, rawBioType, TAB, \
+		TAB, TAB, CREATEDBY_KEY, TAB, CREATEDBY_KEY, TAB, \
+		cdate, TAB, cdate, CRT) )
 
     print '\n%s %s gene model Ids in the database but not in the input file' % \
 	(notInInputCtr, provider)
@@ -242,10 +286,7 @@ def run ():
 # Main
 #
 
-print 'Initializing'
 init()
-
-print 'Creating bcp file for %s ' % provider
 run()
 
 inFile.close()

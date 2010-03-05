@@ -6,7 +6,12 @@
 #  Purpose:
 #
 #      This script is a wrapper around the process that loads the gene
-#      models and/or the associations for a given provider.
+#      models and/or marker associations for a given provider.
+#      As of MGI4.33 (TR9782) This script also runs the loading of
+#      1) SEQ_GeneModel (A script in this product) 
+#      2) VEGA/Ensembl transcript/protein sequence loads and marker 
+#         associations, VEGA/Ensembl transcript/protein sequence
+#         associations  (vega_ensemblseqload)
 #
 #  Usage:
 #
@@ -193,11 +198,14 @@ then
 fi
 
 #
-# If the gene models are to be reloaded:
-# 1) call the assemblyseqload which reloads genemodels AND associations
-# 2) if VEGA or Ensembl, call the vega_ensemblseqload to reload 
-#    transcript and protein sequences and associations
-# 3) call the seqgenemodelload
+# If the gene models are to be reloaded, the following is done for PROVIDER:
+# 1) call the assemblyseqload to reload genemodels, coordinates and
+#    marker associations
+# 2) call the seqgenemodelload to reload SEQ_GeneModel
+# 3) if VEGA or Ensembl, call the vega_ensemblseqload to reload 
+#    a) transcript and protein sequences 
+#    b) marker associations to transcript and protein sequences
+#    d) relationships between transcript and protein sequences
 #
 echo "" >> ${LOG}
 date >> ${LOG}
@@ -205,26 +213,30 @@ if [ ${RELOAD_GENEMODELS} = "true" ]
 then
     echo "Load gene models and associations for ${PROVIDER}" | tee -a ${LOG}
     ${ASSEMBLY_WRAPPER} ${ASSEMBLY_CONFIG} >> ${LOG}
+
+    echo "Load SEQ_GeneModel for ${PROVIDER}" | tee -a ${LOG}
+    ./seqgenemodelload.sh ${PROVIDER} | tee -a ${LOG}
+
     if [ ${PROVIDER} = "ensembl" ]
     then
-	echo "Load protein/transcript sequences and marker associations for ${PROVIDER}" | tee -a ${LOG}
-        # order is important, transcripts must be loaded first so proteins can be associated
-	# with them
+	echo "Load protein/transcript sequences and marker associations \		    for ${PROVIDER}" | tee -a ${LOG}
+        # order is important, transcripts must be loaded first so 
+	# proteins can be associated with them
         ${VEGA_ENS_WRAPPER} ensembl_transcriptseqload.config true >> ${LOG}
 	${VEGA_ENS_WRAPPER} ensembl_proteinseqload.config  true >> ${LOG}
     elif [ ${PROVIDER} = "vega" ]
     then
-	echo "Load protein/transcript sequences and marker associations for ${PROVIDER}" | tee -a ${LOG}
+	echo "Load protein/transcript sequences and marker associations \
+	    for ${PROVIDER}" | tee -a ${LOG}
         ${VEGA_ENS_WRAPPER} vega_transcriptseqload.config true >> ${LOG}
         ${VEGA_ENS_WRAPPER} vega_proteinseqload.config true >> ${LOG}
 	echo "Load raw biotypes for ${PROVIDER}" | tee -a ${LOG}
     fi
-    ./seqgenemodelload.sh ${PROVIDER} | tee -a ${LOG}
 #
 # If only the gene model associations are to be reloaded:
-# 1) reload gene model associations
+# 1) reload gene model marker associations
 # 2) if VEGA or Ensembl, call the vega_ensemblseqload to reload 
-#    transcript and protein marker associations
+#    marker associations to transcript and protein sequences
 #
 else
     echo "Load gene model associations for ${PROVIDER}" | tee -a ${LOG}
@@ -232,12 +244,14 @@ else
 
     if [ ${PROVIDER} = "ensembl" ]
     then
-	echo "Load protein/transcript marker associations for ${PROVIDER}" | tee -a ${LOG}
+	echo "Load protein/transcript marker associations for ${PROVIDER}" \
+	    | tee -a ${LOG}
         ${VEGA_ENS_WRAPPER} ensembl_transcriptseqload.config false >> ${LOG}
         ${VEGA_ENS_WRAPPER} ensembl_proteinseqload.config false >> ${LOG}
     elif [ ${PROVIDER} = "vega" ]
     then
-	echo "Load protein/transcript marker associations for ${PROVIDER}" | tee -a ${LOG}
+	echo "Load protein/transcript marker associations for ${PROVIDER}" \
+	    | tee -a ${LOG}
         ${VEGA_ENS_WRAPPER} vega_transcriptseqload.config false >> ${LOG}
         ${VEGA_ENS_WRAPPER} vega_proteinseqload.config false >> ${LOG}
     fi
@@ -251,7 +265,7 @@ TIMESTAMP=`date '+%Y%m%d.%H%M'`
 echo "" >> ${LOG}
 date >> ${LOG}
 echo "Archive input files" | tee -a ${LOG}
-for FILE in ${GM_FILE_DEFAULT} ${ASSOC_FILE_DEFAULT} ${INFILE_NAME_BIOTYPE}
+for FILE in ${GM_FILE_DEFAULT} ${ASSOC_FILE_DEFAULT} ${BIOTYPE_FILE_DEFAULT} ${TRANSCRIPT_FILE_DEFAULT} ${PROTEIN_FILE_DEFAULT}
 do
     ARC_FILE=`basename ${FILE}`.${TIMESTAMP}
     cp -p ${FILE} ${ARCHIVEDIR}/${ARC_FILE}

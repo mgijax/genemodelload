@@ -80,17 +80,26 @@ do
     . ${i}
 
     #
-    # If this installation is being done on shire, create symbolic links to
+    # If this installation is being done on rohan, create symbolic links to
     # the current gene model file and association file on hobbiton from the
     # input directory. This is where the load will look for both files.
     #
-    if [ ${SERVER_NAME} = "shire" ]
+    if [ ${SERVER_NAME} = "rohan" ]
     then
         rm -f ${GM_FILE_DEFAULT}
         ln -s /hobbiton${GM_FILE_CURRENT} ${GM_FILE_DEFAULT}
 
         rm -f ${ASSOC_FILE_DEFAULT}
         ln -s /hobbiton${ASSOC_FILE_DEFAULT} ${ASSOC_FILE_DEFAULT}
+
+	rm -rf ${BIOTYPE_FILE_DEFAULT}
+	ln -s /hobbiton${BIOTYPE_FILE_CURRENT} ${BIOTYPE_FILE_DEFAULT}
+
+        rm -rf ${TRANSCRIPT_FILE_DEFAULT}
+        ln -s /hobbiton${TRANSCRIPT_FILE_CURRENT} ${TRANSCRIPT_FILE_DEFAULT}
+
+        rm -rf ${PROTEIN_FILE_DEFAULT}
+        ln -s /hobbiton${PROTEIN_FILE_CURRENT} ${PROTEIN_FILE_DEFAULT}
     fi
 
     #
@@ -101,6 +110,7 @@ do
     then
         if [ ! -f ${ASSOC_FILE_DEFAULT} ]
         then
+	    echo "Creating ${ASSOC_FILE_DEFAULT}"
             touch ${ASSOC_FILE_DEFAULT}
             chmod 664 ${ASSOC_FILE_DEFAULT}
             chgrp mgi ${ASSOC_FILE_DEFAULT}
@@ -109,10 +119,10 @@ do
 done
 
 #
-# If this installation is being done on shire, the input directory should
+# If this installation is being done on rohan, the input directory should
 # be locked down to protect the symbolic links that were created there.
 #
-if [ ${SERVER_NAME} = "shire" ]
+if [ ${SERVER_NAME} = "rohan" ]
 then
     chmod -f 755 ${INPUTDIR}
 fi
