@@ -209,28 +209,37 @@ fi
 #
 echo "" >> ${LOG}
 date >> ${LOG}
+message=${PROVIDER}
 if [ ${RELOAD_GENEMODELS} = "true" ]
 then
     echo "Load gene models and associations for ${PROVIDER}" | tee -a ${LOG}
     ${ASSEMBLY_WRAPPER} ${ASSEMBLY_CONFIG} >> ${LOG}
 
     echo "Load SEQ_GeneModel for ${PROVIDER}" | tee -a ${LOG}
-    ./seqgenemodelload.sh ${PROVIDER} | tee -a ${LOG}
+    ./seqgenemodelload.sh ${PROVIDER} >> ${LOG} 2>&1
+    STAT=$?
+    if [ ${STAT} -ne 0 ]
+    then
+	message="${message} seqgenemodelload.sh failed"
+    else
+	message="${message} seqgenemodelload.sh successful" 
+    fi
+    echo ${message} | tee -a ${LOG}
+
 
     if [ ${PROVIDER} = "ensembl" ]
     then
-	echo "Load protein/transcript sequences and marker associations \		    for ${PROVIDER}" | tee -a ${LOG}
+	echo "Load protein/transcript sequences and marker associations for ${PROVIDER}" | tee -a ${LOG}
         # order is important, transcripts must be loaded first so 
 	# proteins can be associated with them
-        ${VEGA_ENS_WRAPPER} ensembl_transcriptseqload.config true >> ${LOG}
-	${VEGA_ENS_WRAPPER} ensembl_proteinseqload.config  true >> ${LOG}
+        ${VEGA_ENS_WRAPPER} ensembl_transcriptseqload.config true >> ${LOG} 2>&1
+	${VEGA_ENS_WRAPPER} ensembl_proteinseqload.config  true >> ${LOG} 2>&1
     elif [ ${PROVIDER} = "vega" ]
     then
-	echo "Load protein/transcript sequences and marker associations \
-	    for ${PROVIDER}" | tee -a ${LOG}
-        ${VEGA_ENS_WRAPPER} vega_transcriptseqload.config true >> ${LOG}
-        ${VEGA_ENS_WRAPPER} vega_proteinseqload.config true >> ${LOG}
-	echo "Load raw biotypes for ${PROVIDER}" | tee -a ${LOG}
+	echo "Load protein/transcript sequences and marker associations for ${PROVIDER}" | tee -a ${LOG}
+        ${VEGA_ENS_WRAPPER} vega_transcriptseqload.config true >> ${LOG} 2>&1
+        ${VEGA_ENS_WRAPPER} vega_proteinseqload.config true >> ${LOG} 2>&1
+	echo "Load raw biotypes for ${PROVIDER}" | tee -a ${LOG} 2>&1
     fi
 #
 # If only the gene model associations are to be reloaded:
@@ -240,20 +249,18 @@ then
 #
 else
     echo "Load gene model associations for ${PROVIDER}" | tee -a ${LOG}
-    ${ASSOCLOAD_WRAPPER} ${ASSEMBLY_CONFIG} >> ${LOG}
+    ${ASSOCLOAD_WRAPPER} ${ASSEMBLY_CONFIG} >> ${LOG} 2>&1
 
     if [ ${PROVIDER} = "ensembl" ]
     then
-	echo "Load protein/transcript marker associations for ${PROVIDER}" \
-	    | tee -a ${LOG}
-        ${VEGA_ENS_WRAPPER} ensembl_transcriptseqload.config false >> ${LOG}
-        ${VEGA_ENS_WRAPPER} ensembl_proteinseqload.config false >> ${LOG}
+	echo "Load protein/transcript marker associations for ${PROVIDER}" | tee -a ${LOG}
+        ${VEGA_ENS_WRAPPER} ensembl_transcriptseqload.config false >> ${LOG} 2>&1
+        ${VEGA_ENS_WRAPPER} ensembl_proteinseqload.config false >> ${LOG} 2>&1
     elif [ ${PROVIDER} = "vega" ]
     then
-	echo "Load protein/transcript marker associations for ${PROVIDER}" \
-	    | tee -a ${LOG}
-        ${VEGA_ENS_WRAPPER} vega_transcriptseqload.config false >> ${LOG}
-        ${VEGA_ENS_WRAPPER} vega_proteinseqload.config false >> ${LOG}
+	echo "Load protein/transcript marker associations for ${PROVIDER}" | tee -a ${LOG}
+        ${VEGA_ENS_WRAPPER} vega_transcriptseqload.config false >> ${LOG} 2>&1
+        ${VEGA_ENS_WRAPPER} vega_proteinseqload.config false >> ${LOG} 2>&1
     fi
 fi
 
@@ -275,5 +282,10 @@ done
 # Touch the "lastrun" file to note when the load was run.
 #
 touch ${LASTRUN_FILE}
+
+#
+# mail the log
+#
+cat ${LOG} | mailx -s "Gene Model Load Completed: ${message}" ${MAIL_LOG}
 
 exit 0

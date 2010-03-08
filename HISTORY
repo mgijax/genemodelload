@@ -1,3 +1,12 @@
+TAG: genemodelload-tr9774-8
+DATE: 03/08/2010
+STAFF: sc
+CHANGES:
+1) genemodel_common.config.default - Added MAIL_LOG="mgiadmin"
+2) genemodelload.sh - added message var to report seqgenemodelload.sh
+   success or failure and mailx of 'message' to 'MAIL_LOG'
+   added 2>&1 to >> ${LOG}
+
 TAG: genemodelload-tr9774-7
 DATE: 03/05/2010
 STAFF: sc
