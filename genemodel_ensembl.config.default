@@ -102,3 +102,60 @@ export ASSEMBLY_CONFIG
 RELOAD_GENEMODELS=false
 
 export RELOAD_GENEMODELS
+
+#
+# seqgenemodelload.sh configuration
+#
+
+# use the Ensembl Genomic Sequence Load user
+#
+USERKEY=1410
+
+export USERKEY
+
+# Full path to the current gene model biotype file (on hobbiton).
+#
+BIOTYPE_FILE_CURRENT=${BIOTYPEDIR}/Mus_musculus.NCBIM37.56.gtf.gz
+
+# Full path to the default biotype file
+# Used to create gene model ID to biotype mapping for createSeqGeneTrapInput.py
+#
+BIOTYPE_FILE_DEFAULT=${INPUTDIR}/ensembl_biotypes.gz
+
+export BIOTYPE_FILE_CURRENT BIOTYPE_FILE_DEFAULT
+
+# Full path to the current transcript file (on hobbiton).
+#
+TRANSCRIPT_FILE_CURRENT=${TRANSCRIPTDIR}/Mus_musculus.NCBIM37.56.cdna.all.fa.gz
+
+# Full path to the default transcript file
+# Used by vega_ensemblseqload
+#
+TRANSCRIPT_FILE_DEFAULT=${INPUTDIR}/ensembl_transcripts.gz
+
+export TRANSCRIPT_FILE_CURRENT TRANSCRIPT_FILE_DEFAULT
+
+# Full path to the current protein file (on hobbiton).
+#
+PROTEIN_FILE_CURRENT=${PROTEINDIR}/Mus_musculus.NCBIM37.56.pep.all.fa.gz
+
+# Full path to the default transcript file
+# Used by vega_ensemblseqload
+#
+PROTEIN_FILE_DEFAULT=${INPUTDIR}/ensembl_proteins.gz
+
+export PROTEIN_FILE_CURRENT PROTEIN_FILE_DEFAULT
+
+# path to bcp file
+#
+BCP_FILE_PATH=${OUTPUTDIR}/SEQ_GeneModel.ensembl.bcp
+
+# full path to the log file
+#
+SEQGENEMODELLOAD_LOGFILE=${LOGDIR}/ensembl_seqgenemodelload.log
+
+# logicalDB of the gene model sequence provider
+#
+PROVIDER_LOGICALDB=${ASSOC_FILE_LOGICALDB}
+
+export BCP_FILE_PATH SEQGENEMODELLOAD_LOGFILE PROVIDER_LOGICALDB

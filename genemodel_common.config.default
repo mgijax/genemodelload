@@ -45,7 +45,19 @@ export INPUTDIR OUTPUTDIR LOGDIR RPTDIR ARCHIVEDIR
 #
 GENEMODELDIR=/data/genemodels/current/models
 
-export GENEMODELDIR
+# Full path to the gene model biotypes directory that exists only on hobbiton.
+#
+BIOTYPEDIR=/data/genemodels/current/biotypes
+
+# Full path to the transcripts directory that exists only on hobbiton.
+#
+TRANSCRIPTSDIR=/data/genemodels/current/transcripts
+
+# Full path to the proteins directory that exists only on hobbiton.
+#
+PROTEINDIR=/data/genemodels/current/proteins
+
+export GENEMODELDIR BIOTYPEDIR TRANSCRIPTSDIR PROTEINDIR
 
 # Number of columns expected for the input files (for sanity check).
 #
@@ -68,8 +80,19 @@ ASSEMBLY_WRAPPER=${ASSEMBLYSEQLOAD}/bin/assemblyseqload.sh
 
 export ASSOCLOAD_WRAPPER ASSEMBLY_WRAPPER
 
+# Full path to Vega/Ensembl seqload scripts.
+#
+VEGA_ENS_WRAPPER=${VEGA_ENSEMBLSEQLOAD}/bin/vega_ensemblseqload.sh
+VEGA_ENS_ASSOC_WRAPPER=${VEGA_ENSEMBLSEQLOAD}/bin/run_assocload.sh
+
+export VEGA_ENS_WRAPPER VEGA_ENS_ASSOC_WRAPPER
+
 # Installation directory for the gene model load.
 #
 INSTALLDIR=${GENEMODELLOAD}
 
-export INSTALLDIR
+#
+# email log to
+MAIL_LOG="mgiadmin"
+
+export INSTALLDIR MAIL_LOG

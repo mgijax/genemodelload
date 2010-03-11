@@ -1,4 +1,69 @@
-TAG: genemodelload-tr9774=BP
+TAG: genemodelload-4-3-3-1
+DATE: 03/11/2010
+STAFF: sc
+CHANGES: Merge tr9774 branch to trunk
+
+TAG: genemodelload-tr9774-9
+TAG: genemodelload-tr9774-8
+DATE: 03/08/2010
+STAFF: sc
+CHANGES:
+1) genemodel_common.config.default - Added MAIL_LOG="mgiadmin"
+2) genemodelload.sh - added message var to report seqgenemodelload.sh
+   success or failure and mailx of 'message' to 'MAIL_LOG'
+   added 2>&1 to >> ${LOG}
+
+TAG: genemodelload-tr9774-7
+DATE: 03/05/2010
+STAFF: sc
+CHANGES:
+1) Updated some input/output file names and paths
+2) Overall comment update
+
+TAG: genemodelload-tr9774-6
+DATE: 03/02/2010
+STAFF: sc
+CHANGES:
+1) vega/ensembl/ncib config files - added USERKEY for seqgenemodelload.py
+   I am using the '* Genomic Sequence Load' user key
+2) seqgenemodelload.py - added createdBy/modifiedBy key and 
+   and creation/modification date as this has been added to the schema
+
+TAG: genemodelload-tr9774-5
+DATE: 02/27/2010
+STAFF: sc
+CHANGES: Need to load transcripts before proteins for seq to seq
+associations To work properly
+
+TAG: genemodelload-tr9774-4
+TAG: genemodelload-tr9774-3
+DATE: 02/18/2010
+STAFF: sc
+CHANGES:
+1) added seqgenemodelload.sh seqgenemodelload.py
+2) genemodelload.sh - added archiving of gm biotype
+   input file. Added call to seqgenemodelload.sh.
+3) ensembl and vega config files added settings to 
+   support seqgenemodelload
+
+TAG: genemodelload-tr9774-2
+DATE: 12/09/2009
+STAFF: sc
+CHANGES: I realized that the associatins were only getting redone
+  when reloading sequences, thus the following changes:
+1) genemodelload.sh - call only VEGA_ENS_WRAPPER and pass new boolean
+   param indicating to load sequences and assocs or just assocs.
+
+TAG: genemodelload-tr9774-1
+DATE: 12/08/2009
+STAFF: sc
+CHANGES: 
+1) genemodel_common.config.default - added  VEGA_ENS_WRAPPER
+   and VEGA_ENS_ASSOC_WRAPPER
+2) Added processing of transcripts/protein sequences and 
+   associating them with gene model markers
+
+TAG: genemodelload-tr9774-BP
 DATE: 12/08/2009
 STAFF: sc
 CHANGES: 
@@ -31,4 +96,5 @@ TAG: genemodelload-4-1-1-1
 DATE: 09/09/2008
 STAFF: dbm
 CHANGES: New load (TR9095)
-
+TE: 12/08/2009
+STAFF: sc
