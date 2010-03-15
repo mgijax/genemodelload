@@ -86,9 +86,12 @@ SEC_MARKER_RPT=${RPTDIR}/ncbi_sec_marker.rpt
 MISSING_GMID_RPT=${RPTDIR}/ncbi_missing_gmid.rpt
 CHR_DISCREP_RPT=${RPTDIR}/ncbi_chr_discrep.rpt
 
+# names of reports containing discrepancies for a given run
+RPT_NAMES_RPT=${RPTDIR}/ncbi_reportsWithDiscrepancies.rpt
+
 export GM_SANITY_RPT ASSOC_SANITY_RPT
 export INVALID_MARKER_RPT SEC_MARKER_RPT
-export MISSING_GMID_RPT CHR_DISCREP_RPT
+export MISSING_GMID_RPT CHR_DISCREP_RPT RPT_NAMES_RPT
 
 # Name of the configuration file for the assemblyseqload.
 #
