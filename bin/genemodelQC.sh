@@ -1,4 +1,4 @@
-#!/bin/sh
+#!/bin/sh 
 #
 #  genemodelQC.sh
 ###########################################################################
@@ -225,7 +225,7 @@ fi
 #
 # Initialize the report files to make sure the current user can write to them.
 #
-RPT_LIST="${GM_SANITY_RPT} ${ASSOC_SANITY_RPT} ${INVALID_MARKER_RPT} ${SEC_MARKER_RPT} ${MISSING_GMID_RPT} ${CHR_DISCREP_RPT}"
+RPT_LIST="${GM_SANITY_RPT} ${ASSOC_SANITY_RPT} ${INVALID_MARKER_RPT} ${SEC_MARKER_RPT} ${MISSING_GMID_RPT} ${CHR_DISCREP_RPT} ${RPT_NAMES_RPT}"
 
 for i in ${RPT_LIST}
 do
@@ -404,7 +404,7 @@ fi
 
 if [ ${GM_FILE_ERROR} -ne 0 ]
 then
-    echo "Sanity errors detected in gene model file" | tee -a ${LOG}
+    echo "Sanity errors detected. See ${GM_SANITY_RPT}" | tee -a ${LOG}
 fi
 
 #
@@ -435,7 +435,7 @@ fi
 
 if [ ${ASSOC_FILE_ERROR} -ne 0 ]
 then
-    echo "Sanity errors detected in association file" | tee -a ${LOG}
+    echo "Sanity errors detected. See ${ASSOC_SANITY_RPT}" | tee -a ${LOG}
 fi
 
 #
@@ -510,8 +510,10 @@ then
     RC=1
 elif [ `cat ${TMP_FILE}` -eq 2 ]
 then
-    echo "QC errors detected" | tee -a ${LOG}
-    RC=0
+    echo "QC errors detected in the following files: " | tee -a ${LOG}
+    #echo `cat ${RPT_NAMES_RPT}` | tee -a ${LOG}
+    cat ${RPT_NAMES_RPT}
+    #cat ${RPT_NAMES_RPT} | while read a; do echo "$a" ; done | cat
 else
     RC=0
 fi

@@ -34,6 +34,7 @@
 #          CHR_DISCREP_RPT
 #          ASSOC_FILE_LOAD
 #          ASSOC_FILE_LOGICALDB
+#	   RPT_NAMES_RPT
 #
 #      The following environment variable is set by the wrapper script:
 #
@@ -146,6 +147,8 @@ invMrkRptFile = os.environ['INVALID_MARKER_RPT']
 secMrkRptFile = os.environ['SEC_MARKER_RPT']
 missGMRptFile = os.environ['MISSING_GMID_RPT']
 chrDiscrepRptFile = os.environ['CHR_DISCREP_RPT']
+# names of reports that contain discrepancies
+rptNamesFile = os.environ['RPT_NAMES_RPT']
 
 assocLoadFile = os.environ['ASSOC_FILE_LOAD']
 logicalDB = os.environ['ASSOC_FILE_LOGICALDB']
@@ -153,7 +156,7 @@ logicalDB = os.environ['ASSOC_FILE_LOGICALDB']
 timestamp = mgi_utils.date()
 
 errorCount = 0
-
+errorReportNames = []
 assoc = {}
 
 
@@ -205,7 +208,7 @@ def init ():
 def openFiles ():
     global fpGM, fpAssoc, fpGMBCP, fpAssocBCP
     global fpInvMrkRpt, fpSecMrkRpt, fpMissGMRpt, fpChrDiscrepRpt
-
+    global fpRptNamesRpt
     #
     # Open the input files.
     #
@@ -257,7 +260,11 @@ def openFiles ():
     except:
         print 'Cannot open report file: ' + chrDiscrepRptFile
         sys.exit(1)
-
+    try:
+        fpRptNamesRpt = open(rptNamesFile, 'a')
+    except:
+        print 'Cannot open report file: ' + invMrkRptFile
+        sys.exit(1)
     return
 
 
@@ -269,13 +276,16 @@ def openFiles ():
 # Throws: Nothing
 #
 def closeFiles ():
+    global fpGM, fpAssoc, fpGMBCP, fpAssocBCP
+    global fpInvMrkRpt, fpSecMrkRpt, fpMissGMRpt, fpChrDiscrepRpt
+    global fpRptNamesRpt
+
     fpGM.close()
     fpAssoc.close()
     fpInvMrkRpt.close()
     fpSecMrkRpt.close()
     fpMissGMRpt.close()
     fpChrDiscrepRpt.close()
-
     return
 
 
@@ -412,7 +422,7 @@ def loadTempTables ():
 # Throws: Nothing
 #
 def createInvMarkerReport ():
-    global assoc, errorCount
+    global assoc, errorCount, errorReportNames
 
     print 'Create the invalid marker report'
     fpInvMrkRpt.write(string.center('Invalid Marker Report',110) + NL)
@@ -513,11 +523,13 @@ def createInvMarkerReport ():
                 if list.count(gmID) > 0:
                     list.remove(gmID)
                 assoc[mgiID] = list
+    numErrors = len(results[0])
+    fpInvMrkRpt.write(NL + 'Number of Rows: ' + str(numErrors) + NL)
 
-    fpInvMrkRpt.write(NL + 'Number of Rows: ' + str(len(results[0])) + NL)
-
-    errorCount += len(results[0])
-
+    errorCount += numErrors
+    if numErrors > 0:
+	if not invMrkRptFile in errorReportNames:
+	    errorReportNames.append(invMrkRptFile + NL)
     return
 
 
@@ -529,7 +541,7 @@ def createInvMarkerReport ():
 # Throws: Nothing
 #
 def createSecMarkerReport ():
-    global assoc, errorCount
+    global assoc, errorCount, errorReportNames
 
     print 'Create the secondary marker report'
     fpSecMrkRpt.write(string.center('Secondary Marker Report',108) + NL)
@@ -567,7 +579,6 @@ def createSecMarkerReport ():
                 'order by tmp.mgiID, tmp.gmID')
 
     results = db.sql(cmds,'auto')
-
     #
     # Write the records to the report.
     #
@@ -589,11 +600,13 @@ def createSecMarkerReport ():
                 if list.count(gmID) > 0:
                     list.remove(gmID)
                 assoc[mgiID] = list
+    numErrors = len(results[0])
+    fpSecMrkRpt.write(NL + 'Number of Rows: ' + str(numErrors) + NL)
 
-    fpSecMrkRpt.write(NL + 'Number of Rows: ' + str(len(results[0])) + NL)
-
-    errorCount += len(results[0])
-
+    errorCount += numErrors
+    if numErrors > 0:
+	if not secMrkRptFile in errorReportNames:
+	    errorReportNames.append(secMrkRptFile + NL)
     return
 
 
@@ -605,7 +618,7 @@ def createSecMarkerReport ():
 # Throws: Nothing
 #
 def createMissingGMIDReport ():
-    global assoc, errorCount
+    global assoc, errorCount, errorReportNames
 
     print 'Create the missing gene model ID report'
     fpMissGMRpt.write(string.center('Missing Gene Model ID Report',80) + NL)
@@ -651,11 +664,14 @@ def createMissingGMIDReport ():
                 if list.count(gmID) > 0:
                     list.remove(gmID)
                 assoc[mgiID] = list
-
-    fpMissGMRpt.write(NL + 'Number of Rows: ' + str(len(results[0])) + NL)
-
-    errorCount += len(results[0])
-
+    
+    numErrors = len(results[0])
+    fpMissGMRpt.write(NL + 'Number of Rows: ' + str(numErrors) + NL)
+    
+    errorCount += numErrors
+    if numErrors > 0:
+	if not missGMRptFile in errorReportName:
+            errorReportNames.append(missGMRptFile + NL)
     return
 
 
@@ -667,7 +683,7 @@ def createMissingGMIDReport ():
 # Throws: Nothing
 #
 def createChrDiscrepReport ():
-    global assoc, errorCount
+    global assoc, errorCount, errorReportNames
 
     print 'Create the chromosome discrepancy report'
     fpChrDiscrepRpt.write(string.center('Chromosome Discrepancy Report',96) + NL)
@@ -727,10 +743,13 @@ def createChrDiscrepReport ():
                     list.remove(gmID)
                 assoc[mgiID] = list
 
-    fpChrDiscrepRpt.write(NL + 'Number of Rows: ' + str(len(results[0])) + NL)
+    numErrors = len(results[0])
+    fpChrDiscrepRpt.write(NL + 'Number of Rows: ' + str(numErrors) + NL)
 
-    errorCount += len(results[0])
-
+    errorCount += numErrors
+    if numErrors > 0:
+	if not chrDiscrepRptFile in errorReportNames:
+            errorReportNames.append(chrDiscrepRptFile + NL)
     return
 
 
@@ -779,6 +798,9 @@ if liveRun == "1":
     createAssocLoadFile()
 
 if errorCount > 0:
+    names = string.join(errorReportNames,'' )
+    fpRptNamesRpt.write(names)
+    fpRptNamesRpt.close()
     sys.exit(2)
 else:
     sys.exit(0)

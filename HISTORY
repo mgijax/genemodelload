@@ -1,3 +1,19 @@
+TAG: genemodelload-4-3-3-3
+DATE: 03/19/2010
+STAFF: sc
+CHANGES: Merged tr9836 branch to trunk
+
+TAG: genemodelload-tr9836-1
+DATE: 03/15/2010
+STAFF: sc
+CHANGES: TR9386
+1) provider.config.default - added RPT_NAMES_RPT setting
+   this file is a report of the  names of the files that
+   report discrepancies
+2) bin/genemodelQC.py - write to RPT_NAMES_RPT the name of the
+   file when a discrepancy is reported
+3) bin/genemodelQC.sh -  write RPT_NAMES_RPT to stdout
+
 TAG: genemodelload-tr9836-BP
 DATE: 03/15/2010
 STAFF: sc
