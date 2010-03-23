@@ -1,3 +1,9 @@
+TAG: genemodelload-4-3-3-4
+DATE: 03/23/2010
+STAFF: sc
+CHANGES: genemodel_common.config.default updated 'TRANSCRIPTSDIR'
+  to 'TRANSCRIPTDIR'
+
 TAG: genemodelload-4-3-3-3
 DATE: 03/19/2010
 STAFF: sc

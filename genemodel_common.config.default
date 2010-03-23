@@ -51,13 +51,13 @@ BIOTYPEDIR=/data/genemodels/current/biotypes
 
 # Full path to the transcripts directory that exists only on hobbiton.
 #
-TRANSCRIPTSDIR=/data/genemodels/current/transcripts
+TRANSCRIPTDIR=/data/genemodels/current/transcripts
 
 # Full path to the proteins directory that exists only on hobbiton.
 #
 PROTEINDIR=/data/genemodels/current/proteins
 
-export GENEMODELDIR BIOTYPEDIR TRANSCRIPTSDIR PROTEINDIR
+export GENEMODELDIR BIOTYPEDIR TRANSCRIPTDIR PROTEINDIR
 
 # Number of columns expected for the input files (for sanity check).
 #
