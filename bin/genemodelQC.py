@@ -670,7 +670,7 @@ def createMissingGMIDReport ():
     
     errorCount += numErrors
     if numErrors > 0:
-	if not missGMRptFile in errorReportName:
+	if not missGMRptFile in errorReportNames:
             errorReportNames.append(missGMRptFile + NL)
     return
 
