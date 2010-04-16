@@ -1,3 +1,10 @@
+TAG: genemodelload-4-3-3-5
+DATE: 04/15/2010
+STAFF: dbm
+CHANGES:
+1) genemodel_ensembl.config.default - updated file names for Ensembl 57
+   release (TR10128)
+
 TAG: genemodelload-4-3-3-4
 DATE: 03/23/2010
 STAFF: sc
