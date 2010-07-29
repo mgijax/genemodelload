@@ -117,7 +117,7 @@ export USERKEY
 
 # Full path to the current gene model biotype file (on hobbiton).
 #
-BIOTYPE_FILE_CURRENT=${BIOTYPEDIR}/gene_info.gz
+BIOTYPE_FILE_CURRENT=${DATADOWNLOADS}/entrezgene/gene_info.gz
 
 # Full path to the default biotype file
 # Used to create gene model ID to biotype mapping for createSeqGeneTrapInput.py
