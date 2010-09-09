@@ -1,3 +1,9 @@
+TAG: genemodelload-4-4-0-1
+DATE: 09/09/2010
+STAFF: sc
+CHANGES: TR10299
+1) genemodel_ensembl.config.default - updated for build 59
+
 TAG: genemodelload-4-3-4-2
 DATE: 07/29/2010
 STAFF: sc
