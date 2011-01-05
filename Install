@@ -98,6 +98,12 @@ do
         rm -rf ${TRANSCRIPT_FILE_DEFAULT}
         ln -s /hobbiton${TRANSCRIPT_FILE_CURRENT} ${TRANSCRIPT_FILE_DEFAULT}
 
+	if [ ${i} -eq 'genemodel_ensembl.config' ]
+	then
+	    rm -rf ${NCRNA_FILE_DEFAULT}
+	    ln -s /hobbiton${NCRNA_FILE_CURRENT} ${NCRNA_FILE_DEFAULT}
+	fi
+
         rm -rf ${PROTEIN_FILE_DEFAULT}
         ln -s /hobbiton${PROTEIN_FILE_CURRENT} ${PROTEIN_FILE_DEFAULT}
     fi

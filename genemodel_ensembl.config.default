@@ -138,6 +138,17 @@ TRANSCRIPT_FILE_DEFAULT=${INPUTDIR}/ensembl_transcripts.gz
 
 export TRANSCRIPT_FILE_CURRENT TRANSCRIPT_FILE_DEFAULT
 
+# Full path to the current non-coding RNA transcript file (on hobbiton).
+#
+NCRNA_FILE_CURRENT=${TRANSCRIPTDIR}/Mus_musculus.NCBIM37.59.ncrna.fa.gz
+
+# Full path to the default non coding RNA transcript file
+# Used by vega_ensemblseqload
+#
+NCRNA_FILE_DEFAULT=${INPUTDIR}/ensembl_ncrna.gz
+
+export TRANSCRIPT_FILE_CURRENT TRANSCRIPT_FILE_DEFAULT
+
 # Full path to the current protein file (on hobbiton).
 #
 PROTEIN_FILE_CURRENT=${PROTEINDIR}/Mus_musculus.NCBIM37.59.pep.all.fa.gz
