@@ -128,7 +128,7 @@ export BIOTYPE_FILE_CURRENT BIOTYPE_FILE_DEFAULT
 
 # Full path to the current transcript file (on hobbiton).
 #
-TRANSCRIPT_FILE_CURRENT=${TRANSCRIPTDIR}/Mus_musculus.VEGA37.41.cdna.all.fa.gz
+TRANSCRIPT_FILE_CURRENT=${TRANSCRIPTDIR}/Mus_musculus.VEGA41.41.cdna.all.fa.gz
 
 # Full path to the default transcript file
 # Used by vega_ensemblseqload
@@ -139,7 +139,7 @@ export TRANSCRIPT_FILE_CURRENT TRANSCRIPT_FILE_DEFAULT
 
 # Full path to the current protein file (on hobbiton).
 #
-PROTEIN_FILE_CURRENT=${PROTEINDIR}/Mus_musculus.VEGA37.41.pep.all.fa.gz
+PROTEIN_FILE_CURRENT=${PROTEINDIR}/Mus_musculus.VEGA41.41.pep.all.fa.gz
 
 # Full path to the default transcript file
 # Used by vega_ensemblseqload
