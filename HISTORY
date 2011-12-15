@@ -1,3 +1,9 @@
+TAG: genemodelload-4-4-1-8
+DATE: 12/15/2011
+STAFF: sc
+CHANGES: TR10921 Ensembl 65
+genemodel_ensembl.config.default - updated filenames for build 65 
+
 TAG: genemodelload-4-4-1-7
 DATE: 09/27/2011
 STAFF: sc
