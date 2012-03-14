@@ -1,9 +1,11 @@
+TAG: genemodelload-4-4-2-2
 TAG: genemodelload-4-4-2-1
 DATE: 03/12/2012
 STAFF: sc
 CHANGES: TR11002/TR11003 
 1) genemodel_ensembl.config.default - updated filenames for build 66
 2) genemodel_vega.config.default - updated filenames for build 46
+3) seqgenemodelload.py - parse raw biotype differently for ensembl
 
 TAG: genemodelload-4-4-1-8
 DATE: 12/15/2011

@@ -161,15 +161,17 @@ def loadSequenceKeyLookup():
 
 def loadVegaEnsemblRawBioTypeByGMIDLookup():
     global rawBioTypeByGMIDLookup
-
     for line in inFile.readlines():
         columnList =  string.split(line, TAB)
-        biotype = string.strip(columnList[1])
         attributeList = string.split(columnList[8], SCOLON)
         gmId = (string.split(attributeList[0], '"'))[1].strip()
+        if provider == 'vega':
+            biotype = string.strip(columnList[1])
+        else:
+	    biotype = (string.split(attributeList[4], '"'))[1].strip()
+
         # there are redundant id/biotype lines in the input, all IDs have the
         # same biotype for each of the redundant lines so save only one pair
-
         # but just in case check
         if rawBioTypeByGMIDLookup.has_key(gmId):
             b = rawBioTypeByGMIDLookup[gmId]
@@ -219,7 +221,6 @@ def init():
             sys.exit(1)
 
     provider = sys.argv[1]
-
     try:
         bcpFilePath = os.environ['BCP_FILE_PATH']
         bcpFile = open(bcpFilePath, 'w')
