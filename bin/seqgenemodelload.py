@@ -178,7 +178,7 @@ def loadVegaEnsemblRawBioTypeByGMIDLookup():
             if b != biotype:
                 print 'Differing biotypes for %s: %s and %s' % (gmId, b, biotype
 )
-                sys.exit(1)
+                #sys.exit(1)
         rawBioTypeByGMIDLookup[gmId] = biotype
         #print '%s %s %s' % (gmId, biotype, CRT)
 
