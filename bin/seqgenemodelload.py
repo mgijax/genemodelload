@@ -165,10 +165,10 @@ def loadVegaEnsemblRawBioTypeByGMIDLookup():
         columnList =  string.split(line, TAB)
         attributeList = string.split(columnList[8], SCOLON)
         gmId = (string.split(attributeList[0], '"'))[1].strip()
-        if provider == 'vega':
-            biotype = string.strip(columnList[1])
-        else:
-	    biotype = (string.split(attributeList[4], '"'))[1].strip()
+        #if provider == 'vega':
+        #    biotype = string.strip(columnList[1])
+        #else:
+	biotype = (string.split(attributeList[4], '"'))[1].strip()
 
         # there are redundant id/biotype lines in the input, all IDs have the
         # same biotype for each of the redundant lines so save only one pair
