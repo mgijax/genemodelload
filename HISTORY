@@ -1,3 +1,9 @@
+TAG: genemodelload-5-0-0-2
+DATE: 09/18/2012
+STAFF: sc
+CHANGES: TR10711 (Build 38)
+1) seqgenemodelload.py - parsing raw biotype now the same for vega and ensembl
+
 TAG: genemodelload-5-0-0-1
 DATE: 08/31/2012
 STAFF: sc
