@@ -118,7 +118,7 @@ export USERKEY
 
 # Full path to the current gene model biotype file (on hobbiton).
 #
-BIOTYPE_FILE_CURRENT=${BIOTYPEDIR}/Mus_musculus.GRCm38.72.gtf.gz
+BIOTYPE_FILE_CURRENT=${BIOTYPEDIR}/Mus_musculus.GRCm38.74.gtf.gz
 
 # Full path to the default biotype file
 # Used to create gene model ID to biotype mapping for createSeqGeneTrapInput.py
@@ -129,7 +129,7 @@ export BIOTYPE_FILE_CURRENT BIOTYPE_FILE_DEFAULT
 
 # Full path to the current transcript file (on hobbiton).
 #
-TRANSCRIPT_FILE_CURRENT=${TRANSCRIPTDIR}/Mus_musculus.GRCm38.72.cdna.all.fa.gz
+TRANSCRIPT_FILE_CURRENT=${TRANSCRIPTDIR}/Mus_musculus.GRCm38.74.cdna.all.fa.gz
 
 # Full path to the default transcript file
 # Used by vega_ensemblseqload
@@ -140,7 +140,7 @@ export TRANSCRIPT_FILE_CURRENT TRANSCRIPT_FILE_DEFAULT
 
 # Full path to the current non-coding RNA transcript file (on hobbiton).
 #
-NCRNA_FILE_CURRENT=${TRANSCRIPTDIR}/Mus_musculus.GRCm38.72.ncrna.fa.gz
+NCRNA_FILE_CURRENT=${TRANSCRIPTDIR}/Mus_musculus.GRCm38.74.ncrna.fa.gz
 
 # Full path to the default non coding RNA transcript file
 # Used by vega_ensemblseqload
@@ -151,7 +151,7 @@ export TRANSCRIPT_FILE_CURRENT TRANSCRIPT_FILE_DEFAULT
 
 # Full path to the current protein file (on hobbiton).
 #
-PROTEIN_FILE_CURRENT=${PROTEINDIR}/Mus_musculus.GRCm38.72.pep.all.fa.gz
+PROTEIN_FILE_CURRENT=${PROTEINDIR}/Mus_musculus.GRCm38.74.pep.all.fa.gz
 
 # Full path to the default transcript file
 # Used by vega_ensemblseqload
