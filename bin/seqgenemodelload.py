@@ -161,6 +161,13 @@ def loadSequenceKeyLookup():
 
 def loadVegaEnsemblRawBioTypeByGMIDLookup():
     global rawBioTypeByGMIDLookup
+    # 12/2/2014 - strip off 5 line header
+    junk = inFile.readline()
+    junk = inFile.readline()
+    junk = inFile.readline()
+    junk = inFile.readline()
+    junk = inFile.readline()
+
     for line in inFile.readlines():
         columnList =  string.split(line, TAB)
         attributeList = string.split(columnList[8], SCOLON)
@@ -168,7 +175,11 @@ def loadVegaEnsemblRawBioTypeByGMIDLookup():
         #if provider == 'vega':
         #    biotype = string.strip(columnList[1])
         #else:
-	biotype = (string.split(attributeList[4], '"'))[1].strip()
+	biotype = ''
+	for a in attributeList:
+	    if string.strip(a).startswith('gene_biotype'):
+		temp = string.split(a)[1]
+		biotype = temp[1:-1]
 
         # there are redundant id/biotype lines in the input, all IDs have the
         # same biotype for each of the redundant lines so save only one pair
