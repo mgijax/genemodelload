@@ -118,7 +118,7 @@ export USERKEY
 
 # Full path to the current gene model biotype file (on hobbiton).
 #
-BIOTYPE_FILE_CURRENT=${BIOTYPEDIR}/Mus_musculus.GRCm38.76.gtf.gz
+BIOTYPE_FILE_CURRENT=${BIOTYPEDIR}/Mus_musculus.GRCm38.78.gtf.gz
 
 # Full path to the default biotype file
 # Used to create gene model ID to biotype mapping for createSeqGeneTrapInput.py
