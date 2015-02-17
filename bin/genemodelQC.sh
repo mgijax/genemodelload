@@ -268,7 +268,7 @@ dos2unix ${GM_FILE_QC} ${GM_FILE_QC} 2>/dev/null
 # 4) Extract only lines that have alphanumerics (excludes blank lines)
 # 5) Remove any Ctrl-M characters (dos2unix)
 #
-cat ${ASSOC_FILE} | tail +2 | cut -d'	' -f1,2 | sed 's/ //g' | grep '[0-9A-Za-z]' > ${ASSOC_FILE_QC}
+cat ${ASSOC_FILE} | tail -n +2 | cut -d'	' -f1,2 | sed 's/ //g' | grep '[0-9A-Za-z]' > ${ASSOC_FILE_QC}
 dos2unix ${ASSOC_FILE_QC} ${ASSOC_FILE_QC} 2>/dev/null
 
 
