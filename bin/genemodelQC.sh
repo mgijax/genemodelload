@@ -305,7 +305,9 @@ checkDupFields ()
     FIELD_NUM=$3    # The field number to check
     FIELD_NAME=$4   # The field name to show on the sanity report
 
-    echo "\n\nDuplicate ${FIELD_NAME}" >> ${REPORT}
+    echo "" >> ${REPORT}
+    echo "" >> ${REPORT}
+    echo "Duplicate ${FIELD_NAME}" >> ${REPORT}
     echo "------------------------------" >> ${REPORT}
     cut -d'	' -f${FIELD_NUM} ${FILE} | sort | uniq -d > ${TMP_FILE}
     cat ${TMP_FILE} >> ${REPORT}
@@ -328,7 +330,9 @@ checkColumns ()
     REPORT=$2       # The sanity report to write to
     NUM_COLUMNS=$3  # The number of columns expected in each input record
 
-    echo "\n\nLines With Missing Columns" >> ${REPORT}
+    echo "" >> ${REPORT}
+    echo "" >> ${REPORT}
+    echo "Lines With Missing Columns" >> ${REPORT}
     echo "--------------------------" >> ${REPORT}
     cat ${FILE} | awk -F'	' '
         BEGIN {error=0}
@@ -360,7 +364,9 @@ checkLineCount ()
     COUNT=`cat ${FILE} | wc -l | sed 's/ //g'`
     if [ ${COUNT} -lt ${NUM_LINES} ]
     then
-        echo "\n\n**** WARNING ****" >> ${REPORT}
+        echo "" >> ${REPORT}
+        echo "" >> ${REPORT}
+        echo "**** WARNING ****" >> ${REPORT}
         echo "${FILE} has ${COUNT} lines." >> ${REPORT}
         echo "Expecting at least ${NUM_LINES} lines." >> ${REPORT}
         return 1
