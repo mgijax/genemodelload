@@ -396,7 +396,9 @@ def loadTempTables ():
     print 'Load the gene model data into the temp table: ' + gmTempTable
     sys.stdout.flush()
 
-    bcpCmd = 'cat %s | bcp tempdb..%s in %s -c -t"%s" -S%s -U%s' % (passwordFile, gmTempTable, gmBCPFile, TAB, db.get_sqlServer(), db.get_sqlUser())
+    bcpCmd = '%s %s %s %s "/" %s "\\t" "\\n" mgd' % \
+        (bcpCommand, db.get_sqlServer(), db.get_sqlDatabase(),gmTempTable,
+        gmBCPFile)
     rc = os.system(bcpCmd)
     if rc <> 0:
         closeFiles()
@@ -405,7 +407,9 @@ def loadTempTables ():
     print 'Load the association data into the temp table: ' + assocTempTable
     sys.stdout.flush()
 
-    bcpCmd = 'cat %s | bcp tempdb..%s in %s -c -t"%s" -S%s -U%s' % (passwordFile, assocTempTable, assocBCPFile, TAB, db.get_sqlServer(), db.get_sqlUser())
+    bcpCmd = '%s %s %s %s "/" %s "\\t" "\\n" mgd' % \
+        (bcpCommand, db.get_sqlServer(), db.get_sqlDatabase(),assocTempTable,
+        assocBCPFile)
     rc = os.system(bcpCmd)
     if rc <> 0:
         closeFiles()
@@ -444,9 +448,9 @@ def createInvMarkerReport ():
     #
     cmds.append('select tmp.mgiID, ' + \
                        'tmp.gmID, ' + \
-                       'null "name", ' + \
-                       'null "status" ' + \
-                'from tempdb..' + assocTempTable + ' tmp ' + \
+                       'null as name, ' + \
+                       'null as status ' + \
+                'from ' + assocTempTable + ' tmp ' + \
                 'where not exists (select 1 ' + \
                                   'from ACC_Accession a ' + \
                                   'where a.accID = tmp.mgiID) ' + \
@@ -454,8 +458,8 @@ def createInvMarkerReport ():
                 'select tmp.mgiID, ' + \
                        'tmp.gmID, ' + \
                        't.name, ' + \
-                       'null "status" ' + \
-                'from tempdb..' + assocTempTable + ' tmp, ' + \
+                       'null as status ' + \
+                'from ' + assocTempTable + ' tmp, ' + \
                      'ACC_Accession a1, ' + \
                      'ACC_MGIType t ' + \
                 'where a1.accID = tmp.mgiID and ' + \
@@ -472,7 +476,7 @@ def createInvMarkerReport ():
                        'tmp.gmID, ' + \
                        't.name, ' + \
                        'ms.status ' + \
-                'from tempdb..' + assocTempTable + ' tmp, ' + \
+                'from ' + assocTempTable + ' tmp, ' + \
                      'ACC_Accession a, ' + \
                      'ACC_MGIType t, ' + \
                      'MRK_Marker m, ' + \
@@ -484,7 +488,7 @@ def createInvMarkerReport ():
                       'a._Object_key = m._Marker_key and ' + \
                       'm._Marker_Status_key not in (1,3) and ' + \
                       'm._Marker_Status_key = ms._Marker_Status_key ' + \
-                'order by tmp.mgiID, tmp.gmID')
+                'order by mgiID, gmID')
 
     results = db.sql(cmds,'auto')
 
@@ -563,11 +567,11 @@ def createSecMarkerReport ():
                        'tmp.gmID, ' + \
                        'm.symbol, ' + \
                        'a2.accID ' + \
-                'from tempdb..' + assocTempTable + ' tmp, ' + \
+                'from ' + assocTempTable + ' tmp, ' + \
                      'ACC_Accession a1, ' + \
                      'ACC_Accession a2, ' + \
                      'MRK_Marker m ' + \
-                'where tmp.mgiID = a1.accID and ' + \
+                'where lower(tmp.mgiID) = lower(a1.accID) and ' + \
                       'a1._MGIType_key = 2 and ' + \
                       'a1._LogicalDB_key = 1 and ' + \
                       'a1.preferred = 0 and ' + \
@@ -576,7 +580,7 @@ def createSecMarkerReport ():
                       'a2._LogicalDB_key = 1 and ' + \
                       'a2.preferred = 1 and ' + \
                       'a2._Object_key = m._Marker_key ' + \
-                'order by tmp.mgiID, tmp.gmID')
+                'order by mgiID, gmID')
 
     results = db.sql(cmds,'auto')
     #
@@ -636,10 +640,10 @@ def createMissingGMIDReport ():
     #
     cmds.append('select ta.mgiID, ' + \
                        'ta.gmID ' + \
-                'from tempdb..' + assocTempTable + ' ta ' + \
+                'from ' + assocTempTable + ' ta ' + \
                 'where not exists (select 1 ' + \
-                                  'from tempdb..' + gmTempTable + ' tgm ' + \
-                                  'where tgm.gmID = ta.gmID) ' + \
+                                  'from ' + gmTempTable + ' tgm ' + \
+                                  'where lower(tgm.gmID) = lower(ta.gmID)) ' + \
                 'order by ta.gmID')
 
     results = db.sql(cmds,'auto')
@@ -702,22 +706,22 @@ def createChrDiscrepReport ():
     # file has a different chromosome than what is in the gene model file.
     #
     cmds.append('select tgm.gmID, ' + \
-                       'tgm.chromosome "gmChr", ' + \
+                       'tgm.chromosome as gmChr, ' + \
                        'ta.mgiID, ' + \
                        'm.symbol, ' + \
-                       'm.chromosome "mrkChr" ' + \
-                'from tempdb..' + gmTempTable + ' tgm, ' + \
-                     'tempdb..' + assocTempTable + ' ta, ' + \
+                       'm.chromosome as mrkChr ' + \
+                'from ' + gmTempTable + ' tgm, ' + \
+                      + assocTempTable + ' ta, ' + \
                      'ACC_Accession a, ' + \
                      'MRK_Marker m ' + \
-                'where tgm.gmID = ta.gmID and ' + \
-                      'ta.mgiID = a.accID and ' + \
+                'where lower(tgm.gmID) = lower(ta.gmID) and ' + \
+                      'lower(ta.mgiID) = lower(a.accID) and ' + \
                       'a._MGIType_key = 2 and ' + \
                       'a._LogicalDB_key = 1 and ' + \
                       'a.preferred = 1 and ' + \
                       'a._Object_key = m._Marker_key and ' + \
-                      'm.chromosome != tgm.chromosome ' + \
-                'order by tgm.gmID')
+                      'lower(m.chromosome) != lower(tgm.chromosome) ' + \
+                'order by gmID')
 
     results = db.sql(cmds,'auto')
 

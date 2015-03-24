@@ -170,7 +170,7 @@ fi
 LASTRUN_FILE=${INPUTDIR}/${GM_PROVIDER}.lastrun
 if [ -f ${LASTRUN_FILE} ]
 then
-    if /usr/local/bin/test ${LASTRUN_FILE} -nt ${ASSOC_FILE_DEFAULT}
+    if test ${LASTRUN_FILE} -nt ${ASSOC_FILE_DEFAULT}
     then
         echo "Association file has not been updated - skipping load" | tee -a ${LOG}
         exit 0
