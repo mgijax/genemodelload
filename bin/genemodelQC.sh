@@ -460,10 +460,7 @@ fi
 echo "" >> ${LOG}
 date >> ${LOG}
 echo "Create temp tables for the input data" >> ${LOG}
-cat - <<EOSQL | isql -S${MGD_DBSERVER} -D${MGD_DBNAME} -U${MGI_PUBLICUSER} -P`cat ${MGI_PUBPASSWORDFILE}` -e  >> ${LOG}
-
-use tempdb
-go
+cat - <<EOSQL | psql -h${PG_DBSERVER} -d${PG_DBNAME} -U mgd_dbo -e  >> ${LOG}
 
 create table ${GM_TEMP_TABLE} (
     gmID varchar(80) not null,
@@ -472,34 +469,25 @@ create table ${GM_TEMP_TABLE} (
     endCoordinate float not null,
     strand char(1) not null,
     description varchar(255) not null
-)
-go
+);
 
-create nonclustered index idx_gmID on ${GM_TEMP_TABLE} (gmID)
-go
+create  index idx_gmID on ${GM_TEMP_TABLE} (gmID);
 
-create nonclustered index idx_chromosome on ${GM_TEMP_TABLE} (chromosome)
-go
+create  index idx_chromosome on ${GM_TEMP_TABLE} (chromosome);
 
-grant all on ${GM_TEMP_TABLE} to public
-go
+grant all on ${GM_TEMP_TABLE} to public;
 
 create table ${ASSOC_TEMP_TABLE} (
     mgiID varchar(80) not null,
     gmID varchar(80) not null
-)
-go
+);
 
-create nonclustered index idx_mgiID on ${ASSOC_TEMP_TABLE} (mgiID)
-go
+create  index idx_mgiID on ${ASSOC_TEMP_TABLE} (mgiID);
 
-create nonclustered index idx_gmID on ${ASSOC_TEMP_TABLE} (gmID)
-go
+create  index idx_gmID on ${ASSOC_TEMP_TABLE} (gmID);
 
-grant all on ${ASSOC_TEMP_TABLE} to public
-go
+grant all on ${ASSOC_TEMP_TABLE} to public;
 
-quit
 EOSQL
 
 #
@@ -530,18 +518,12 @@ fi
 echo "" >> ${LOG}
 date >> ${LOG}
 echo "Drop the temp tables" >> ${LOG}
-cat - <<EOSQL | isql -S${MGD_DBSERVER} -D${MGD_DBNAME} -U${MGI_PUBLICUSER} -P`cat ${MGI_PUBPASSWORDFILE}` -e  >> ${LOG}
+cat - <<EOSQL | psql -h${PG_DBSERVER} -d${PG_DBNAME} -U mgd_dbo -e  >> ${LOG}
 
-use tempdb
-go
+drop table ${GM_TEMP_TABLE};
 
-drop table ${GM_TEMP_TABLE}
-go
+drop table ${ASSOC_TEMP_TABLE};
 
-drop table ${ASSOC_TEMP_TABLE}
-go
-
-quit
 EOSQL
 
 date >> ${LOG}
