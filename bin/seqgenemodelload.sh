@@ -158,27 +158,23 @@ fi
 echo "" >> ${LOG}
 date >> ${LOG}
 echo "Deleting the existing records for ${PROVIDER}" | tee -a ${LOG}
-cat - <<EOSQL | isql -S${MGD_DBSERVER} -D${MGD_DBNAME} -Umgd_dbo -P`cat ${MGD_DBPASSWORDFILE}` -e >> ${LOG}
-
-declare @logicalDBKey int
-select @logicalDBKey = _LogicalDB_key
-from ACC_LogicalDB
-where name = '${PROVIDER_LOGICALDB}'
+cat - <<EOSQL | psql -h${PG_DBSERVER} -d${PG_DBNAME} -U mgd_dbo -e  >> ${LOG}
 
 select _Object_key as _Sequence_key
-into #tmp_gmKey
-from ACC_Accession
+into temp tmp_gmKey
+from ACC_Accession a
+join acc_logicaldb ldb on
+	ldb._logicaldb_key = a._logicaldb_key
 where _MGIType_key = 19
 and preferred = 1
-and _LogicalDB_key = @logicalDBKey
-go
+and ldb.name = '${PROVIDER_LOGICALDB}'
+;
 
-delete SEQ_GeneModel
-from SEQ_GeneModel s, #tmp_gmKey t
-where s._Sequence_key = t._Sequence_key
-go
+delete from SEQ_GeneModel
+using tmp_gmKey t
+where SEQ_GeneModel._Sequence_key = t._Sequence_key
+;
 
-quit
 EOSQL
 
 #
@@ -188,7 +184,7 @@ echo "" >> ${LOG}
 date >> ${LOG}
 echo "Adding records for  ${PROVIDER}" | tee -a ${LOG}
 
-cat ${MGD_DBPASSWORDFILE} | bcp ${MGD_DBNAME}..SEQ_GeneModel in ${BCP_FILE_PATH} -c -t\\t -S${MGD_DBSERVER} -U${MGD_DBUSER} >> ${LOG}
+${PG_DBUTILS}/bin/bcpin.csh ${PG_DBSERVER} ${PG_DBNAME} SEQ_GeneModel "" ${BCP_FILE_PATH} "\t" "\n" mgd >> ${LOG}
 
 date >> ${LOG}
 
