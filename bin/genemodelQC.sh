@@ -482,9 +482,9 @@ create table ${ASSOC_TEMP_TABLE} (
     gmID varchar(80) not null
 );
 
-create  index idx_mgiID on ${ASSOC_TEMP_TABLE} (mgiID);
+create  index idx_assoc_mgiID on ${ASSOC_TEMP_TABLE} (mgiID);
 
-create  index idx_gmID on ${ASSOC_TEMP_TABLE} (gmID);
+create  index idx_assoc_gmID on ${ASSOC_TEMP_TABLE} (gmID);
 
 grant all on ${ASSOC_TEMP_TABLE} to public;
 
