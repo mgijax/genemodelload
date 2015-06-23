@@ -460,7 +460,7 @@ fi
 echo "" >> ${LOG}
 date >> ${LOG}
 echo "Create temp tables for the input data" >> ${LOG}
-cat - <<EOSQL | psql -h${PG_DBSERVER} -d${PG_DBNAME} -U mgd_dbo -e  >> ${LOG}
+cat - <<EOSQL | psql -h${MGD_DBSERVER} -d${MGD_DBNAME} -U mgd_dbo -e  >> ${LOG}
 
 create table ${GM_TEMP_TABLE} (
     gmID varchar(80) not null,
@@ -518,7 +518,7 @@ fi
 echo "" >> ${LOG}
 date >> ${LOG}
 echo "Drop the temp tables" >> ${LOG}
-cat - <<EOSQL | psql -h${PG_DBSERVER} -d${PG_DBNAME} -U mgd_dbo -e  >> ${LOG}
+cat - <<EOSQL | psql -h${MGD_DBSERVER} -d${MGD_DBNAME} -U mgd_dbo -e  >> ${LOG}
 
 drop table ${GM_TEMP_TABLE};
 

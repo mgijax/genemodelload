@@ -158,7 +158,7 @@ fi
 echo "" >> ${LOG}
 date >> ${LOG}
 echo "Deleting the existing records for ${PROVIDER}" | tee -a ${LOG}
-cat - <<EOSQL | psql -h${PG_DBSERVER} -d${PG_DBNAME} -U mgd_dbo -e  >> ${LOG}
+cat - <<EOSQL | psql -h${MGD_DBSERVER} -d${MGD_DBNAME} -U mgd_dbo -e  >> ${LOG}
 
 select _Object_key as _Sequence_key
 into temp tmp_gmKey
@@ -184,7 +184,7 @@ echo "" >> ${LOG}
 date >> ${LOG}
 echo "Adding records for  ${PROVIDER}" | tee -a ${LOG}
 
-${PG_DBUTILS}/bin/bcpin.csh ${PG_DBSERVER} ${PG_DBNAME} SEQ_GeneModel "" ${BCP_FILE_PATH} "\t" "\n" mgd >> ${LOG}
+${PG_DBUTILS}/bin/bcpin.csh ${MGD_DBSERVER} ${MGD_DBNAME} SEQ_GeneModel "" ${BCP_FILE_PATH} "\t" "\n" mgd >> ${LOG}
 
 date >> ${LOG}
 
