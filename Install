@@ -53,13 +53,9 @@ ${DLAINSTALL} ${DEV}
 #
 # The DLAInstall script removes all permissions from shell scripts for
 # group "other" on non-development servers. The gene model QC report wrapper
-# script needs to have permissions restored on hobbiton to allow the
-# curation staff to run it.
+# script needs to have permissions restored to allow the curation staff to run it.
 #
-if [ ${SERVER_NAME} = "hobbiton" ]
-then
-    chmod -f 755 ${GENEMODEL_QC_SH}
-fi
+chmod -f 755 ${GENEMODEL_QC_SH}
 
 #
 # Create the input directory.
@@ -80,11 +76,11 @@ do
     . ${i}
 
     #
-    # If this installation is being done on lindon, create symbolic links to
-    # the current gene model file and association file on hobbiton from the
+    # If this installation is being done on bhmgiapp01, create symbolic links to
+    # the current gene model file and association file on bhmgiapp01 from the
     # input directory. This is where the load will look for both files.
     #
-    if [ ${SERVER_NAME} = "lindon" ]
+    if [ ${SERVER_NAME} = "bhmgiapp01" ]
     then
         rm -f ${GM_FILE_DEFAULT}
         ln -s /hobbiton${GM_FILE_CURRENT} ${GM_FILE_DEFAULT}
@@ -109,39 +105,23 @@ do
     fi
 
     #
-    # If this installation is being done on hobbiton and the association
-    # file does not exist already, create one that is writable.
+    # For any server, if the association file does not exist already, create one that is writable.
     #
-    if [ ${SERVER_NAME} = "hobbiton" ]
+    if [ ! -f ${ASSOC_FILE_DEFAULT} ]
     then
-        if [ ! -f ${ASSOC_FILE_DEFAULT} ]
-        then
-	    echo "Creating ${ASSOC_FILE_DEFAULT}"
-            touch ${ASSOC_FILE_DEFAULT}
-            chmod 664 ${ASSOC_FILE_DEFAULT}
-            chgrp mgi ${ASSOC_FILE_DEFAULT}
-        fi
+	echo "Creating ${ASSOC_FILE_DEFAULT}"
+        touch ${ASSOC_FILE_DEFAULT}
+        chmod 664 ${ASSOC_FILE_DEFAULT}
+        chgrp mgi ${ASSOC_FILE_DEFAULT}
     fi
 done
 
 #
-# If this installation is being done on lindon, the input directory should
-# be locked down to protect the symbolic links that were created there.
-#
-if [ ${SERVER_NAME} = "lindon" ]
-then
-    chmod -f 755 ${INPUTDIR}
-fi
-
-#
-# If this installation is being done on hobbiton, the input directory should
+# For any server, the input directory should
 # be opened up to allow the curation staff to publish new association files.
 #
-if [ ${SERVER_NAME} = "hobbiton" ]
-then
-    chmod -f 775 ${INPUTDIR}
-    chgrp mgi ${INPUTDIR}
-fi
+chmod -f 775 ${INPUTDIR}
+chgrp mgi ${INPUTDIR}
 
 # copy the scripts for curator use into a standard location which exists in
 # their path statements
