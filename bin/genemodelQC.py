@@ -21,8 +21,6 @@
 #      The following environment variables are set by the configuration
 #      files that are sourced by the wrapper script:
 #
-#          MGI_PUBLICUSER
-#          MGI_PUBPASSWORDFILE
 #          GM_PROVIDER
 #          GM_FILE_BCP
 #          ASSOC_FILE_BCP
@@ -132,9 +130,6 @@ USAGE = 'genemodelQC.py  assoc_file  gm_file'
 #
 #  GLOBALS
 #
-user = os.environ['MGI_PUBLICUSER']
-passwordFile = os.environ['MGI_PUBPASSWORDFILE']
-
 provider = os.environ['GM_PROVIDER']
 liveRun = os.environ['LIVE_RUN']
 
@@ -180,25 +175,6 @@ def checkArgs ():
     gmFile = sys.argv[2]
 
     return
-
-
-#
-# Purpose: Perform initialization steps.
-# Returns: Nothing
-# Assumes: Nothing
-# Effects: Sets global variables.
-# Throws: Nothing
-#
-def init ():
-    print 'DB Server:' + db.get_sqlServer()
-    print 'DB Name:  ' + db.get_sqlDatabase()
-    sys.stdout.flush()
-
-    db.set_sqlUser(user)
-    db.set_sqlPasswordFromFile(passwordFile)
-
-    return
-
 
 #
 # Purpose: Open the files.
@@ -793,7 +769,6 @@ def createAssocLoadFile ():
 # Main
 #
 checkArgs()
-init()
 openFiles()
 loadTempTables()
 createInvMarkerReport()
