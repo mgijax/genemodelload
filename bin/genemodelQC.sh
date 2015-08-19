@@ -181,6 +181,16 @@ else
 fi
 
 #
+# If the QC check is being run by a curator, the mgd_dbo password needs to
+# be in a password file in their HOME directory because they won't have
+# permission to read the password file in the pgdbutilities product.
+#
+if [ "${USER}" != "mgiadmin" ]
+then
+    PGPASSFILE=$HOME/.pgpass
+fi
+
+#
 # Go to the directory where the script was invoked from, in case the
 # input files are relative paths.
 #
