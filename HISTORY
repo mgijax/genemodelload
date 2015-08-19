@@ -1,3 +1,10 @@
+TAG: genemodelload-6-0-0-3
+DATE: 8/19/2015
+STAFF: dbm
+CHANGES: 
+1) bin/genemodelQC.sh: Use .pgpass file in the user's HOME directory if
+                       not run as mgiadmin
+
 TAG: genemodelload-6-0-0-2
 TAG: genemodelload-6-0-0-1
 DATE: 7/23/15, 7/27/2015
