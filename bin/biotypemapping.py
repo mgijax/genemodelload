@@ -63,15 +63,15 @@ import loadlib
 #
 # from configuration file
 #
-mode = os.environ['BIOTYPEMAPMODE']
-biotypeTable = os.environ['BIOTYPEMAPTABLE']
+mode = os.environ['BIOTYPEMODE']
+biotypeTable = os.environ['BIOTYPETABLE']
 bcpCommand = os.environ['BCP_CMD']
 outputFileDir = os.environ['OUTPUTDIR']
 inputFileName = os.environ['INPUT_FILE_DEFAULT']
 bcpFileName = biotypeTable + '.bcp'
 outputFileName = os.environ['OUTPUTDIR'] + '/' + bcpFileName
-diagFileName = os.environ['LOG_DIAG']
-errorFileName = os.environ['LOG_ERROR']
+diagFileName = os.environ['BIOTYPELOG_DIAG']
+errorFileName = os.environ['BIOTYPELOG_ERROR']
 
 DEBUG = 0		# set DEBUG to false unless preview mode is selected
 bcpon = 1		# can the bcp files be bcp-ed into the database?  default is yes (1).
