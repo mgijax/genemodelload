@@ -1,9 +1,9 @@
 #format: sh
 #
-# default configuration file
+# biotypemapping.config
 #
-# cp config.default *.config (e.g. vega.config)
-# set all settings where default value is '?'
+# configuration variables used by 'bin/biotypemapping.py '
+#
 
 BCP_CMD="${PG_DBUTILS}/bin/bcpin.csh ${MGD_DBSERVER} ${MGD_DBNAME}"
 export BCP_CMD
@@ -14,25 +14,21 @@ DESTCURRENTDIR=${DESTFILEDIR}/RawBioTypeEquivalence
 export DESTFILEDIR DESTCURRENTDIR
 
 # Complete path name of the biotypemapload log files
-LOG_FILE=${LOGDIR}/biotypemapload.log
-LOG_PROC=${LOGDIR}/biotypemapload.proc.log
-LOG_DIAG=${LOGDIR}/biotypemapload.diag.log
-LOG_CUR=${LOGDIR}/biotypemapload.cur.log
-LOG_VAL=${LOGDIR}/biotypemapload.val.log
-LOG_ERROR=${LOGDIR}/biotypemapload.error.log
+BIOTYPELOG_DIAG=${LOGDIR}/biotypemapload.diag.log
+BIOTYPELOG_ERROR=${LOGDIR}/biotypemapload.error.log
 
-export LOG_FILE LOG_PROC LOG_DIAG LOG_CUR LOG_VAL LOG_ERROR
+export BIOTYPELOG_DIAG BIOTYPELOG_ERROR
 
 # Full path to the default input file.
 # This is where the publish script places the file
-INPUT_FILE_NAME=biotypemap.txt
-INPUT_FILE_DEFAULT=${DESTCURRENTDIR}/${INPUT_FILE_NAME}
-export INPUT_FILE_NAME INPUT_FILE_DEFAULT
+BIOTYPEINPUT_FILE_NAME=biotypemap.txt
+BIOTYPEINPUT_FILE_DEFAULT=${DESTCURRENTDIR}/${BIOTYPEINPUT_FILE_NAME}
+export BIOTYPEINPUT_FILE_NAME BIOTYPEINPUT_FILE_DEFAULT
 
 # Load Mode:
 # 'load' - load data
 # 'preview' - not currently used
-BIOTYPEMAPMODE=load
-BIOTYPEMAPTABLE=MRK_BiotypeMapping
-export BIOTYPEMAPMODE BIOTYPEMAPTABLE
+BIOTYPEMODE=load
+BIOTYPETABLE=MRK_BiotypeMapping
+export BIOTYPEMODE BIOTYPETABLE
 
