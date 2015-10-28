@@ -90,6 +90,7 @@
 cd `dirname $0`
 
 COMMON_CONFIG=genemodel_common.config
+BIOTYPEMAPPING_CONFIG=biotypemapping.config
 
 USAGE="Usage: genemodelload.sh {ensembl | ncbi | vega}"
 
@@ -126,6 +127,17 @@ then
     . ../${COMMON_CONFIG}
 else
     echo "Missing configuration file: ${COMMON_CONFIG}"
+    exit 1
+fi
+
+#
+# Make sure the biotypemapping-specific configuration file exists and source it.
+#
+if [ -f ../${BIOTYPEMAPPING_CONFIG} ]
+then
+    . ../${BIOTYPEMAPPING_CONFIG}
+else
+    echo "Missing configuration file: ${BIOTYPEMAPPING_CONFIG}"
     exit 1
 fi
 
@@ -199,7 +211,13 @@ date >> ${LOG}
 echo "Truncating the MRK_BiotypeMapping table..." | tee -a ${LOG}
 ${PG_MGD_DBSCHEMADIR}/table/MRK_BiotypeMapping_truncate.object | tee -a ${LOG}
 STAT=$?
-checkStatus ${STAT} "${PG_MGD_DBSCHEMADIR}/table/MRK_BiotypeMapping_truncate.object:"
+if [ ${STAT} -ne 0 ]
+then
+	message="${message} ${PG_MGD_DBSCHEMADIR}/table/MRK_BiotypeMapping_truncate.object failed"
+else
+	message="${message} ${PG_MGD_DBSCHEMADIR}/table/MRK_BiotypeMapping_truncate.object successful" 
+fi
+echo ${message} | tee -a ${LOG}
 
 #
 # load vocabulary terms
