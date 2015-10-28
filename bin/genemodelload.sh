@@ -212,6 +212,7 @@ date >> ${LOG}
 message=${PROVIDER}
 if [ ${RELOAD_GENEMODELS} = "true" ]
 then
+
     echo "Load gene models and associations for ${PROVIDER}" | tee -a ${LOG}
     ${ASSEMBLY_WRAPPER} ${ASSEMBLY_CONFIG} >> ${LOG}
 
