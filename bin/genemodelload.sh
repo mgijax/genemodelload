@@ -184,10 +184,93 @@ fi
 TMP_FILE=/tmp/`basename $0`.$$
 trap "rm -f ${TMP_FILE}" 0 1 2 15
 
-#
-# Generate the sanity/QC reports.
-#
+if [ ${RELOAD_GENEMODELS} = "true" ]
+then
+
 echo "" >> ${LOG}
+date >> ${LOG}
+echo "Generate BioType-Mapping" | tee -a ${LOG}
+
+#
+# truncate the MRK_BiotypeMapping table
+# this is always a drop/reload
+#
+date >> ${LOG}
+echo "Truncating the MRK_BiotypeMapping table..." | tee -a ${LOG}
+${PG_MGD_DBSCHEMADIR}/table/MRK_BiotypeMapping_truncate.object | tee -a ${LOG}
+STAT=$?
+checkStatus ${STAT} "${PG_MGD_DBSCHEMADIR}/table/MRK_BiotypeMapping_truncate.object:"
+
+#
+# load vocabulary terms
+#
+date >> tee -a ${LOG}
+echo "Running biotype/vocload : ensembl.txt" | tee -a ${LOG}
+rm -rf ${INPUTDIR}/ensembl.txt
+grep "^Ensembl" ${INPUT_FILE_DEFAULT} > ${INPUTDIR}/ensembl.txt
+${VOCLOAD}/runSimpleFullLoadNoArchive.sh biotype_ensembl.config | tee -a ${LOG}
+STAT=$?
+if [ ${STAT} -ne 0 ]
+then
+	message="${message} ${VOCLOAD}/runSimpleFullLoadNoArchive.sh biotype_ensembl.config failed"
+else
+	message="${message} ${VOCLOAD}/runSimpleFullLoadNoArchive.sh biotype_ensembl.config successful" 
+fi
+echo ${message} | tee -a ${LOG}
+
+date >> tee -a ${LOG}
+echo "Running biotype/vocload : ncbi.txt" | tee -a ${LOG}
+rm -rf ${INPUTDIR}/ncbi.txt
+grep "^NCBI" ${INPUT_FILE_DEFAULT} > ${INPUTDIR}/ncbi.txt
+${VOCLOAD}/runSimpleFullLoadNoArchive.sh biotype_ncbi.config | tee -a ${LOG}
+STAT=$?
+if [ ${STAT} -ne 0 ]
+then
+	message="${message} ${VOCLOAD}/runSimpleFullLoadNoArchive.sh biotype_ncbi.config failed"
+else
+	message="${message} ${VOCLOAD}/runSimpleFullLoadNoArchive.sh biotype_ncbi.config successful" 
+fi
+echo ${message} | tee -a ${LOG}
+
+date >> tee -a ${LOG}
+echo "Running biotype/vocload : vega.txt" | tee -a ${LOG}
+rm -rf ${INPUTDIR}/vega.txt
+grep "^VEGA" ${INPUT_FILE_DEFAULT} > ${INPUTDIR}/vega.txt
+${VOCLOAD}/runSimpleFullLoadNoArchive.sh biotype_vega.config | tee -a ${LOG}
+STAT=$?
+if [ ${STAT} -ne 0 ]
+then
+	message="${message} ${VOCLOAD}/runSimpleFullLoadNoArchive.sh biotype_vega.config failed"
+else
+	message="${message} ${VOCLOAD}/runSimpleFullLoadNoArchive.sh biotype_vega.config successful" 
+fi
+echo ${message} | tee -a ${LOG}
+
+#
+# Execute biotypemapping.py
+#
+date >> tee -a ${LOG}
+echo "Running biotypemapping" | tee -a ${LOG}
+cd ${OUTPUTDIR}
+${GENEMODELLOAD}/bin/biotypemapping.py | tee -a ${LOG}
+STAT=$?
+if [ ${STAT} -ne 0 ]
+then
+	message="${message} ${GENEMODELLOAD}/bin/biotypemapping.py failed"
+else
+	message="${message} ${GENEMODELLOAD}/bin/biotypemapping.py successful"
+fi
+echo ${message} | tee -a ${LOG}
+
+#
+# cat the error file
+#
+cat ${LOG_ERROR}
+
+fi
+
+### end if [ ${RELOAD_GENEMODELS} = "true" ]
+
 date >> ${LOG}
 echo "Generate the sanity/QC reports" | tee -a ${LOG}
 { ${GENEMODEL_QC_SH} ${PROVIDER} ${ASSOC_FILE_DEFAULT} ${RUNTYPE} 2>&1; echo $? > ${TMP_FILE}; } >> ${LOG}
@@ -212,7 +295,6 @@ date >> ${LOG}
 message=${PROVIDER}
 if [ ${RELOAD_GENEMODELS} = "true" ]
 then
-
     echo "Load gene models and associations for ${PROVIDER}" | tee -a ${LOG}
     ${ASSEMBLY_WRAPPER} ${ASSEMBLY_CONFIG} >> ${LOG}
 
@@ -226,7 +308,6 @@ then
 	message="${message} seqgenemodelload.sh successful" 
     fi
     echo ${message} | tee -a ${LOG}
-
 
     if [ ${PROVIDER} = "ensembl" ]
     then
