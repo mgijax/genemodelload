@@ -1,0 +1,75 @@
+#!/bin/sh
+
+#
+# default configuration file
+#
+# cp config.default *.config (e.g. vega.config)
+# set all settings where default value is '?'
+
+if [ "${MGICONFIG}" = "" ]
+then
+        MGICONFIG=/usr/local/mgi/live/mgiconfig
+	export MGICONFIG
+fi
+
+. ${MGICONFIG}/master.config.sh
+
+#  Path name of the archive, logs, reports and output directories
+FILEDIR=${DATALOADSOUTPUT}/mgi/genemodelload
+ARCHIVEDIR=${FILEDIR}/archive
+LOGDIR=${FILEDIR}/logs
+RPTDIR=${FILEDIR}/reports
+OUTPUTDIR=${FILEDIR}/output
+INPUTDIR=${FILEDIR}/input
+BCP_CMD="${PG_DBUTILS}/bin/bcpin.csh ${MGD_DBSERVER} ${MGD_DBNAME}"
+export FILEDIR ARCHIVEDIR LOGDIR RPTDIR OUTPUTDIR INPUTDIR BCP_CMD
+
+# destination area for curator sanity checks
+DESTFILEDIR=/mgi/all/wts_projects/10300/10308
+DESTCURRENTDIR=${DESTFILEDIR}/RawBioTypeEquivalence
+export DESTFILEDIR DESTCURRENTDIR
+
+# Complete path name of the biotypemapload log files
+LOG_FILE=${LOGDIR}/biotypemapload.log
+LOG_PROC=${LOGDIR}/biotypemapload.proc.log
+LOG_DIAG=${LOGDIR}/biotypemapload.diag.log
+LOG_CUR=${LOGDIR}/biotypemapload.cur.log
+LOG_VAL=${LOGDIR}/biotypemapload.val.log
+LOG_ERROR=${LOGDIR}/biotypemapload.error.log
+
+export LOG_FILE LOG_PROC LOG_DIAG LOG_CUR LOG_VAL LOG_ERROR
+
+# Full path to the default input file.
+# This is where the publish script places the file
+INPUT_FILE_NAME=biotypemap.txt
+INPUT_FILE_DEFAULT=${DESTCURRENTDIR}/${INPUT_FILE_NAME}
+export INPUT_FILE_NAME INPUT_FILE_DEFAULT
+
+# Load Mode:
+# 'load' - load data
+# 'preview' - not currently used
+BIOTYPEMAPMODE=load
+BIOTYPEMAPTABLE=MRK_BiotypeMapping
+export BIOTYPEMAPMODE BIOTYPEMAPTABLE
+
+###########################################################################
+#
+#  MISCELLANEOUS SETTINGS
+#
+###########################################################################
+
+#  The name of the load for the subject of an email notification
+MAIL_LOADNAME="${GENEMODELLOAD} : BioType/Mapping Load"
+export MAIL_LOADNAME
+
+#  Recipient list for mailing the log files (comma-separated)
+case `uname -n` in
+bhmgidevapp01) MAIL_LOG_PROC="mgiadmin@jax.org";;
+mgi-testdb4) MAIL_LOG_PROC="lori.corbani@jax.org";;
+*) MAIL_LOG_PROC="mgiadmin@jax.org,sophia.zhu@jax.org";;
+esac
+export MAIL_LOG_PROC
+
+INSTALLDIR=${GENEMODELLOAD}
+export INSTALLDIR
+
