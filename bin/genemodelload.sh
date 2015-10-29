@@ -298,8 +298,6 @@ then
     exit 1
 fi
 
-exit 0
-
 #
 # If the gene models are to be reloaded, the following is done for PROVIDER:
 # 1) call the assemblyseqload to reload genemodels, coordinates and
