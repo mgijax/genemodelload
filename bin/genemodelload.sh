@@ -196,6 +196,11 @@ fi
 TMP_FILE=/tmp/`basename $0`.$$
 trap "rm -f ${TMP_FILE}" 0 1 2 15
 
+#
+# If the gene models are to be reloaded, the following is done for *all* PROVIDERs:
+#	- reload the PROVIDER/biotype vocabulary
+#	- reload the MRK_BiotypeMapping table
+#
 if [ ${RELOAD_GENEMODELS} = "true" ]
 then
 
@@ -281,7 +286,7 @@ fi
 echo ${message} | tee -a ${LOG}
 
 #
-# cat the error file
+# cat the biotype error file
 #
 cat ${BIOTYPELOG_ERROR}
 
