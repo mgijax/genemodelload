@@ -222,10 +222,10 @@ echo ${message} | tee -a ${LOG}
 #
 # load vocabulary terms
 #
-date >> tee -a ${LOG}
+date | tee -a ${LOG}
 echo "Running biotype/vocload : ensembl.txt" | tee -a ${LOG}
 rm -rf ${INPUTDIR}/ensembl.txt
-grep "^Ensembl" ${INPUT_FILE_DEFAULT} > ${INPUTDIR}/ensembl.txt
+grep "^Ensembl" ${BIOTYPEINPUT_FILE_DEFAULT} > ${INPUTDIR}/ensembl.txt
 ${VOCLOAD}/runSimpleFullLoadNoArchive.sh biotype_ensembl.config | tee -a ${LOG}
 STAT=$?
 if [ ${STAT} -ne 0 ]
@@ -236,10 +236,10 @@ else
 fi
 echo ${message} | tee -a ${LOG}
 
-date >> tee -a ${LOG}
+date | tee -a ${LOG}
 echo "Running biotype/vocload : ncbi.txt" | tee -a ${LOG}
-rm -rf ${INPUTDIR}/ncbi.txt
-grep "^NCBI" ${INPUT_FILE_DEFAULT} > ${INPUTDIR}/ncbi.txt
+rm -rf ${BIOTYPEINPUTDIR}/ncbi.txt
+grep "^NCBI" ${BIOTYPEINPUT_FILE_DEFAULT} > ${INPUTDIR}/ncbi.txt
 ${VOCLOAD}/runSimpleFullLoadNoArchive.sh biotype_ncbi.config | tee -a ${LOG}
 STAT=$?
 if [ ${STAT} -ne 0 ]
@@ -250,10 +250,10 @@ else
 fi
 echo ${message} | tee -a ${LOG}
 
-date >> tee -a ${LOG}
+date | tee -a ${LOG}
 echo "Running biotype/vocload : vega.txt" | tee -a ${LOG}
 rm -rf ${INPUTDIR}/vega.txt
-grep "^VEGA" ${INPUT_FILE_DEFAULT} > ${INPUTDIR}/vega.txt
+grep "^VEGA" ${BIOTYPEINPUT_FILE_DEFAULT} > ${INPUTDIR}/vega.txt
 ${VOCLOAD}/runSimpleFullLoadNoArchive.sh biotype_vega.config | tee -a ${LOG}
 STAT=$?
 if [ ${STAT} -ne 0 ]
@@ -267,7 +267,7 @@ echo ${message} | tee -a ${LOG}
 #
 # Execute biotypemapping.py
 #
-date >> tee -a ${LOG}
+date | tee -a ${LOG}
 echo "Running biotypemapping" | tee -a ${LOG}
 cd ${OUTPUTDIR}
 ${GENEMODELLOAD}/bin/biotypemapping.py | tee -a ${LOG}
@@ -283,7 +283,7 @@ echo ${message} | tee -a ${LOG}
 #
 # cat the error file
 #
-cat ${LOG_ERROR}
+cat ${BIOTYPELOG_ERROR}
 
 fi
 
@@ -297,6 +297,8 @@ then
     echo "QC reports failed" | tee -a ${LOG}
     exit 1
 fi
+
+exit 0
 
 #
 # If the gene models are to be reloaded, the following is done for PROVIDER:
