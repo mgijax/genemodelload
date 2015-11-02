@@ -158,7 +158,7 @@ fi
 echo "" >> ${LOG}
 date >> ${LOG}
 echo "Deleting the existing records for ${PROVIDER}" | tee -a ${LOG}
-cat - <<EOSQL | psql -h${MGD_DBSERVER} -d${MGD_DBNAME} -U mgd_dbo -e  >> ${LOG}
+cat - <<EOSQL | psql -h${MGD_DBSERVER} -d${MGD_DBNAME} -U${MGD_DBUSER} -e  >> ${LOG}
 
 select _Object_key as _Sequence_key
 into temp tmp_gmKey

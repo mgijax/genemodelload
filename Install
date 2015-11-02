@@ -76,35 +76,6 @@ do
     . ${i}
 
     #
-    # If this installation is being done on bhmgiapp01, create symbolic links to
-    # the current gene model file and association file on bhmgiapp01 from the
-    # input directory. This is where the load will look for both files.
-    #
-    if [ ${SERVER_NAME} = "bhmgiapp01" ]
-    then
-        rm -f ${GM_FILE_DEFAULT}
-        ln -s /hobbiton${GM_FILE_CURRENT} ${GM_FILE_DEFAULT}
-
-        rm -f ${ASSOC_FILE_DEFAULT}
-        ln -s /hobbiton${ASSOC_FILE_DEFAULT} ${ASSOC_FILE_DEFAULT}
-
-	rm -rf ${BIOTYPE_FILE_DEFAULT}
-	ln -s /hobbiton${BIOTYPE_FILE_CURRENT} ${BIOTYPE_FILE_DEFAULT}
-
-        rm -rf ${TRANSCRIPT_FILE_DEFAULT}
-        ln -s /hobbiton${TRANSCRIPT_FILE_CURRENT} ${TRANSCRIPT_FILE_DEFAULT}
-
-	if [ ${i} = "genemodel_ensembl.config" ]
-	then
-	    rm -rf ${NCRNA_FILE_DEFAULT}
-	    ln -s /hobbiton${NCRNA_FILE_CURRENT} ${NCRNA_FILE_DEFAULT}
-	fi
-
-        rm -rf ${PROTEIN_FILE_DEFAULT}
-        ln -s /hobbiton${PROTEIN_FILE_CURRENT} ${PROTEIN_FILE_DEFAULT}
-    fi
-
-    #
     # For any server, if the association file does not exist already, create one that is writable.
     #
     if [ ! -f ${ASSOC_FILE_DEFAULT} ]

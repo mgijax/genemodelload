@@ -185,10 +185,10 @@ fi
 # be in a password file in their HOME directory because they won't have
 # permission to read the password file in the pgdbutilities product.
 #
-if [ "${USER}" != "mgiadmin" ]
-then
-    PGPASSFILE=$HOME/.pgpass
-fi
+#if [ "${USER}" != "mgiadmin" ]
+#then
+#    PGPASSFILE=$HOME/.pgpass
+#fi
 
 #
 # Go to the directory where the script was invoked from, in case the
@@ -470,7 +470,7 @@ fi
 echo "" >> ${LOG}
 date >> ${LOG}
 echo "Create temp tables for the input data" >> ${LOG}
-cat - <<EOSQL | psql -h${MGD_DBSERVER} -d${MGD_DBNAME} -U mgd_dbo -e  >> ${LOG}
+cat - <<EOSQL | psql -h${MGD_DBSERVER} -d${MGD_DBNAME} -U${MGD_DBUSER} -e  >> ${LOG}
 
 create table ${GM_TEMP_TABLE} (
     gmID varchar(80) not null,
@@ -528,7 +528,7 @@ fi
 echo "" >> ${LOG}
 date >> ${LOG}
 echo "Drop the temp tables" >> ${LOG}
-cat - <<EOSQL | psql -h${MGD_DBSERVER} -d${MGD_DBNAME} -U mgd_dbo -e  >> ${LOG}
+cat - <<EOSQL | psql -h${MGD_DBSERVER} -d${MGD_DBNAME} -U${MGD_DBUSER} -e  >> ${LOG}
 
 drop table ${GM_TEMP_TABLE};
 
