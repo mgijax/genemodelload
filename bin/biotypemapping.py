@@ -58,21 +58,26 @@ import loadlib
 
 #db.setTrace()
 
-#globals
+### Constants ###
 
-#
-# from configuration file
-#
-mode = os.environ['BIOTYPEMODE']
-biotypeTable = os.environ['BIOTYPETABLE']
-bcpCommand = os.environ['BCP_CMD']
-outputFileDir = os.environ['OUTPUTDIR']
-inputFileName = os.environ['BIOTYPEINPUT_FILE_DEFAULT']
-bcpFileName = biotypeTable + '.bcp'
-outputFileName = os.environ['OUTPUTDIR'] + '/' + bcpFileName
-diagFileName = os.environ['BIOTYPELOG_DIAG']
-errorFileName = os.environ['BIOTYPELOG_ERROR']
+# Biotype vocab keys
+ENSEMBL_VOCAB_KEY = 103
+NCBI_VOCAB_KEY = 104
+VEGA_VOCAB_KEY = 105
+# MCV vocab key
+MCV_VOCAB_KEY = 79
 
+createdByKey = 1001
+cdate = mgi_utils.date('%m/%d/%Y')	# current date
+
+# sanity check error messages
+INVALID_VOCAB_ERROR = "Invalid BioType Vocab (row %d): %s"
+INVALID_BIOTYPE_TERM_ERROR = "Invalid BioType Term (row %d): %s, for vocab %s"
+INVALID_MARKER_TYPE_ERROR = "Invalid Marker Type Term (row %d): %s"
+INVALID_MCV_TERM_ERROR = "Invalid MCV/Feature Type Term (row %d): %s"
+
+
+### Globals ###
 DEBUG = 0		# set DEBUG to false unless preview mode is selected
 bcpon = 1		# can the bcp files be bcp-ed into the database?  default is yes (1).
 
@@ -82,16 +87,61 @@ diagFile = ''		# file descriptor
 errorFile = ''		# file descriptor
 
 biotypeKey = 1		# _biotypemapping_key always starts at 1
+biotypeVocabKey = 0
 biotypeTerm = None
 biotypeTermKey = 0
 mcvTerms = []
 mcvTermKeys = []
 markerType = None
 markerTypeKey = 0
-mcvVocabKey = 79
 
-createdByKey = 1001
-cdate = mgi_utils.date('%m/%d/%Y')	# current date
+#
+# from configuration file
+#
+# BIOTYPEMODE
+mode = None
+# BIOTYPETABLE
+biotypeTable = None
+# BCP_CMD
+bcpCommand = None
+# OUTPUTDIR
+outputFileDir = None
+# BIOTYPEINPUT_FILE_DEFAULT
+inputFileName = None
+# name of BCP file
+bcpFileName = None
+# full path of bcp file
+outputFileName = None
+# BIOTYPELOG_DIAG
+diagFileName = None
+# BIOTYPELOG_ERROR
+errorFileName = None
+
+
+def initConfig():
+    """
+    Initialize any required environment variables
+	and input/output file names
+    """
+    global mode
+    global biotypeTable
+    global bcpCommand
+    global outputFileDir
+    global inputFileName
+    global bcpFileName
+    global outputFileName
+    global diagFileName
+    global errorFileName
+    mode = os.environ['BIOTYPEMODE']
+    biotypeTable = os.environ['BIOTYPETABLE']
+    bcpCommand = os.environ['BCP_CMD']
+    outputFileDir = os.environ['OUTPUTDIR']
+    inputFileName = os.environ['BIOTYPEINPUT_FILE_DEFAULT']
+    bcpFileName = biotypeTable + '.bcp'
+    outputFileName = os.environ['OUTPUTDIR'] + '/' + bcpFileName
+    diagFileName = os.environ['BIOTYPELOG_DIAG']
+    errorFileName = os.environ['BIOTYPELOG_ERROR']
+
 
 def exit(status, message = None):
     '''
@@ -211,8 +261,8 @@ def sanityCheck(biotypeVocab, biotypeTerm, mcvTerms, markerType, lineNum):
     # effects:
     #
     # returns:
-    #	0 if sanity check passes
-    #	1 if sanity check fails
+    #   List [] of error messages if sanity check fails
+    #   Empty list [] if all sanity checks pass
     #
     '''
 
@@ -221,46 +271,46 @@ def sanityCheck(biotypeVocab, biotypeTerm, mcvTerms, markerType, lineNum):
     global mcvTermKeys
     global markerTypeKey
 
-    error = 0
+    errors = []
     mcvTermKeys = []
 
     #
     # BioType Vocabularies
     #
+    biotypeVocabKey = 0
 
     if biotypeVocab == 'Ensembl':
-	biotypeVocabKey = 103
+	biotypeVocabKey = ENSEMBL_VOCAB_KEY
     elif biotypeVocab == 'NCBI':
-	biotypeVocabKey = 104
+	biotypeVocabKey = NCBI_VOCAB_KEY
     elif biotypeVocab == 'VEGA':
-	biotypeVocabKey = 105
+	biotypeVocabKey = VEGA_VOCAB_KEY
     else:
-	errorFile.write('Invalid BioType Term (row %d): %s\n' % (lineNum, biotypeVocab))
-	error = 1
-    	return (error)
+        errors.append( INVALID_VOCAB_ERROR % (lineNum, biotypeVocab) )
 
-    biotypeTermKey = loadlib.verifyTerm('', biotypeVocabKey, biotypeTerm, lineNum, errorFile)
+    # Lookup the biotype _term_key for this vocab/term
+    if biotypeVocabKey:
+	biotypeTermKey = loadlib.verifyTerm('', biotypeVocabKey, biotypeTerm, lineNum, errorFile)
+	if biotypeTermKey == 0:
+	    errors.append( INVALID_BIOTYPE_TERM_ERROR % (lineNum, biotypeTerm, biotypeVocab) )
+
+    # lookup the _marker_type_key
     markerTypeKey = loadlib.verifyMarkerType(markerType, lineNum, errorFile)
-
-    if biotypeTermKey == 0 or \
-       markerTypeKey == 0:
-
-        # set error flag to true
-	error = 1
+    if markerTypeKey == 0:
+        errors.append( INVALID_MARKER_TYPE_ERROR % (lineNum, markerType) )
 
     # 
     # mcv/feature types
     #
     tokens = mcvTerms.split('|')
     for r in tokens:
-	t = loadlib.verifyTerm('', mcvVocabKey, r, lineNum, errorFile)
+	t = loadlib.verifyTerm('', MCV_VOCAB_KEY, r, lineNum, errorFile)
 	if t == 0:
-	    errorFile.write('Invalid MCV/Feature Type Term (row %d): %s\n' % (lineNum, r))
-	    error = 1
+            errors.append( INVALID_MCV_TERM_ERROR % (lineNum, r) )
     	else:
             mcvTermKeys.append(t)
 
-    return (error)
+    return errors
 
 def processFile():
     '''
@@ -312,7 +362,9 @@ def processFile():
 	# sanity checks
 	#
 
-        if sanityCheck(biotypeVocab, biotypeTerm, mcvTerms, markerType, lineNum) == 1:
+	errors = sanityCheck(biotypeVocab, biotypeTerm, mcvTerms, markerType, lineNum)
+        if errors :
+	    errorFile.write('\n'.join(errors) + '\n')
 	    errorFile.write(str(tokens) + '\n\n')
 	    bcpon = 0
 	    continue
@@ -348,22 +400,33 @@ def bcpFiles():
     diagFile.write('%s\n' % bcp1)
     os.system(bcp1)
 
-#
-# Main
-#
 
-print 'verifyMode()'
-verifyMode()
+def main():
 
-print 'init()'
-init()
+    print 'initConfig()'
+    initConfig()
 
-print 'processFile()'
-processFile()
+    print 'verifyMode()'
+    verifyMode()
 
-if not DEBUG and bcpon:
-    print 'sanity check PASSED : loading data'
-    bcpFiles()
-    exit(0)
-else:
-    exit(1)
+    print 'init()'
+    init()
+
+    print 'processFile()'
+    processFile()
+
+    if not DEBUG and bcpon:
+	print 'sanity check PASSED : loading data'
+	bcpFiles()
+	exit(0)
+    else:
+	exit(1)
+
+
+if __name__ == '__main__':
+	db.useOneConnection(1)
+	db.sql('start transaction', None)
+	main()
+
+	#db.commit()
+

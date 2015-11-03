@@ -94,6 +94,14 @@ done
 chmod -f 775 ${INPUTDIR}
 chgrp mgi ${INPUTDIR}
 
+
+# All Unit Tests
+echo "Running all unit tests"
+cd unittest
+./all_tests.sh || exit 1;
+cd -
+
+
 # copy the scripts for curator use into a standard location which exists in
 # their path statements
 
@@ -131,5 +139,6 @@ if [ -d ${DEPLOY_PATH} ]; then
         done
         echo "Deployed curator files to ${DEPLOY_PATH}"
 fi
+
 exit 0
 
