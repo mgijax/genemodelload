@@ -102,8 +102,6 @@ markerTypeKey = 0
 mode = None
 # BIOTYPETABLE
 biotypeTable = None
-# BCP_CMD
-bcpCommand = None
 # OUTPUTDIR
 outputFileDir = None
 # BIOTYPEINPUT_FILE_DEFAULT
@@ -125,7 +123,6 @@ def initConfig():
     """
     global mode
     global biotypeTable
-    global bcpCommand
     global outputFileDir
     global inputFileName
     global bcpFileName
@@ -134,7 +131,6 @@ def initConfig():
     global errorFileName
     mode = os.environ['BIOTYPEMODE']
     biotypeTable = os.environ['BIOTYPETABLE']
-    bcpCommand = os.environ['BCP_CMD']
     outputFileDir = os.environ['OUTPUTDIR']
     inputFileName = os.environ['BIOTYPEINPUT_FILE_DEFAULT']
     bcpFileName = biotypeTable + '.bcp'

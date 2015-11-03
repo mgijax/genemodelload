@@ -278,8 +278,6 @@ fi
 
 ### end if [ ${RELOAD_GENEMODELS} = "true" ]
 
-exit 0
-
 date >> ${LOG}
 echo "Generate the sanity/QC reports" | tee -a ${LOG}
 { ${GENEMODEL_QC_SH} ${PROVIDER} ${ASSOC_FILE_DEFAULT} ${RUNTYPE} 2>&1; echo $? > ${TMP_FILE}; } >> ${LOG}

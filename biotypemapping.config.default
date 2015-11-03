@@ -5,9 +5,6 @@
 # configuration variables used by 'bin/biotypemapping.py '
 #
 
-BCP_CMD="${PG_DBUTILS}/bin/bcpin.csh ${MGD_DBSERVER} ${MGD_DBNAME}"
-export BCP_CMD
-
 # destination area for curator sanity checks
 DESTFILEDIR=/mgi/all/wts_projects/10300/10308
 DESTCURRENTDIR=${DESTFILEDIR}/RawBioTypeEquivalence
