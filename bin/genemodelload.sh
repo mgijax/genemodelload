@@ -209,22 +209,6 @@ date >> ${LOG}
 echo "Generate BioType-Mapping" | tee -a ${LOG}
 
 #
-# truncate the MRK_BiotypeMapping table
-# this is always a drop/reload
-#
-date >> ${LOG}
-echo "Truncating the MRK_BiotypeMapping table..." | tee -a ${LOG}
-${PG_MGD_DBSCHEMADIR}/table/MRK_BiotypeMapping_truncate.object | tee -a ${LOG}
-STAT=$?
-if [ ${STAT} -ne 0 ]
-then
-	message="${message} ${PG_MGD_DBSCHEMADIR}/table/MRK_BiotypeMapping_truncate.object failed"
-else
-	message="${message} ${PG_MGD_DBSCHEMADIR}/table/MRK_BiotypeMapping_truncate.object successful" 
-fi
-echo ${message} | tee -a ${LOG}
-
-#
 # load vocabulary terms
 #
 date | tee -a ${LOG}
