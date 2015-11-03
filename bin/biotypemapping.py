@@ -396,9 +396,11 @@ def bcpFiles():
     #
     '''
 
-    bcp1 = '''%s %s %s %s '|' '\\n' mgd''' % (bcpCommand, biotypeTable, outputFileDir, bcpFileName)
-    diagFile.write('%s\n' % bcp1)
-    os.system(bcp1)
+    diagFile.write('truncating %s' % biotypeTable)
+    db.sql('truncate table %s' % biotypeTable, None)
+
+    diagFile.write('BCP into %s' % biotypeTable)
+    db.bcp(outputFileName, biotypeTable)
 
 
 def main():
@@ -426,7 +428,9 @@ def main():
 if __name__ == '__main__':
 	db.useOneConnection(1)
 	db.sql('start transaction', None)
+
+	# do main processing
 	main()
 
-	#db.commit()
+	db.commit()
 
