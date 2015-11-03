@@ -322,7 +322,7 @@ then
     ${ASSEMBLY_WRAPPER} ${ASSEMBLY_CONFIG} >> ${LOG}
 
     echo "Load SEQ_GeneModel for ${PROVIDER}" | tee -a ${LOG}
-    ./seqgenemodelload.sh ${PROVIDER} >> ${LOG} 2>&1
+    ${GENEMODELLOAD}/bin/seqgenemodelload.sh ${PROVIDER} >> ${LOG} 2>&1
     STAT=$?
     if [ ${STAT} -ne 0 ]
     then
