@@ -400,7 +400,7 @@ def bcpFiles():
     db.sql('truncate table %s' % biotypeTable, None)
 
     diagFile.write('BCP into %s' % biotypeTable)
-    db.bcp(outputFileName, biotypeTable)
+    db.bcp(outputFileName, biotypeTable, delimiter='|')
 
 
 def main():
