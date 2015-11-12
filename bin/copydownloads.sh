@@ -17,6 +17,7 @@ then
 fi
 
 . ${MGICONFIG}/master.config.sh
+. ${GENEMODELLOAD}/genemodel_common.config
 . $1
 
 LOG=$0.log

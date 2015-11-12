@@ -107,6 +107,7 @@ if [ ${STAT} -ne 0 ]
 then
 	echo "error : cannot load database : ", ${PG_DBSERVER}, ${PG_DBNAME}, ${TEST_DBDUMP_TO} | tee -a ${LOG}
 fi
+exit 0
 
 #
 # step 6
