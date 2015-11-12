@@ -41,19 +41,19 @@ ARCHIVEDIR=${FILEDIR}/archive
 
 export INPUTDIR OUTPUTDIR LOGDIR RPTDIR ARCHIVEDIR
 
-# Full path to the gene model directory that exists only on hobbiton.
+# Full path to the gene model directory 
 #
 GENEMODELDIR=/data/genemodels/current/models
 
-# Full path to the gene model biotypes directory that exists only on hobbiton.
+# Full path to the gene model biotypes directory 
 #
 BIOTYPEDIR=/data/genemodels/current/biotypes
 
-# Full path to the transcripts directory that exists only on hobbiton.
+# Full path to the transcripts directory 
 #
 TRANSCRIPTDIR=/data/genemodels/current/transcripts
 
-# Full path to the proteins directory that exists only on hobbiton.
+# Full path to the proteins directory 
 #
 PROTEINDIR=/data/genemodels/current/proteins
 
@@ -86,6 +86,11 @@ VEGA_ENS_WRAPPER=${VEGA_ENSEMBLSEQLOAD}/bin/vega_ensemblseqload.sh
 VEGA_ENS_ASSOC_WRAPPER=${VEGA_ENSEMBLSEQLOAD}/bin/run_assocload.sh
 
 export VEGA_ENS_WRAPPER VEGA_ENS_ASSOC_WRAPPER
+
+# test database dump file
+#
+TEST_DBDUMP=/bhmgidevdb01/dump/ mgd.genemodelload.dump
+export TEST_DBDUMP
 
 # Installation directory for the gene model load.
 #

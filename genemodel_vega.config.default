@@ -8,23 +8,70 @@
 ###########################################################################
 
 #
+# test TR directory
+#
+TRDIR=/mgi/all/wts_projects/12000/12058/VEGA
+export TRDIR
+
+#
+# used by other wrappers in bin directory :
+#  copydownloads.sh, copyinputs.sh, runTest.sh
+#
+BIOTYPE_FILE_NAME=Mus_musculus.GRCm38.61.gtf.gz
+TRANSCRIPT_FILE_NAME=Mus_musculus.VEGA61.cdna.all.fa.gz
+PROTEIN_FILE_NAME=Mus_musculus.VEGA61.pep.all.fa.gz
+export BIOTYPE_FILE_NAME TRANSCRIPT_FILE_NAME PROTEIN_FILE_NAME
+
+#
+# Reload the gene models (true/false)?  If false, only the associations
+# will be deleted/reloaded.
+#
+RELOAD_GENEMODELS=false
+export RELOAD_GENEMODELS
+
+# Full path to the current gene model biotype file
+#
+BIOTYPE_FILE_CURRENT=${BIOTYPEDIR}/${BIOTYPE_FILE_NAME}
+# Full path to the default biotype file 
+# Used to create gene model ID to biotype mapping for createSeqGeneTrapInput.py
+#
+BIOTYPE_FILE_DEFAULT=${INPUTDIR}/vega_biotypes.gz
+export BIOTYPE_FILE_CURRENT BIOTYPE_FILE_DEFAULT
+
+# Full path to the current transcript file
+#
+TRANSCRIPT_FILE_CURRENT=${TRANSCRIPTDIR}/${TRANSCRIPT_FILE_NAME}
+# Full path to the default transcript file 
+# Used by vega_ensemblseqload
+#
+TRANSCRIPT_FILE_DEFAULT=${INPUTDIR}/vega_transcripts.gz
+export TRANSCRIPT_FILE_CURRENT TRANSCRIPT_FILE_DEFAULT
+
+# Full path to the current protein file
+#
+PROTEIN_FILE_CURRENT=${PROTEINDIR}/${PROTEIN_FILE_NAME}
+# Full path to the default transcript file 
+# Used by vega_ensemblseqload
+#
+PROTEIN_FILE_DEFAULT=${INPUTDIR}/vega_proteins.gz
+export PROTEIN_FILE_CURRENT PROTEIN_FILE_DEFAULT
+
+#
+#
 # Gene model provider name.
 #
 GM_PROVIDER=VEGA
-
 export GM_PROVIDER
 
-# Full path to the current gene model file (on hobbiton).
+# Full path to the current gene model file
 #
 GM_FILE_CURRENT=${GENEMODELDIR}/vega_genemodels.txt
-
 export GM_FILE_CURRENT
 
 # Full path to the default gene model and association files.
 #
 GM_FILE_DEFAULT=${INPUTDIR}/vega_genemodels.txt
 ASSOC_FILE_DEFAULT=${INPUTDIR}/vega_assoc.txt
-
 export GM_FILE_DEFAULT ASSOC_FILE_DEFAULT
 
 # Full path to the "cleaned up" QC-ready gene model and association files
@@ -32,7 +79,6 @@ export GM_FILE_DEFAULT ASSOC_FILE_DEFAULT
 #
 GM_FILE_QC=${OUTPUTDIR}/vega_genemodels_qc.txt
 ASSOC_FILE_QC=${OUTPUTDIR}/vega_assoc_qc.txt
-
 export GM_FILE_QC ASSOC_FILE_QC
 
 # Full path to the load-ready gene model and association file that are
@@ -41,41 +87,35 @@ export GM_FILE_QC ASSOC_FILE_QC
 #
 GM_FILE_LOAD=${OUTPUTDIR}/vega_genemodels_load.txt
 ASSOC_FILE_LOAD=${OUTPUTDIR}/vega_assoc_load.txt
-
 export GM_FILE_LOAD ASSOC_FILE_LOAD
 
 # Minimum number of lines expected for the input files (for sanity check).
 #
 GM_FILE_MINIMUM_SIZE=15000
 ASSOC_FILE_MINIMUM_SIZE=15000
-
 export GM_FILE_MINIMUM_SIZE ASSOC_FILE_MINIMUM_SIZE
 
 # The logical DB for the header of the load-ready association file.
 #
 ASSOC_FILE_LOGICALDB="VEGA Gene Model"
-
 export ASSOC_FILE_LOGICALDB
 
 # Full path to the log files.
 #
 GENEMODELQC_LOGFILE=${LOGDIR}/vega_genemodelQC.log
 GENEMODELLOAD_LOGFILE=${LOGDIR}/vega_genemodelload.log
-
 export GENEMODELQC_LOGFILE GENEMODELLOAD_LOGFILE
 
 # Temp table that will be loaded from the input files.
 #
 GM_TEMP_TABLE=VEGA_GM
 ASSOC_TEMP_TABLE=VEGA_Assoc
-
 export GM_TEMP_TABLE ASSOC_TEMP_TABLE
 
 # Full path to the bcp files for loading the input files into temp tables.
 #
 GM_FILE_BCP=${OUTPUTDIR}/vega_genemodels.bcp
 ASSOC_FILE_BCP=${OUTPUTDIR}/vega_assoc.bcp
-
 export GM_FILE_BCP ASSOC_FILE_BCP
 
 # Full path to the sanity/QC reports.
@@ -97,15 +137,7 @@ export MISSING_GMID_RPT CHR_DISCREP_RPT RPT_NAMES_RPT
 # Name of the configuration file for the assemblyseqload.
 #
 ASSEMBLY_CONFIG=vega_assemblyseqload.config
-
 export ASSEMBLY_CONFIG
-
-# Reload the gene models (true/false)?  If false, only the associations
-# will be deleted/reloaded.
-#
-RELOAD_GENEMODELS=false
-
-export RELOAD_GENEMODELS
 
 #
 # seqgenemodelload.sh configuration
@@ -113,41 +145,7 @@ export RELOAD_GENEMODELS
 
 # use the VEGA Genomic Sequence Load user
 USERKEY=1439
-
 export USERKEY
-
-# Full path to the current gene model biotype file (on hobbiton).
-#
-BIOTYPE_FILE_CURRENT=${BIOTYPEDIR}/Mus_musculus.GRCm38.61.gtf.gz
-
-# Full path to the default biotype file
-# Used to create gene model ID to biotype mapping for createSeqGeneTrapInput.py
-#
-BIOTYPE_FILE_DEFAULT=${INPUTDIR}/vega_biotypes.gz
-
-export BIOTYPE_FILE_CURRENT BIOTYPE_FILE_DEFAULT
-
-# Full path to the current transcript file (on hobbiton).
-#
-TRANSCRIPT_FILE_CURRENT=${TRANSCRIPTDIR}/Mus_musculus.VEGA61.cdna.all.fa.gz
-
-# Full path to the default transcript file
-# Used by vega_ensemblseqload
-#
-TRANSCRIPT_FILE_DEFAULT=${INPUTDIR}/vega_transcripts.gz
-
-export TRANSCRIPT_FILE_CURRENT TRANSCRIPT_FILE_DEFAULT
-
-# Full path to the current protein file (on hobbiton).
-#
-PROTEIN_FILE_CURRENT=${PROTEINDIR}/Mus_musculus.VEGA61.pep.all.fa.gz
-
-# Full path to the default transcript file
-# Used by vega_ensemblseqload
-#
-PROTEIN_FILE_DEFAULT=${INPUTDIR}/vega_proteins.gz
-
-export PROTEIN_FILE_CURRENT PROTEIN_FILE_DEFAULT
 
 # path to bcp file
 BCP_FILE_PATH=${OUTPUTDIR}/SEQ_GeneModel.vega.bcp
