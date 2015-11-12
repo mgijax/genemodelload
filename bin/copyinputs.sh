@@ -50,37 +50,39 @@ then
 #
 # ensembl
 #
-cp /data/downloads/ensembl_mus_gtf/${BIOTYPE_FILE_NAME} ${BIOTYPE_FILE_DEFAULT}
-cp /data/downloads/ensembl_mus_cdna/${TRANSCRIPT_FILE_NAME} ${TRANSCRIPT_FILE_DEFAULT}
-cp /data/downloads/ensembl_mus_protein/${PROTEIN_FILE_NAME} ${PROTEIN_FILE_DEFAULT}
-cp /data/downloads/ensembl_mus_ncrna/${NCRNA_FILE_NAME} ${NCRNA_FILE_DEFAULT}
-cp ${TRDIR}/GeneModelLoad/ensembl_genemodels.txt ${INPUTDIR}
-cp ${TRDIR}/AssociationLoad/ensembl_assoc.txt ${INPUTDIR}
+cp -r /data/downloads/ensembl_mus_gtf/${BIOTYPE_FILE_NAME} ${BIOTYPE_FILE_DEFAULT}
+cp -r /data/downloads/ensembl_mus_cdna/${TRANSCRIPT_FILE_NAME} ${TRANSCRIPT_FILE_DEFAULT}
+cp -r /data/downloads/ensembl_mus_protein/${PROTEIN_FILE_NAME} ${PROTEIN_FILE_DEFAULT}
+cp -r /data/downloads/ensembl_mus_ncrna/${NCRNA_FILE_NAME} ${NCRNA_FILE_DEFAULT}
+cp -r ${TRDIR}/GeneModelLoad/ensembl_genemodels.txt ${INPUTDIR}
+cp -r ${TRDIR}/AssociationLoad/ensembl_assoc.txt ${INPUTDIR}
 
 elif [ "${GM_PROVIDER}" = "VEGA" ]
 then
 #
 # vega
 #
-cp /data/downloads/vega_mus_gtf/${BIOTYPE_FILE_NAME} ${BIOTYPE_FILE_DEFAULT}
-cp /data/downloads/vega_mus_cdna/${TRANSCRIPT_FILE_NAME} ${TRANSCRIPT_FILE_DEFAULT}
-cp /data/downloads/vega_mus_protein/${PROTEIN_FILE_NAME} ${PROTEIN_FILE_DEFAULT}
-cp ${TRDIR}/VEGA/GeneModelLoad/vega_genemodels.txt ${INPUTDIR}
-cp ${TRDIR}/VEGA/AssociationLoad/vega_assoc.txt ${INPUTDIR}
+cp -r /data/downloads/vega_mus_gtf/${BIOTYPE_FILE_NAME} ${BIOTYPE_FILE_DEFAULT}
+cp -r /data/downloads/vega_mus_cdna/${TRANSCRIPT_FILE_NAME} ${TRANSCRIPT_FILE_DEFAULT}
+cp -r /data/downloads/vega_mus_protein/${PROTEIN_FILE_NAME} ${PROTEIN_FILE_DEFAULT}
+cp -r ${TRDIR}/VEGA/GeneModelLoad/vega_genemodels.txt ${INPUTDIR}
+cp -r ${TRDIR}/VEGA/AssociationLoad/vega_assoc.txt ${INPUTDIR}
 
 elif [ "${GM_PROVIDER}" = "NCBI" ]
 then
 #
 # ncbi/entrezgene
 #
-cp /data/downloads/entrezgene/${BIOTYPE_FILE_NAME} ${BIOTYPE_FILE_DEFAULT}
-cp ${TRDIR}/VEGA/GeneModelLoad/ncbi_genemodels.txt ${INPUTDIR}
-cp ${TRDIR}/VEGA/AssociationLoad/ncbi_assoc.txt ${INPUTDIR}
+cp -r /data/downloads/entrezgene/${BIOTYPE_FILE_NAME} ${BIOTYPE_FILE_DEFAULT}
+cp -r ${TRDIR}/VEGA/GeneModelLoad/ncbi_genemodels.txt ${INPUTDIR}
+cp -r ${TRDIR}/VEGA/AssociationLoad/ncbi_assoc.txt ${INPUTDIR}
 
 else
     echo "variable GM_PROVIDER has not been set"
     exit 1
 fi
+
+ls -l ${INPUTDIR}
 
 date |tee -a $LOG
 
