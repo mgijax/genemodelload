@@ -24,6 +24,7 @@ fi
 LOG=$0.log
 rm -rf ${LOG}
 touch ${LOG}
+chgrp mgi ${LOG}
 
 date |tee -a $LOG
 
