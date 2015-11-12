@@ -20,6 +20,7 @@ fi
 . ${GENEMODELLOAD}/genemodel_common.config
 . $1
 
+cd `dirname $0`
 LOG=$0.log
 rm -rf ${LOG}
 touch ${LOG}
