@@ -101,13 +101,12 @@ then
 fi
 
 echo "loading test database...."
-echo ${PG_DBUTILS}/bin/loadDB.csh ${PG_DBSERVER} ${PG_DBNAME} mgd ${TEST_DBDUMP} | tee -a ${LOG}
+${PG_DBUTILS}/bin/loadDB.csh ${PG_DBSERVER} ${PG_DBNAME} mgd ${TEST_DBDUMP} | tee -a ${LOG}
 STAT=$?
 if [ ${STAT} -ne 0 ]
 then
 	echo "error : cannot load database : ", ${PG_DBSERVER}, ${PG_DBNAME}, ${TEST_DBDUMP_TO} | tee -a ${LOG}
 fi
-exit 0
 
 #
 # step 6
@@ -118,13 +117,13 @@ echo "Running ${GENEMODELLOAD}/bin/genemodelload.sh ", ${GM_PROVIDER} | tee -a $
 if [ "${GM_PROVIDER}" = "Ensembl" ]
 then
   rm -rf ${INPUTFILE}/Ensembl.lastrun
-  echo ${GENEMODELLOAD}/bin/genemodelload.sh ensembl | tee -a ${LOG}
+  ${GENEMODELLOAD}/bin/genemodelload.sh ensembl | tee -a ${LOG}
 elif [ "${GM_PROVIDER}" = "VEGA" ]
   rm -rf ${INPUTFILE}/VEGA.lastrun
-  echo ${GENEMODELLOAD}/bin/genemodelload.sh vega | tee -a ${LOG}
+  ${GENEMODELLOAD}/bin/genemodelload.sh vega | tee -a ${LOG}
 elif [ "${GM_PROVIDER}" = "NCBI" ]
   rm -rf ${INPUTFILE}/NCBI.lastrun
-  echo ${GENEMODELLOAD}/bin/genemodelload.sh ncbi | tee -a ${LOG}
+  ${GENEMODELLOAD}/bin/genemodelload.sh ncbi | tee -a ${LOG}
 else
     echo "variable GM_PROVIDER has not been set"
     exit 1
@@ -140,11 +139,11 @@ fi
 #
 # run all cache loads (see wiki/section 11/Processing)
 #
-#${SEQCACHELOAD}/seqcoord.csh | tee -a ${LOG}
-#${SEQCACHELOAD}/seqmarker.csh | tee -a ${LOG}
-#${MRKCACHELOAD}/mrklabel.csh | tee -a ${LOG}
-#${MRKCACHELOAD}/mrkref.csh | tee -a ${LOG}
-#${MRKCACHELOAD}/mrklocation.csh  | tee -a ${LOG}
+${SEQCACHELOAD}/seqcoord.csh | tee -a ${LOG}
+${SEQCACHELOAD}/seqmarker.csh | tee -a ${LOG}
+${MRKCACHELOAD}/mrklabel.csh | tee -a ${LOG}
+${MRKCACHELOAD}/mrkref.csh | tee -a ${LOG}
+${MRKCACHELOAD}/mrklocation.csh  | tee -a ${LOG}
 
 #
 # contact MGI-SE-Admin : load EMBOSS sequences
