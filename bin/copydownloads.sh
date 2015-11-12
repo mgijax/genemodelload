@@ -50,10 +50,14 @@ then
 #
 # ensembl
 #
-scp -p bhmgiapp01:/data/downloads/ensembl_mus_gtf/${BIOTYPE_FILE_NAME} /data/downloads/ensembl_mus_gtf
-scp -p bhmgiapp01:/data/downloads/ensembl_mus_cdna/${TRANSCRIPT_FILE_NAME} /data/downloads/ensembl_mus_cdna
-scp -p bhmgiapp01:/data/downloads/ensembl_mus_protein/${PROTEIN_FILE_NAME} /data/downloads/ensembl_mus_protein
-scp -p bhmgiapp01:/data/downloads/ensembl_mus_ncrna/${NCRNA_FILE_NAME} /data/downloads/ensembl_mus_ncrna
+rm -rf /data/downloads/ensembl_mus_gtf/${BIOTYPE_FILE_NAME}
+rm -rf /data/downloads/ensembl_mus_cdna/${TRANSCRIPT_FILE_NAME}
+rm -rf /data/downloads/ensembl_mus_protein/${PROTEIN_FILE_NAME}
+rm -rf /data/downloads/ensembl_mus_ncrna/${NCRNA_FILE_NAME}
+scp bhmgiapp01:/data/downloads/ensembl_mus_gtf/${BIOTYPE_FILE_NAME} /data/downloads/ensembl_mus_gtf
+scp bhmgiapp01:/data/downloads/ensembl_mus_cdna/${TRANSCRIPT_FILE_NAME} /data/downloads/ensembl_mus_cdna
+scp bhmgiapp01:/data/downloads/ensembl_mus_protein/${PROTEIN_FILE_NAME} /data/downloads/ensembl_mus_protein
+scp bhmgiapp01:/data/downloads/ensembl_mus_ncrna/${NCRNA_FILE_NAME} /data/downloads/ensembl_mus_ncrna
 ls -l /data/downloads/ensembl_mus_gtf/${BIOTYPE_FILE_NAME}
 ls -l /data/downloads/ensembl_mus_cdna/${TRANSCRIPT_FILE_NAME}
 ls -l /data/downloads/ensembl_mus_protein/${PROTEIN_FILE_NAME}
@@ -64,9 +68,12 @@ then
 #
 # vega
 #
-scp -p bhmgiapp01:/data/downloads/vega_mus_gtf/${BIOTYPE_FILE_NAME} /data/downloads/vega_mus_gtf
-scp -p bhmgiapp01:/data/downloads/vega_mus_cdna/${TRANSCRIPT_FILE_NAME} /data/downloads/vega_mus_cdna
-scp -p bhmgiapp01:/data/downloads/vega_mus_protein/${PROTEIN_FILE_NAME} /data/downloads/vega_mus_protein
+rm -rf /data/downloads/vega_mus_gtf/${BIOTYPE_FILE_NAME}
+rm -rf /data/downloads/vega_mus_cdna/${TRANSCRIPT_FILE_NAME}
+rm -rf /data/downloads/vega_mus_protein/${PROTEIN_FILE_NAME}
+scp bhmgiapp01:/data/downloads/vega_mus_gtf/${BIOTYPE_FILE_NAME} /data/downloads/vega_mus_gtf
+scp bhmgiapp01:/data/downloads/vega_mus_cdna/${TRANSCRIPT_FILE_NAME} /data/downloads/vega_mus_cdna
+scp bhmgiapp01:/data/downloads/vega_mus_protein/${PROTEIN_FILE_NAME} /data/downloads/vega_mus_protein
 ls -l /data/downloads/vega_mus_gtf/${BIOTYPE_FILE_NAME}
 ls -l /data/downloads/vega_mus_cdna/${TRANSCRIPT_FILE_NAME}
 ls -l /data/downloads/vega_mus_protein/${PROTEIN_FILE_NAME}
@@ -76,7 +83,8 @@ then
 #
 # ncbi/entrezgene
 #
-scp -p bhmgiapp01:/data/downloads/entrezgene/${BIOTYPE_FILE_NAME} /data/downloads/entrezgene
+rm -rf /data/downloads/entrezgene/${BIOTYPE_FILE_NAME}
+scp bhmgiapp01:/data/downloads/entrezgene/${BIOTYPE_FILE_NAME} /data/downloads/entrezgene
 ls -l /data/downloads/entrezgene/${BIOTYPE_FILE_NAME}
 
 else
