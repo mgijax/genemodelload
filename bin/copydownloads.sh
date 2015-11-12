@@ -8,11 +8,11 @@
 
 #
 #  If the MGICONFIG environment variable does not have a local override,
-#  use the default "live" settings.
+#  use the default "test" settings.
 #
 if [ "${MGICONFIG}" = "" ]
 then
-    MGICONFIG=/usr/local/mgi/live/mgiconfig
+    MGICONFIG=/usr/local/mgi/test/mgiconfig
     export MGICONFIG
 fi
 
@@ -28,10 +28,9 @@ date |tee -a $LOG
 #
 # The following steps must all be done on the TEST SERVER: 
 #
-case(`uname -n` in
+case `uname -n` in
 
-        bhmgidevapp01)
-        mgi-testdb4)
+        bhmgidevapp01|mgi-testdb4)
                 echo "server verified as a test server...continuing..."
                 ;;
 
@@ -72,7 +71,6 @@ then
 scp bhmgiapp01:/data/downloads/entrezgene/${BIOTYPE_FILE_NAME} /data/downloads/entrezgene
 
 else
-then
     echo "variable GM_PROVIDER has not been set"
     exit 1
 fi
