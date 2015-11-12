@@ -21,13 +21,7 @@ fi
 . ${GENEMODELLOAD}/genemodel_common.config
 . $1
 
-cd `dirname $0`
-LOG=$0.log
-rm -rf ${LOG}
-touch ${LOG}
-chgrp mgi ${LOG}
-
-date |tee -a $LOG
+date
 
 #
 # The following steps must all be done on the TEST SERVER: 
@@ -87,5 +81,5 @@ fi
 
 ls -l ${INPUTDIR}
 
-date |tee -a $LOG
+date
 
