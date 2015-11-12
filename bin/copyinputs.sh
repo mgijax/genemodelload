@@ -78,7 +78,6 @@ cp ${TRDIR}/VEGA/GeneModelLoad/ncbi_genemodels.txt ${INPUTDIR}
 cp ${TRDIR}/VEGA/AssociationLoad/ncbi_assoc.txt ${INPUTDIR}
 
 else
-then
     echo "variable GM_PROVIDER has not been set"
     exit 1
 fi

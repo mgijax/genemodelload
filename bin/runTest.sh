@@ -125,7 +125,6 @@ elif [ "${GM_PROVIDER}" = "NCBI" ]
   rm -rf ${INPUTFILE}/NCBI.lastrun
   echo ${GENEMODELLOAD}/bin/genemodelload.sh ncbi | tee -a ${LOG}
 else
-then
     echo "variable GM_PROVIDER has not been set"
     exit 1
 fi
