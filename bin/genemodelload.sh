@@ -206,73 +206,16 @@ then
 
 echo "" >> ${LOG}
 date >> ${LOG}
-echo "Generate BioType-Mapping" | tee -a ${LOG}
-
-#
-# load vocabulary terms
-#
-date | tee -a ${LOG}
-echo "Running biotype/vocload : ensembl.txt" | tee -a ${LOG}
-rm -rf ${INPUTDIR}/ensembl.txt
-grep "^Ensembl" ${BIOTYPEINPUT_FILE_DEFAULT} > ${INPUTDIR}/ensembl.txt
-${VOCLOAD}/runSimpleFullLoadNoArchive.sh biotype_ensembl.config | tee -a ${LOG}
+echo "Running BioType-Mapping" | tee -a ${LOG}
+${GENEMODELLOAD}/bin/biotypemapping.sh | tee -a ${LOG}
 STAT=$?
 if [ ${STAT} -ne 0 ]
 then
-	message="${message} ${VOCLOAD}/runSimpleFullLoadNoArchive.sh biotype_ensembl.config failed"
+        message="${message} ${GENEMODELLOAD}/bin/biotypemapping.sh failed"
 else
-	message="${message} ${VOCLOAD}/runSimpleFullLoadNoArchive.sh biotype_ensembl.config successful" 
+        message="${message} ${GENEMODELLOAD}/bin/biotypemapping.sh successful"
 fi
 echo ${message} | tee -a ${LOG}
-
-date | tee -a ${LOG}
-echo "Running biotype/vocload : ncbi.txt" | tee -a ${LOG}
-rm -rf ${BIOTYPEINPUTDIR}/ncbi.txt
-grep "^NCBI" ${BIOTYPEINPUT_FILE_DEFAULT} > ${INPUTDIR}/ncbi.txt
-${VOCLOAD}/runSimpleFullLoadNoArchive.sh biotype_ncbi.config | tee -a ${LOG}
-STAT=$?
-if [ ${STAT} -ne 0 ]
-then
-	message="${message} ${VOCLOAD}/runSimpleFullLoadNoArchive.sh biotype_ncbi.config failed"
-else
-	message="${message} ${VOCLOAD}/runSimpleFullLoadNoArchive.sh biotype_ncbi.config successful" 
-fi
-echo ${message} | tee -a ${LOG}
-
-date | tee -a ${LOG}
-echo "Running biotype/vocload : vega.txt" | tee -a ${LOG}
-rm -rf ${INPUTDIR}/vega.txt
-grep "^VEGA" ${BIOTYPEINPUT_FILE_DEFAULT} > ${INPUTDIR}/vega.txt
-${VOCLOAD}/runSimpleFullLoadNoArchive.sh biotype_vega.config | tee -a ${LOG}
-STAT=$?
-if [ ${STAT} -ne 0 ]
-then
-	message="${message} ${VOCLOAD}/runSimpleFullLoadNoArchive.sh biotype_vega.config failed"
-else
-	message="${message} ${VOCLOAD}/runSimpleFullLoadNoArchive.sh biotype_vega.config successful" 
-fi
-echo ${message} | tee -a ${LOG}
-
-#
-# Execute biotypemapping.py
-#
-date | tee -a ${LOG}
-echo "Running biotypemapping" | tee -a ${LOG}
-cd ${OUTPUTDIR}
-${GENEMODELLOAD}/bin/biotypemapping.py | tee -a ${LOG}
-STAT=$?
-if [ ${STAT} -ne 0 ]
-then
-	message="${message} ${GENEMODELLOAD}/bin/biotypemapping.py failed"
-else
-	message="${message} ${GENEMODELLOAD}/bin/biotypemapping.py successful"
-fi
-echo ${message} | tee -a ${LOG}
-
-#
-# cat the biotype error file
-#
-cat ${BIOTYPELOG_ERROR}
 
 fi
 
