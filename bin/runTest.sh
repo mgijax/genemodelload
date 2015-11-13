@@ -106,21 +106,14 @@ esac
 #
 # reload the database
 #
-#if [ ! -d ${TEST_DBDUMP} ]
-#then
-#	echo "error : cannot find database dump : "
-#	echo  ${TEST_DBDUMP}
-#	exit 1
-#fi
-#
-#echo "loading test database...."
-#${PG_DBUTILS}/bin/loadDB.csh ${PG_DBSERVER} ${PG_DBNAME} mgd ${TEST_DBDUMP}
-#STAT=$?
-#if [ ${STAT} -ne 0 ]
-#then
-#	echo "error : cannot load database : "
-#	echo  ${PG_DBSERVER}, ${PG_DBNAME}, ${TEST_DBDUMP_TO}
-#fi
+echo "loading test database...."
+${PG_DBUTILS}/bin/loadDB.csh ${PG_DBSERVER} ${PG_DBNAME} ${TEST_DBSCHEMA} ${TEST_DBDUMP}
+STAT=$?
+if [ ${STAT} -ne 0 ]
+then
+	echo "error : cannot load database : "
+	echo  ${PG_DBSERVER}, ${PG_DBNAME}, ${TEST_DBDUMP_TO}
+fi
 
 #
 # step 6
