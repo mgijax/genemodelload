@@ -1,6 +1,8 @@
 #!/bin/sh
 
 #
+# there are 7 steps to this process
+#
 # step 1 : 
 #	nomenload
 # 	mcvload
