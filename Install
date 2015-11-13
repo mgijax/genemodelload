@@ -93,11 +93,27 @@ done
 #
 # The config files needs to be open to allow curators to edit them for testing.
 #
-chmod -f 777 ${INPUTDIR}
-chmod -f 777 ${OUTPUTDIR}
-chmod -f 777 ${LOGDIR}
-chmod -f 777 ${RPTDIR}
-chmod -f 666 *config
+chmod -fR 777 ${INPUTDIR}
+
+#
+# The following steps must all be done on the TEST SERVER: 
+#
+case `uname -n` in
+
+        bhmgidevapp01|mgi-testdb4)
+		chmod -f 666 *config
+		chmod -fR 777 ${OUTPUTDIR}
+		chmod -fR 777 ${LOGDIR}
+		chmod -fR 777 ${RPTDIR}
+		chmod -fR 777 ${DATALOADSOUTPUT}/assembly
+		chmod -fR 777 ${DATALOADSOUTPUT}/ensembl
+		chmod -fR 777 ${DATALOADSOUTPUT}/vega
+                ;;
+
+        *)
+                ;;
+esac
+
 
 # All Unit Tests
 #echo "Running all unit tests"
