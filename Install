@@ -97,14 +97,13 @@ chmod -fR 777 ${INPUTDIR}
 
 #
 # The following steps must all be done on the TEST SERVER: 
+# opens up all permissions
 #
 case `uname -n` in
 
         bhmgidevapp01|mgi-testdb4)
 		chmod -f 666 *config
-		chmod -fR 777 ${OUTPUTDIR}
-		chmod -fR 777 ${LOGDIR}
-		chmod -fR 777 ${RPTDIR}
+		chmod -fR 777 ${DATALOADSOUTPUT}/genemodelload
 		chmod -fR 777 ${DATALOADSOUTPUT}/assembly
 		chmod -fR 777 ${DATALOADSOUTPUT}/ensembl
 		chmod -fR 777 ${DATALOADSOUTPUT}/vega
