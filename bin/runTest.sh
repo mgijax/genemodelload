@@ -92,19 +92,19 @@ esac
 #
 # reload the database
 #
-if [ ! -d ${TEST_DBDUMP} ]
-then
-	echo "error : cannot find database dump : ", ${TEST_DBDUMP}
-	exit 1
-fi
-
-echo "loading test database...."
-${PG_DBUTILS}/bin/loadDB.csh ${PG_DBSERVER} ${PG_DBNAME} mgd ${TEST_DBDUMP}
-STAT=$?
-if [ ${STAT} -ne 0 ]
-then
-	echo "error : cannot load database : ", ${PG_DBSERVER}, ${PG_DBNAME}, ${TEST_DBDUMP_TO}
-fi
+#if [ ! -d ${TEST_DBDUMP} ]
+#then
+#	echo "error : cannot find database dump : ", ${TEST_DBDUMP}
+#	exit 1
+#fi
+#
+#echo "loading test database...."
+#${PG_DBUTILS}/bin/loadDB.csh ${PG_DBSERVER} ${PG_DBNAME} mgd ${TEST_DBDUMP}
+#STAT=$?
+#if [ ${STAT} -ne 0 ]
+#then
+#	echo "error : cannot load database : ", ${PG_DBSERVER}, ${PG_DBNAME}, ${TEST_DBDUMP_TO}
+#fi
 
 #
 # step 6
@@ -117,9 +117,11 @@ then
   rm -rf ${INPUTFILE}/Ensembl.lastrun
   ${GENEMODELLOAD}/bin/genemodelload.sh ensembl
 elif [ "${GM_PROVIDER}" = "VEGA" ]
+then
   rm -rf ${INPUTFILE}/VEGA.lastrun
   ${GENEMODELLOAD}/bin/genemodelload.sh vega
 elif [ "${GM_PROVIDER}" = "NCBI" ]
+then
   rm -rf ${INPUTFILE}/NCBI.lastrun
   ${GENEMODELLOAD}/bin/genemodelload.sh ncbi
 else
@@ -137,11 +139,11 @@ fi
 #
 # run all cache loads (see wiki/section 11/Processing)
 #
-${SEQCACHELOAD}/seqcoord.csh
-${SEQCACHELOAD}/seqmarker.csh
-${MRKCACHELOAD}/mrklabel.csh
-${MRKCACHELOAD}/mrkref.csh
-${MRKCACHELOAD}/mrklocation.csh
+#${SEQCACHELOAD}/seqcoord.csh
+#${SEQCACHELOAD}/seqmarker.csh
+#${MRKCACHELOAD}/mrklabel.csh
+#${MRKCACHELOAD}/mrkref.csh
+#${MRKCACHELOAD}/mrklocation.csh
 
 #
 # contact MGI-SE-Admin : load EMBOSS sequences
