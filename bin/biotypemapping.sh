@@ -29,10 +29,6 @@ else
     exit 1
 fi
 
-echo "" >> ${LOG}
-date >> ${LOG}
-echo "Generate BioType-Mapping"
-
 #
 # load vocabulary terms
 #
