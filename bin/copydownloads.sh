@@ -18,7 +18,21 @@ fi
 
 . ${MGICONFIG}/master.config.sh
 . ${GENEMODELLOAD}/genemodel_common.config
-. $1
+
+if [ "`echo $1 | grep -i '^ensembl$'`" != "" ]
+then
+        CONFIG=genemodel_ensembl.config
+elif [ "`echo $1 | grep -i '^ncbi$'`" != "" ]
+then
+        CONFIG=genemodel_ncbi.config
+elif [ "`echo $1 | grep -i '^vega$'`" != "" ]
+then
+        CONFIG=genemodel_vega.config
+else
+	echo ${USAGE}; exit 1
+fi
+
+. ${CONFIG}
 
 date
 
