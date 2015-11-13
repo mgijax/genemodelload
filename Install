@@ -96,10 +96,10 @@ chgrp mgi ${INPUTDIR}
 
 
 # All Unit Tests
-echo "Running all unit tests"
-cd unittest
-./all_tests.sh || exit 1;
-cd -
+#echo "Running all unit tests"
+#cd unittest
+#./all_tests.sh || exit 1;
+#cd -
 
 
 # copy the scripts for curator use into a standard location which exists in
@@ -139,6 +139,8 @@ if [ -d ${DEPLOY_PATH} ]; then
         done
         echo "Deployed curator files to ${DEPLOY_PATH}"
 fi
+
+chgrp mgi *config
 
 exit 0
 

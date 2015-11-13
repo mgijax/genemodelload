@@ -89,7 +89,7 @@ export VEGA_ENS_WRAPPER VEGA_ENS_ASSOC_WRAPPER
 
 # test database dump file
 #
-TEST_DBDUMP=/bhmgidevdb01/dump/ mgd.genemodelload.dump
+TEST_DBDUMP=/bhmgidevdb01/dump/mgd.genemodelload.dump
 export TEST_DBDUMP
 
 # Installation directory for the gene model load.
