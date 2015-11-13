@@ -88,14 +88,16 @@ do
 done
 
 #
-# For any server, the input directory should
-# be opened up to allow the curation staff to publish new association files.
+# For any server, the these directories are opened up
+# to allow the curation staff to publish new association files.
 #
 # The config files needs to be open to allow curators to edit them for testing.
 #
-chmod -f 775 ${INPUTDIR}
-chgrp mgi ${INPUTDIR}
-chgrp mgi *config
+chmod -f 777 ${INPUTDIR}
+chmod -f 777 ${OUTPUTDIR}
+chmod -f 777 ${LOGDIR}
+chmod -f 777 ${RPTDIR}
+chmod -f 666 *config
 
 # All Unit Tests
 #echo "Running all unit tests"
