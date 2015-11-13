@@ -108,7 +108,8 @@ esac
 #
 #if [ ! -d ${TEST_DBDUMP} ]
 #then
-#	echo "error : cannot find database dump : ", ${TEST_DBDUMP}
+#	echo "error : cannot find database dump : "
+#	echo  ${TEST_DBDUMP}
 #	exit 1
 #fi
 #
@@ -117,7 +118,8 @@ esac
 #STAT=$?
 #if [ ${STAT} -ne 0 ]
 #then
-#	echo "error : cannot load database : ", ${PG_DBSERVER}, ${PG_DBNAME}, ${TEST_DBDUMP_TO}
+#	echo "error : cannot load database : "
+#	echo  ${PG_DBSERVER}, ${PG_DBNAME}, ${TEST_DBDUMP_TO}
 #fi
 
 #

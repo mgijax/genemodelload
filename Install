@@ -108,6 +108,7 @@ case `uname -n` in
 		chmod -fR 777 ${DATALOADSOUTPUT}/assembly
 		chmod -fR 777 ${DATALOADSOUTPUT}/ensembl
 		chmod -fR 777 ${DATALOADSOUTPUT}/vega
+		chmod -fR 777 ${DATALOADSOUTPUT}/mgi/vocload/runTimeBiotype
                 ;;
 
         *)
