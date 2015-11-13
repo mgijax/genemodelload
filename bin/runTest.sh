@@ -111,6 +111,12 @@ esac
 #
 # run the genemodelload
 # 
+rm -rf ${INPUTDIR}/*
+rm -rf ${OUTPUTDIR}/*
+rm -rf ${LOGDIR}/*
+rm -rf ${RPTDIR}/*
+rm -rf ${DATALOADSOUTPUT}/mgi/vocload/runTimeBiotype/*
+
 echo "Running ${GENEMODELLOAD}/bin/genemodelload.sh ", ${GM_PROVIDER}
 if [ "${GM_PROVIDER}" = "Ensembl" ]
 then
