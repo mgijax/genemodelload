@@ -58,14 +58,6 @@ ${DLAINSTALL} ${DEV}
 chmod -f 755 ${GENEMODEL_QC_SH}
 
 #
-# Create the input directory.
-#
-if [ ! -d ${INPUTDIR} ]
-then
-    mkdir -p ${INPUTDIR}
-fi
-
-#
 # Handle installation tasks specific to each provider.
 #
 for i in ${PROVIDER_CONFIGS}

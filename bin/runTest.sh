@@ -114,6 +114,7 @@ then
 	echo "error : cannot load database : "
 	echo  ${PG_DBSERVER}, ${PG_DBNAME}, ${TEST_DBDUMP_TO}
 fi
+exit 0
 
 #
 # step 6
