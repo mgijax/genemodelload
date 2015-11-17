@@ -54,6 +54,7 @@ esac
 #
 # copy download files from production server to test server
 #
+echo "copying download files from production server to test server...."
 
 if [ "${GM_PROVIDER}" = "Ensembl" ]
 then

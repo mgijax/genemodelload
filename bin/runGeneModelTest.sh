@@ -148,11 +148,11 @@ fi
 #
 # run all cache loads (see wiki/section 11/Processing)
 #
-${SEQCACHELOAD}/seqcoord.csh
-${SEQCACHELOAD}/seqmarker.csh
-${MRKCACHELOAD}/mrklabel.csh
-${MRKCACHELOAD}/mrkref.csh
-${MRKCACHELOAD}/mrklocation.csh
+#${SEQCACHELOAD}/seqcoord.csh
+#${SEQCACHELOAD}/seqmarker.csh
+#${MRKCACHELOAD}/mrklabel.csh
+#${MRKCACHELOAD}/mrkref.csh
+#${MRKCACHELOAD}/mrklocation.csh
 
 #
 # contact MGI-SE-Admin : load EMBOSS sequences

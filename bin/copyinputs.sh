@@ -53,8 +53,9 @@ case `uname -n` in
 esac
 
 #
-# copy download files from production server to test server
+# copy input files from TR directory to test server
 #
+echo "copy input files from TR directory to test serve..."
 
 if [ "${GM_PROVIDER}" = "Ensembl" ]
 then
