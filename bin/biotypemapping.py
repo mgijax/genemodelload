@@ -402,10 +402,6 @@ def bcpFiles():
     diagFile.write('%s\n' % bcp1)
     os.system(bcp1)
 
-    # not working...
-    #diagFile.write('BCP into %s' % biotypeTable)
-    #db.bcp(outputFileName, biotypeTable, delimiter='|')
-
 def main():
     '''
     #
