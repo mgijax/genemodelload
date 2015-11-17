@@ -64,6 +64,7 @@ import loadlib
 ENSEMBL_VOCAB_KEY = 103
 NCBI_VOCAB_KEY = 104
 VEGA_VOCAB_KEY = 105
+
 # MCV vocab key
 MCV_VOCAB_KEY = 79
 
@@ -76,8 +77,8 @@ INVALID_BIOTYPE_TERM_ERROR = "Invalid BioType Term (row %d): %s, for vocab %s"
 INVALID_MARKER_TYPE_ERROR = "Invalid Marker Type Term (row %d): %s"
 INVALID_MCV_TERM_ERROR = "Invalid MCV/Feature Type Term (row %d): %s"
 
-
 ### Globals ###
+
 DEBUG = 0		# set DEBUG to false unless preview mode is selected
 bcpon = 1		# can the bcp files be bcp-ed into the database?  default is yes (1).
 
@@ -100,27 +101,36 @@ markerTypeKey = 0
 #
 # BIOTYPEMODE
 mode = None
+
 # BIOTYPETABLE
 biotypeTable = None
+
 # OUTPUTDIR
 outputFileDir = None
+
 # BIOTYPEINPUT_FILE_DEFAULT
 inputFileName = None
+
 # name of BCP file
 bcpFileName = None
+
 # full path of bcp file
 outputFileName = None
+
 # BIOTYPELOG_DIAG
 diagFileName = None
+
 # BIOTYPELOG_ERROR
 errorFileName = None
 
-
 def initConfig():
-    """
-    Initialize any required environment variables
-	and input/output file names
-    """
+    '''
+    #
+    # Initialize any required environment variables
+    #   and input/output file names
+    #
+    '''
+
     global mode
     global biotypeTable
     global outputFileDir
@@ -129,6 +139,7 @@ def initConfig():
     global outputFileName
     global diagFileName
     global errorFileName
+
     mode = os.environ['BIOTYPEMODE']
     biotypeTable = os.environ['BIOTYPETABLE']
     outputFileDir = os.environ['OUTPUTDIR']
@@ -137,7 +148,6 @@ def initConfig():
     outputFileName = os.environ['OUTPUTDIR'] + '/' + bcpFileName
     diagFileName = os.environ['BIOTYPELOG_DIAG']
     errorFileName = os.environ['BIOTYPELOG_ERROR']
-
 
 def exit(status, message = None):
     '''
@@ -150,9 +160,6 @@ def exit(status, message = None):
     # returns:
     #
     '''
-
-    db.commit()
-    db.useOneConnection()
 
     if message is not None:
 	sys.stderr.write('\n' + str(message) + '\n')
@@ -185,8 +192,6 @@ def init():
 
     global inputFile, outputFile, diagFile, errorFile
     global inputFileName, errorFileName, diagFileName, outputFileName
-
-    db.useOneConnection(1)
 
     try:
 	inputFile = open(inputFileName, 'r')
@@ -420,13 +425,17 @@ def main():
     else:
 	exit(1)
 
-
 if __name__ == '__main__':
-	db.useOneConnection(1)
+        user = os.environ['MGD_DBUSER']
+        passwordFileName = os.environ['MGD_DBPASSWORDFILE']
+        db.useOneConnection(1)
+        db.set_sqlUser(user)
+        db.set_sqlPasswordFromFile(passwordFileName)
 	db.sql('start transaction', None)
 
 	# do main processing
 	main()
 
 	db.commit()
+        db.useOneConnection(0)
 

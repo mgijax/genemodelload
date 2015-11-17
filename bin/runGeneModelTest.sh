@@ -123,15 +123,15 @@ esac
 echo "Running ${GENEMODELLOAD}/bin/genemodelload.sh ", ${GM_PROVIDER}
 if [ "${GM_PROVIDER}" = "Ensembl" ]
 then
-  rm -rf ${INPUTFILE}/Ensembl.lastrun
+  rm -rf ${INPUTDIR}/Ensembl.lastrun
   ${GENEMODELLOAD}/bin/genemodelload.sh ensembl
 elif [ "${GM_PROVIDER}" = "VEGA" ]
 then
-  rm -rf ${INPUTFILE}/VEGA.lastrun
+  rm -rf ${INPUTDIR}/VEGA.lastrun
   ${GENEMODELLOAD}/bin/genemodelload.sh vega
 elif [ "${GM_PROVIDER}" = "NCBI" ]
 then
-  rm -rf ${INPUTFILE}/NCBI.lastrun
+  rm -rf ${INPUTDIR}/NCBI.lastrun
   ${GENEMODELLOAD}/bin/genemodelload.sh ncbi
 else
     echo "variable GM_PROVIDER has not been set"
