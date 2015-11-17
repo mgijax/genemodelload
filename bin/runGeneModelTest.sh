@@ -87,7 +87,6 @@ fi
 # copy produciton /download files to test server
 # only need to do this once per TR
 #./copydownloads.sh $1
-#
 
 # step 4
 #
@@ -95,7 +94,6 @@ fi
 # copy sophia's .txt files to genemodelload/input directory
 # only need to do this once per TR
 ./copyinputs.sh $1
-#
 
 #
 # step 5
@@ -120,8 +118,7 @@ echo "Running ${GENEMODELLOAD}/bin/genemodelload.sh ", ${GM_PROVIDER}
 if [ "${GM_PROVIDER}" = "Ensembl" ]
 then
   rm -rf ${INPUTDIR}/Ensembl.lastrun
-  #${GENEMODELLOAD}/bin/genemodelload.sh ensembl
-  ${GENEMODELLOAD}/bin/zgenemodelload.sh ensembl
+  ${GENEMODELLOAD}/bin/genemodelload.sh ensembl
 elif [ "${GM_PROVIDER}" = "VEGA" ]
 then
   rm -rf ${INPUTDIR}/VEGA.lastrun

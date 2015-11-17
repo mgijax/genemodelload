@@ -426,16 +426,12 @@ def main():
 	exit(1)
 
 if __name__ == '__main__':
-        user = os.environ['MGD_DBUSER']
-        passwordFileName = os.environ['MGD_DBPASSWORDFILE']
-        db.useOneConnection(1)
-        db.set_sqlUser(user)
-        db.set_sqlPasswordFromFile(passwordFileName)
+	db.useOneConnection(1)
 	db.sql('start transaction', None)
 
 	# do main processing
 	main()
 
 	db.commit()
-        db.useOneConnection(0)
+	db.useOneConnection(0)
 

@@ -190,13 +190,6 @@ then
 fi
 
 #
-# Create a temporary file and make sure the it is removed when this script
-# terminates.
-#
-TMP_FILE=/tmp/`basename $0`.$$
-trap "rm -f ${TMP_FILE}" 0 1 2 15
-
-#
 # If the gene models are to be reloaded, the following is done for *all* PROVIDERs:
 #	- reload the PROVIDER/biotype vocabulary
 #	- reload the MRK_BiotypeMapping table
@@ -221,8 +214,16 @@ fi
 
 ### end if [ ${RELOAD_GENEMODELS} = "true" ]
 
+#
+# Run sanity/QC reports
+#
+# a distinct tmp file is created  to allow > 1 curator to run a QC check
+# make sure the tmp file is removed when this script terminates
+#
 date >> ${LOG}
 echo "Generate the sanity/QC reports" | tee -a ${LOG}
+TMP_FILE=/tmp/`basename $0`.$$
+trap "rm -f ${TMP_FILE}" 0 1 2 15
 { ${GENEMODEL_QC_SH} ${PROVIDER} ${ASSOC_FILE_DEFAULT} ${RUNTYPE} 2>&1; echo $? > ${TMP_FILE}; } >> ${LOG}
 if [ `cat ${TMP_FILE}` -eq 1 ]
 then

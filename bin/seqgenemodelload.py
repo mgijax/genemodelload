@@ -217,12 +217,6 @@ def init():
     print '%s' % mgi_utils.date()
     print 'Initializing'
 
-    #user = os.environ['MGD_DBUSER']
-    #passwordFileName = os.environ['MGD_DBPASSWORDFILE']
-    #db.useOneConnection(1)
-    #db.set_sqlUser(user)
-    #db.set_sqlPasswordFromFile(passwordFileName)
-
     inFile = sys.stdin
     if len(sys.argv) != 2:
             print Usage
@@ -291,9 +285,6 @@ def run ():
 	(notInInputCtr, provider)
 
     print '\n%s %s gene model Ids not loaded because unable to translate biotype\n' % (noTranslationCtr, provider)
-
-    db.commit()
-    db.useOneConnection(0)
 
 #
 # Main
