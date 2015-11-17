@@ -264,10 +264,6 @@ def closeFiles ():
     fpSecMrkRpt.close()
     fpMissGMRpt.close()
     fpChrDiscrepRpt.close()
-
-    db.commit()
-    db.useOneConnection()
-
     return
 
 
@@ -422,14 +418,15 @@ def createInvMarkerReport ():
     fpInvMrkRpt.write(12*'-' + '  ' + 20*'-' + '  ' + 20*'-' + '  ' + \
                       20*'-' + '  ' + 30*'-' + NL)
 
+    cmds = []
+
     #
     # Find any MGI IDs from the association file that:
     # 1) Do not exist in the database.
     # 2) Exist for a non-marker object.
     # 3) Exist for a marker, but the status is not "offical" or "interim".
     #
-
-    cmds = 'select tmp.mgiID, ' + \
+    cmds.append('select tmp.mgiID, ' + \
                        'tmp.gmID, ' + \
                        'null as name, ' + \
                        'null as status ' + \
@@ -471,15 +468,14 @@ def createInvMarkerReport ():
                       'a._Object_key = m._Marker_key and ' + \
                       'm._Marker_Status_key not in (1,3) and ' + \
                       'm._Marker_Status_key = ms._Marker_Status_key ' + \
-                'order by mgiID, gmID'
+                'order by mgiID, gmID')
 
-    print cmds
     results = db.sql(cmds,'auto')
 
     #
     # Write the records to the report.
     #
-    for r in results:
+    for r in results[0]:
         mgiID = r['mgiID']
         gmID = r['gmID']
         objectType = r['name']
@@ -511,7 +507,7 @@ def createInvMarkerReport ():
                 if list.count(gmID) > 0:
                     list.remove(gmID)
                 assoc[mgiID] = list
-    numErrors = len(results)
+    numErrors = len(results[0])
     fpInvMrkRpt.write(NL + 'Number of Rows: ' + str(numErrors) + NL)
 
     errorCount += numErrors
@@ -541,11 +537,13 @@ def createSecMarkerReport ():
     fpSecMrkRpt.write(16*'-' + '  ' + 20*'-' + '  ' + 50*'-' + '  ' + \
                       16*'-' + NL)
 
+    cmds = []
+
     #
     # Find any MGI IDs from the association file that are secondary IDs
     # for a marker.
     #
-    cmds = 'select tmp.mgiID, ' + \
+    cmds.append('select tmp.mgiID, ' + \
                        'tmp.gmID, ' + \
                        'm.symbol, ' + \
                        'a2.accID ' + \
@@ -562,15 +560,13 @@ def createSecMarkerReport ():
                       'a2._LogicalDB_key = 1 and ' + \
                       'a2.preferred = 1 and ' + \
                       'a2._Object_key = m._Marker_key ' + \
-                'order by tmp.mgiID, tmp.gmID'
+                'order by tmp.mgiID, tmp.gmID')
 
-    print cmds
     results = db.sql(cmds,'auto')
-
     #
     # Write the records to the report.
     #
-    for r in results:
+    for r in results[0]:
         mgiID = r['mgiID']
         gmID = r['gmID']
 
@@ -588,7 +584,7 @@ def createSecMarkerReport ():
                 if list.count(gmID) > 0:
                     list.remove(gmID)
                 assoc[mgiID] = list
-    numErrors = len(results)
+    numErrors = len(results[0])
     fpSecMrkRpt.write(NL + 'Number of Rows: ' + str(numErrors) + NL)
 
     errorCount += numErrors
@@ -622,21 +618,20 @@ def createMissingGMIDReport ():
     # Find any gene model IDs from the association file that are not in
     # the gene model file.
     #
-    cmds = 'select ta.mgiID, ' + \
+    cmds.append('select ta.mgiID, ' + \
                        'ta.gmID ' + \
                 'from ' + assocTempTable + ' ta ' + \
                 'where not exists (select 1 ' + \
                                   'from ' + gmTempTable + ' tgm ' + \
                                   'where lower(tgm.gmID) = lower(ta.gmID)) ' + \
-                'order by ta.gmID'
+                'order by ta.gmID')
 
-    print cmds
     results = db.sql(cmds,'auto')
 
     #
     # Write the records to the report.
     #
-    for r in results:
+    for r in results[0]:
         mgiID = r['mgiID']
         gmID = r['gmID']
 
@@ -654,7 +649,7 @@ def createMissingGMIDReport ():
                     list.remove(gmID)
                 assoc[mgiID] = list
     
-    numErrors = len(results)
+    numErrors = len(results[0])
     fpMissGMRpt.write(NL + 'Number of Rows: ' + str(numErrors) + NL)
     
     errorCount += numErrors
@@ -684,11 +679,13 @@ def createChrDiscrepReport ():
     fpChrDiscrepRpt.write(20*'-' + '  ' + 3*'-' + '  ' + 12*'-' + '  ' +
                           50*'-' + '  ' + 3*'-' + NL)
 
+    cmds = []
+
     #
     # Find any cases where the marker for the MGI ID in the association
     # file has a different chromosome than what is in the gene model file.
     #
-    cmds = 'select tgm.gmID, ' + \
+    cmds.append('select tgm.gmID, ' + \
                        'tgm.chromosome as gmChr, ' + \
                        'ta.mgiID, ' + \
                        'm.symbol, ' + \
@@ -704,15 +701,14 @@ def createChrDiscrepReport ():
                       'a.preferred = 1 and ' + \
                       'a._Object_key = m._Marker_key and ' + \
                       'm.chromosome != tgm.chromosome ' + \
-                'order by tgm.gmID'
+                'order by tgm.gmID')
 
-    print cmds
     results = db.sql(cmds,'auto')
 
     #
     # Write the records to the report.
     #
-    for r in results:
+    for r in results[0]:
         mgiID = r['mgiID']
         gmID = r['gmID']
 
@@ -731,7 +727,7 @@ def createChrDiscrepReport ():
                     list.remove(gmID)
                 assoc[mgiID] = list
 
-    numErrors = len(results)
+    numErrors = len(results[0])
     fpChrDiscrepRpt.write(NL + 'Number of Rows: ' + str(numErrors) + NL)
 
     errorCount += numErrors

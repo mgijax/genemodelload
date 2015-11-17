@@ -52,9 +52,8 @@ Usage='createSeqGeneModelInput.py provider (vega | ensembl | ncbi)'
 
 import sys
 import os
-import mgi_utils
-import loadlib
 import string
+import mgi_utils
 import db
 
 #
@@ -299,7 +298,6 @@ def run ():
 
 init()
 run()
-
 inFile.close()
 bcpFile.close()
 

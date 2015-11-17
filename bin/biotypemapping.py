@@ -249,11 +249,6 @@ def verifyMode():
     elif mode not in ['load']:
 	exit(1, 'Invalid Processing Mode:  %s\n' % (mode))
 
-    # the shell wrapper will truncate the table
-    #else:
-    	#db.sql('truncate table mgd.%s' % (biotypeTable), None)
-	#db.commit()
-
 def sanityCheck(biotypeVocab, biotypeTerm, mcvTerms, markerType, lineNum):
     '''
     #
@@ -426,12 +421,9 @@ def main():
 	exit(1)
 
 if __name__ == '__main__':
-	db.useOneConnection(1)
+
 	db.sql('start transaction', None)
 
 	# do main processing
 	main()
-
-	db.commit()
-	db.useOneConnection(0)
 
