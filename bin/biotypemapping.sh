@@ -32,47 +32,47 @@ fi
 #
 # load vocabulary terms
 #
-#date
-#echo "Running biotype/vocload : ensembl.txt"
-#rm -rf ${INPUTDIR}/ensembl.txt
-#grep "^Ensembl" ${BIOTYPEINPUT_FILE_DEFAULT} > ${INPUTDIR}/ensembl.txt
-#${VOCLOAD}/runSimpleFullLoadNoArchive.sh biotype_ensembl.config
-#STAT=$?
-#if [ ${STAT} -ne 0 ]
-#then
-#	message="${message} ${VOCLOAD}/runSimpleFullLoadNoArchive.sh biotype_ensembl.config failed"
-#else
-#	message="${message} ${VOCLOAD}/runSimpleFullLoadNoArchive.sh biotype_ensembl.config successful" 
-#fi
-#echo ${message}
+date
+echo "Running biotype/vocload : ensembl.txt"
+rm -rf ${INPUTDIR}/ensembl.txt
+grep "^Ensembl" ${BIOTYPEINPUT_FILE_DEFAULT} > ${INPUTDIR}/ensembl.txt
+${VOCLOAD}/runSimpleFullLoadNoArchive.sh biotype_ensembl.config
+STAT=$?
+if [ ${STAT} -ne 0 ]
+then
+	message="${message} ${VOCLOAD}/runSimpleFullLoadNoArchive.sh biotype_ensembl.config failed"
+else
+	message="${message} ${VOCLOAD}/runSimpleFullLoadNoArchive.sh biotype_ensembl.config successful" 
+fi
+echo ${message}
 
-#date
-#echo "Running biotype/vocload : ncbi.txt"
-#rm -rf ${BIOTYPEINPUTDIR}/ncbi.txt
-#grep "^NCBI" ${BIOTYPEINPUT_FILE_DEFAULT} > ${INPUTDIR}/ncbi.txt
-#${VOCLOAD}/runSimpleFullLoadNoArchive.sh biotype_ncbi.config
-#STAT=$?
-#if [ ${STAT} -ne 0 ]
-#then
-#	message="${message} ${VOCLOAD}/runSimpleFullLoadNoArchive.sh biotype_ncbi.config failed"
-#else
-#	message="${message} ${VOCLOAD}/runSimpleFullLoadNoArchive.sh biotype_ncbi.config successful" 
-#fi
-#echo ${message}
+date
+echo "Running biotype/vocload : ncbi.txt"
+rm -rf ${BIOTYPEINPUTDIR}/ncbi.txt
+grep "^NCBI" ${BIOTYPEINPUT_FILE_DEFAULT} > ${INPUTDIR}/ncbi.txt
+${VOCLOAD}/runSimpleFullLoadNoArchive.sh biotype_ncbi.config
+STAT=$?
+if [ ${STAT} -ne 0 ]
+then
+	message="${message} ${VOCLOAD}/runSimpleFullLoadNoArchive.sh biotype_ncbi.config failed"
+else
+	message="${message} ${VOCLOAD}/runSimpleFullLoadNoArchive.sh biotype_ncbi.config successful" 
+fi
+echo ${message}
 
-#date
-#echo "Running biotype/vocload : vega.txt"
-#rm -rf ${INPUTDIR}/vega.txt
-#grep "^VEGA" ${BIOTYPEINPUT_FILE_DEFAULT} > ${INPUTDIR}/vega.txt
-#${VOCLOAD}/runSimpleFullLoadNoArchive.sh biotype_vega.config
-#STAT=$?
-#if [ ${STAT} -ne 0 ]
-#then
-#	message="${message} ${VOCLOAD}/runSimpleFullLoadNoArchive.sh biotype_vega.config failed"
-#else
-#	message="${message} ${VOCLOAD}/runSimpleFullLoadNoArchive.sh biotype_vega.config successful" 
-#fi
-#echo ${message}
+date
+echo "Running biotype/vocload : vega.txt"
+rm -rf ${INPUTDIR}/vega.txt
+grep "^VEGA" ${BIOTYPEINPUT_FILE_DEFAULT} > ${INPUTDIR}/vega.txt
+${VOCLOAD}/runSimpleFullLoadNoArchive.sh biotype_vega.config
+STAT=$?
+if [ ${STAT} -ne 0 ]
+then
+	message="${message} ${VOCLOAD}/runSimpleFullLoadNoArchive.sh biotype_vega.config failed"
+else
+	message="${message} ${VOCLOAD}/runSimpleFullLoadNoArchive.sh biotype_vega.config successful" 
+fi
+echo ${message}
 
 #
 # Execute biotypemapping.py
