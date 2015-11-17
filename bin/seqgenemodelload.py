@@ -52,8 +52,9 @@ Usage='createSeqGeneModelInput.py provider (vega | ensembl | ncbi)'
 
 import sys
 import os
-import string
 import mgi_utils
+import loadlib
+import string
 import db
 
 #
@@ -109,14 +110,21 @@ provider = ''
 def loadMarkerTypeKeyLookup():
     global markerTypeKeyByRawBioTypeLookup
 
+    # get the biotype translation type key
+    results = db.sql('''SELECT _TranslationType_key
+        FROM MGI_TranslationType
+        WHERE translationType = '%s' ''' % TRANSTYPE, 'auto')
+    if len(results) == 0:
+	print 'Translation type not in database: %s' % TRANSTYPE
+        sys.exit(1)
+    transTypeKey = results[0]['_TranslationType_key']
+
     # load the biotype translation into a lookup
-    results = db.sql('''
-                SELECT distinct t.term, m._Marker_Type_key
-                FROM MRK_BiotypeMapping m, VOC_Term t
-                WHERE m._biotypeterm_key = t._Term_key
-    	''', 'auto')
+    results = db.sql('''SELECT badName, _Object_key as markerTypeKey
+        FROM MGI_Translation
+        WHERE _TranslationType_key = %s''' % transTypeKey, 'auto')
     for r in results:
-        markerTypeKeyByRawBioTypeLookup[r['term']] = r['_Marker_Type_key']
+        markerTypeKeyByRawBioTypeLookup[ r['badName'] ] = r['markerTypeKey']
 
 # Purpose:  Load  sequence key lookup by seqId for a given provider
 # Returns: nothing
@@ -239,7 +247,6 @@ def init():
     else:
         'Provider not recognized: %s' % provider
         sys.exit(1)
-
     loadSequenceKeyLookup()
     loadMarkerTypeKeyLookup()
 
@@ -292,6 +299,7 @@ def run ():
 
 init()
 run()
+
 inFile.close()
 bcpFile.close()
 

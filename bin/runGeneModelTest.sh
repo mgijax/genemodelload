@@ -100,14 +100,14 @@ fi
 #
 # reload the database
 #
-#echo "loading test database...."
-#${PG_DBUTILS}/bin/loadDB.csh ${PG_DBSERVER} ${PG_DBNAME} ${TEST_DBSCHEMA} ${TEST_DBDUMP}
-#STAT=$?
-#if [ ${STAT} -ne 0 ]
-#then
-#	echo "error : cannot load database : "
-#	echo  ${PG_DBSERVER}, ${PG_DBNAME}, ${TEST_DBDUMP_TO}
-#fi
+echo "loading test database...."
+${PG_DBUTILS}/bin/loadDB.csh ${PG_DBSERVER} ${PG_DBNAME} ${TEST_DBSCHEMA} ${TEST_DBDUMP}
+STAT=$?
+if [ ${STAT} -ne 0 ]
+then
+	echo "error : cannot load database : "
+	echo  ${PG_DBSERVER}, ${PG_DBNAME}, ${TEST_DBDUMP_TO}
+fi
 
 #
 # step 6
