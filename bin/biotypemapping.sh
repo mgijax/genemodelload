@@ -95,6 +95,4 @@ echo ${message}
 #
 cat ${BIOTYPELOG_ERROR}
 
-fi
-
 exit 0

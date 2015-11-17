@@ -42,7 +42,7 @@
 #
 if [ "${MGICONFIG}" = "" ]
 then
-    MGICONFIG=/usr/local/mgi/test/mgiconfig
+    MGICONFIG=/usr/local/mgi/scrum-dog/mgiconfig
     export MGICONFIG
 fi
 
