@@ -139,6 +139,7 @@ def initConfig():
     global outputFileName
     global diagFileName
     global errorFileName
+    global bcpCommand
 
     mode = os.environ['BIOTYPEMODE']
     biotypeTable = os.environ['BIOTYPETABLE']
@@ -148,6 +149,7 @@ def initConfig():
     outputFileName = os.environ['OUTPUTDIR'] + '/' + bcpFileName
     diagFileName = os.environ['BIOTYPELOG_DIAG']
     errorFileName = os.environ['BIOTYPELOG_ERROR']
+    bcpCommand = os.environ['BCP_CMD']
 
 def exit(status, message = None):
     '''
@@ -394,10 +396,15 @@ def bcpFiles():
 
     diagFile.write('truncating %s' % biotypeTable)
     db.sql('truncate table %s' % biotypeTable, None)
+    db.commit()
 
-    diagFile.write('BCP into %s' % biotypeTable)
-    db.bcp(outputFileName, biotypeTable, delimiter='|')
+    bcp1 = '''%s %s %s %s '|' '\\n' mgd''' % (bcpCommand, biotypeTable, outputFileDir, bcpFileName)
+    diagFile.write('%s\n' % bcp1)
+    os.system(bcp1)
 
+    #diagFile.write('BCP into %s' % biotypeTable)
+    #print 'bcp...'
+    #db.bcp(outputFileName, biotypeTable, delimiter='|')
 
 def main():
     '''
