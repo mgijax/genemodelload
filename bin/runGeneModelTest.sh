@@ -98,7 +98,7 @@ esac
 # copy downloads files to genemodeload/input directory
 # copy sophia's .txt files to genemodelload/input directory
 # only need to do this once per TR
-#./copyinputs.sh $1
+./copyinputs.sh $1
 #
 
 #
@@ -106,14 +106,14 @@ esac
 #
 # reload the database
 #
-#echo "loading test database...."
-#${PG_DBUTILS}/bin/loadDB.csh ${PG_DBSERVER} ${PG_DBNAME} ${TEST_DBSCHEMA} ${TEST_DBDUMP}
-#STAT=$?
-#if [ ${STAT} -ne 0 ]
-#then
-#	echo "error : cannot load database : "
-#	echo  ${PG_DBSERVER}, ${PG_DBNAME}, ${TEST_DBDUMP_TO}
-#fi
+echo "loading test database...."
+${PG_DBUTILS}/bin/loadDB.csh ${PG_DBSERVER} ${PG_DBNAME} ${TEST_DBSCHEMA} ${TEST_DBDUMP}
+STAT=$?
+if [ ${STAT} -ne 0 ]
+then
+	echo "error : cannot load database : "
+	echo  ${PG_DBSERVER}, ${PG_DBNAME}, ${TEST_DBDUMP_TO}
+fi
 
 #
 # step 6
@@ -148,11 +148,11 @@ fi
 #
 # run all cache loads (see wiki/section 11/Processing)
 #
-#${SEQCACHELOAD}/seqcoord.csh
-#${SEQCACHELOAD}/seqmarker.csh
-#${MRKCACHELOAD}/mrklabel.csh
-#${MRKCACHELOAD}/mrkref.csh
-#${MRKCACHELOAD}/mrklocation.csh
+${SEQCACHELOAD}/seqcoord.csh
+${SEQCACHELOAD}/seqmarker.csh
+${MRKCACHELOAD}/mrklabel.csh
+${MRKCACHELOAD}/mrkref.csh
+${MRKCACHELOAD}/mrklocation.csh
 
 #
 # contact MGI-SE-Admin : load EMBOSS sequences
