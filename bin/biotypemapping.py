@@ -400,6 +400,11 @@ def bcpFiles():
 
 
 def main():
+    '''
+    #
+    # main processing
+    #
+    '''
 
     print 'initConfig()'
     initConfig()
