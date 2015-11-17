@@ -40,17 +40,13 @@ date
 #
 # The following steps must all be done on the TEST SERVER: 
 #
-case `uname -n` in
-
-        bhmgidevapp01|mgi-testdb4)
-                echo "server verified as a test server...continuing..."
-                ;;
-
-        *)
-                echo "cannot run the test on this server : " 
-                echo `uname -n` 
-                ;;
-esac
+if [ "${INSTALL_TYPE}" = "dev" ]
+then
+        echo "server verified as a test server...continuing..."
+else
+        echo "cannot run the test on this server : "
+        exit 1
+fi
 
 #
 # copy input files from TR directory to test server

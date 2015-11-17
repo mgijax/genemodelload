@@ -73,17 +73,13 @@ date
 #
 # The following steps must all be done on the TEST SERVER: 
 #
-case `uname -n` in
-
-        bhmgidevapp01|mgi-testdb4)
-                echo "server verified as a test server...continuing..."
-                ;;
-
-        *)
-                echo "cannot run the test on this server : " 
-                echo `uname -n` 
-                ;;
-esac
+if [ "${INSTALL_TYPE}" = "dev" ]
+then
+	echo "server verified as a test server...continuing..."
+else
+ 	echo "cannot run the test on this server : "
+	exit 1
+fi
 
 #
 # step 3
@@ -106,14 +102,14 @@ esac
 #
 # reload the database
 #
-echo "loading test database...."
-${PG_DBUTILS}/bin/loadDB.csh ${PG_DBSERVER} ${PG_DBNAME} ${TEST_DBSCHEMA} ${TEST_DBDUMP}
-STAT=$?
-if [ ${STAT} -ne 0 ]
-then
-	echo "error : cannot load database : "
-	echo  ${PG_DBSERVER}, ${PG_DBNAME}, ${TEST_DBDUMP_TO}
-fi
+#echo "loading test database...."
+#${PG_DBUTILS}/bin/loadDB.csh ${PG_DBSERVER} ${PG_DBNAME} ${TEST_DBSCHEMA} ${TEST_DBDUMP}
+#STAT=$?
+#if [ ${STAT} -ne 0 ]
+#then
+#	echo "error : cannot load database : "
+#	echo  ${PG_DBSERVER}, ${PG_DBNAME}, ${TEST_DBDUMP_TO}
+#fi
 
 #
 # step 6
@@ -124,7 +120,8 @@ echo "Running ${GENEMODELLOAD}/bin/genemodelload.sh ", ${GM_PROVIDER}
 if [ "${GM_PROVIDER}" = "Ensembl" ]
 then
   rm -rf ${INPUTDIR}/Ensembl.lastrun
-  ${GENEMODELLOAD}/bin/genemodelload.sh ensembl
+  #${GENEMODELLOAD}/bin/genemodelload.sh ensembl
+  ${GENEMODELLOAD}/bin/zgenemodelload.sh ensembl
 elif [ "${GM_PROVIDER}" = "VEGA" ]
 then
   rm -rf ${INPUTDIR}/VEGA.lastrun

@@ -174,11 +174,11 @@ def checkArgs ():
     assocFile = sys.argv[1]
     gmFile = sys.argv[2]
 
-    user = os.environ['MGD_DBUSER']
-    passwordFileName = os.environ['MGD_DBPASSWORDFILE']
-    db.useOneConnection(1)
-    db.set_sqlUser(user)
-    db.set_sqlPasswordFromFile(passwordFileName)
+    #user = os.environ['MGD_DBUSER']
+    #passwordFileName = os.environ['MGD_DBPASSWORDFILE']
+    #db.useOneConnection(1)
+    #db.set_sqlUser(user)
+    #db.set_sqlPasswordFromFile(passwordFileName)
 
     return
 
