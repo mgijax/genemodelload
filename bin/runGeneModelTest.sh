@@ -75,16 +75,16 @@ date
 #
 if [ "${INSTALL_TYPE}" = "dev" ]
 then
-	echo "\nserver verified as a test server...continuing..."
+	echo "server verified as a test server...continuing..."
 else
- 	echo "\ncannot run the test on this server : "
+ 	echo "cannot run the test on this server : "
 	exit 1
 fi
 
 #
 # reset $HOME/.pgpass file to use the dev version
 #
-echo "\nsetting postgres password..."
+echo "setting postgres password..."
 ${MGIBIN}/pgsetup
 cat ${HOME}/.pgpass
 
@@ -93,7 +93,7 @@ cat ${HOME}/.pgpass
 #
 # reload the database
 #
-echo "\nloading test database...."
+echo "loading test database...."
 echo ${PG_DBUTILS}/bin/loadDB.csh ${PG_DBSERVER} ${PG_DBNAME} ${TEST_DBSCHEMA} ${TEST_DBDUMP}
 STAT=$?
 if [ ${STAT} -ne 0 ]
@@ -122,7 +122,7 @@ exit 0
 #
 # run the genemodelload
 # 
-echo "\nrunning ${GENEMODELLOAD}/bin/genemodelload.sh ", ${GM_PROVIDER}
+echo "running ${GENEMODELLOAD}/bin/genemodelload.sh ", ${GM_PROVIDER}
 if [ "${GM_PROVIDER}" = "Ensembl" ]
 then
   rm -rf ${INPUTDIR}/Ensembl.lastrun
@@ -136,13 +136,13 @@ then
   rm -rf ${INPUTDIR}/NCBI.lastrun
   ${GENEMODELLOAD}/bin/genemodelload.sh ncbi
 else
-    echo "\nvariable GM_PROVIDER has not been set"
+    echo "variable GM_PROVIDER has not been set"
     exit 1
 fi
 STAT=$?
 if [ ${STAT} -ne 0 ]
 then
-	echo "\nerror : genemodelload failed"
+	echo "error : genemodelload failed"
 fi
 exit 0
 
@@ -151,15 +151,15 @@ exit 0
 #
 # run all cache updates
 #
-echo "\nrunning ${SEQCACHELOAD}/seqcoord.csh ", ${GM_PROVIDER}
+echo "running ${SEQCACHELOAD}/seqcoord.csh ", ${GM_PROVIDER}
 ${SEQCACHELOAD}/seqcoord.csh
-echo "\nrunning ${SEQCACHELOAD}/marker.csh ", ${GM_PROVIDER}
+echo "running ${SEQCACHELOAD}/marker.csh ", ${GM_PROVIDER}
 ${SEQCACHELOAD}/seqmarker.csh
-echo "\nrunning ${MRKCACHELOAD}/mrklabel.csh ", ${GM_PROVIDER}
+echo "running ${MRKCACHELOAD}/mrklabel.csh ", ${GM_PROVIDER}
 ${MRKCACHELOAD}/mrklabel.csh
-echo "\nrunning ${MRKCACHELOAD}/mrkref.csh ", ${GM_PROVIDER}
+echo "running ${MRKCACHELOAD}/mrkref.csh ", ${GM_PROVIDER}
 ${MRKCACHELOAD}/mrkref.csh
-echo "\nrunning ${MRKCACHELOAD}/mrklocation.csh ", ${GM_PROVIDER}
+echo "running ${MRKCACHELOAD}/mrklocation.csh ", ${GM_PROVIDER}
 ${MRKCACHELOAD}/mrklocation.csh
 
 #
