@@ -47,6 +47,16 @@ else
         exit 1
 fi
 
+#LASTDOWNLOAD_FILE=${INPUTDIR}/${GM_PROVIDER}.lastdownload
+#if [ -f ${LASTDOWNLOAD_FILE} ]
+#then
+#    if test ${LASTDOWNLOAD_FILE} -nt ${ASSOC_FILE_DEFAULT}
+#    then
+#        echo "download file has not been updated - will not copy any download files" | tee -a ${LOG}
+#        exit 0
+#    fi  
+#fi
+
 #
 # copy download files from production server to test server
 #
@@ -98,6 +108,8 @@ else
     echo "variable GM_PROVIDER has not been set"
     exit 1
 fi
+
+#touch ${LASTDOWNLOAD_FILE}
 
 date
 

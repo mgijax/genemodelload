@@ -307,6 +307,8 @@ echo "Archive input files" | tee -a ${LOG}
 for FILE in ${GM_FILE_DEFAULT} ${ASSOC_FILE_DEFAULT} ${BIOTYPE_FILE_DEFAULT} ${TRANSCRIPT_FILE_DEFAULT} ${PROTEIN_FILE_DEFAULT}
 do
     ARC_FILE=`basename ${FILE}`.${TIMESTAMP}
+    chmod 777 ${FILE}
+    rm -rf ${ARCHIVEDIR}/${ARC_FILE}
     cp -p ${FILE} ${ARCHIVEDIR}/${ARC_FILE}
 done
 
