@@ -39,10 +39,6 @@
 #	Diagnostics file of all input parameters and SQL commands
 #	Error file
 #
-# Processing:
-#	See biotypemapload wiki:
-#	http://prodwww.informatics.jax.org/software/wiki/index.php/Biotypemapload
-#
 # History:
 #
 # lec   10/21/2015
@@ -55,8 +51,6 @@ import os
 import db
 import mgi_utils
 import loadlib
-
-#db.setTrace()
 
 ### Constants ###
 
@@ -430,6 +424,7 @@ def main():
 
 if __name__ == '__main__':
 
+        #db.setTrace()
 	db.sql('start transaction', None)
 
 	# do main processing
