@@ -82,13 +82,6 @@ else
 fi
 
 #
-# reset $HOME/.pgpass file to use the dev version
-#
-echo "\nsetting postgres password..."
-${MGIBIN}/pgsetup
-cat ${HOME}/.pgpass
-
-#
 # step 3
 #
 # copy produciton /download files to test server
@@ -116,6 +109,13 @@ then
 	echo  ${PG_DBSERVER}, ${PG_DBNAME}, ${TEST_DBDUMP_TO}
 fi
 exit 0
+
+#
+# reset $HOME/.pgpass file to use the dev version
+#
+echo "\nsetting postgres password..."
+${MGIBIN}/pgsetup
+cat ${HOME}/.pgpass
 
 #
 # step 6
