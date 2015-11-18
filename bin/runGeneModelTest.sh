@@ -42,7 +42,7 @@
 #
 if [ "${MGICONFIG}" = "" ]
 then
-    MGICONFIG=/usr/local/mgi/scrum-dog/mgiconfig
+    MGICONFIG=/usr/local/mgi/test/mgiconfig
     export MGICONFIG
 fi
 
@@ -108,7 +108,7 @@ cat ${HOME}/.pgpass
 # reload the database
 #
 echo "\nloading test database...."
-${PG_DBUTILS}/bin/loadDB.csh ${PG_DBSERVER} ${PG_DBNAME} ${TEST_DBSCHEMA} ${TEST_DBDUMP}
+echo ${PG_DBUTILS}/bin/loadDB.csh ${PG_DBSERVER} ${PG_DBNAME} ${TEST_DBSCHEMA} ${TEST_DBDUMP}
 STAT=$?
 if [ ${STAT} -ne 0 ]
 then
