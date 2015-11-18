@@ -84,7 +84,9 @@ fi
 #
 # reset $HOME/.pgpass file to use the dev version
 #
+echo "setting postgres password..."
 ${MGIBIN}/pgsetup
+cat ${HOME}/.pgpass
 
 #
 # step 3
@@ -113,6 +115,7 @@ then
 	echo "error : cannot load database : "
 	echo  ${PG_DBSERVER}, ${PG_DBNAME}, ${TEST_DBDUMP_TO}
 fi
+exit 0
 
 #
 # step 6
@@ -141,6 +144,7 @@ if [ ${STAT} -ne 0 ]
 then
 	echo "error : genemodelload failed"
 fi
+exit 0
 
 #
 # step 7
