@@ -82,6 +82,13 @@ else
 fi
 
 #
+# reset $HOME/.pgpass file to use the dev version
+#
+echo "\nsetting postgres password..."
+${MGIBIN}/pgsetup
+cat ${HOME}/.pgpass
+
+#
 # step 3
 #
 # copy produciton /download files to test server
@@ -94,13 +101,6 @@ fi
 # copy sophia's .txt files to genemodelload/input directory
 # only need to do this once per TR
 ./copyinputs.sh $1
-
-#
-# reset $HOME/.pgpass file to use the dev version
-#
-echo "\nsetting postgres password..."
-${MGIBIN}/pgsetup
-cat ${HOME}/.pgpass
 
 #
 # step 5
