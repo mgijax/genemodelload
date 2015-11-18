@@ -94,7 +94,7 @@ cat ${HOME}/.pgpass
 # reload the database
 #
 echo "loading test database...."
-echo ${PG_DBUTILS}/bin/loadDB.csh ${PG_DBSERVER} ${PG_DBNAME} ${TEST_DBSCHEMA} ${TEST_DBDUMP}
+${PG_DBUTILS}/bin/loadDB.csh ${PG_DBSERVER} ${PG_DBNAME} ${TEST_DBSCHEMA} ${TEST_DBDUMP}
 STAT=$?
 if [ ${STAT} -ne 0 ]
 then
