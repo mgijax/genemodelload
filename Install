@@ -91,21 +91,19 @@ chmod -fR 777 ${INPUTDIR}
 # The following steps must all be done on the TEST SERVER: 
 # opens up all permissions
 #
-case `uname -n` in
-
-        bhmgidevapp01|mgi-testdb4)
-		chmod -f 666 *config
-		chmod -fR 777 ${DATALOADSOUTPUT}/genemodelload
-		chmod -fR 777 ${DATALOADSOUTPUT}/assembly
-		chmod -fR 777 ${DATALOADSOUTPUT}/ensembl
-		chmod -fR 777 ${DATALOADSOUTPUT}/vega
-		chmod -fR 777 ${DATALOADSOUTPUT}/mgi/vocload/runTimeBiotype
-                ;;
-
-        *)
-                ;;
-esac
-
+#
+# The following steps must all be done on the TEST SERVER: 
+#
+if [ "${INSTALL_TYPE}" = "dev" ]
+then
+	echo "Setting permissions..."
+	chmod -f 666 *config
+	chmod -fR 777 ${DATALOADSOUTPUT}/genemodelload
+	chmod -fR 777 ${DATALOADSOUTPUT}/assembly
+	chmod -fR 777 ${DATALOADSOUTPUT}/ensembl
+	chmod -fR 777 ${DATALOADSOUTPUT}/vega
+	chmod -fR 777 ${DATALOADSOUTPUT}/mgi/vocload/runTimeBiotype
+fi
 
 # All Unit Tests
 #echo "Running all unit tests"
