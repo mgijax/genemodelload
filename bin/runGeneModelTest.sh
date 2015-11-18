@@ -82,6 +82,11 @@ else
 fi
 
 #
+# reset $HOME/.pgpass file to use the dev version
+#
+${MGIBIN}/pgsetup
+
+#
 # step 3
 #
 # copy produciton /download files to test server
@@ -140,12 +145,17 @@ fi
 #
 # step 7
 #
-# run all cache loads (see wiki/section 11/Processing)
+# run all cache updates
 #
+echo "Running ${SEQCACHELOAD}/seqcoord.csh ", ${GM_PROVIDER}
 ${SEQCACHELOAD}/seqcoord.csh
+echo "Running ${SEQCACHELOAD}/marker.csh ", ${GM_PROVIDER}
 ${SEQCACHELOAD}/seqmarker.csh
+echo "Running ${MRKCACHELOAD}/mrklabel.csh ", ${GM_PROVIDER}
 ${MRKCACHELOAD}/mrklabel.csh
+echo "Running ${MRKCACHELOAD}/mrkref.csh ", ${GM_PROVIDER}
 ${MRKCACHELOAD}/mrkref.csh
+echo "Running ${MRKCACHELOAD}/mrklocation.csh ", ${GM_PROVIDER}
 ${MRKCACHELOAD}/mrklocation.csh
 
 #
