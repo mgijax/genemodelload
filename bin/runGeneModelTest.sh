@@ -143,8 +143,8 @@ STAT=$?
 if [ ${STAT} -ne 0 ]
 then
 	echo -e "\nerror : genemodelload failed"
+	exit 1
 fi
-exit 0
 
 #
 # step 7
