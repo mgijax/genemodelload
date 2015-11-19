@@ -103,6 +103,8 @@ then
 	chmod -fR 777 ${DATALOADSOUTPUT}/ensembl
 	chmod -fR 777 ${DATALOADSOUTPUT}/vega
 	chmod -fR 777 ${DATALOADSOUTPUT}/mgi/vocload/runTimeBiotype
+	chmod -f 666 ${ASSEMBLYSEQLOAD}/*.config
+	chmod -f 666 ${VEGA_ENSEMBLSEQLOAD}/*.config
 fi
 
 # All Unit Tests
