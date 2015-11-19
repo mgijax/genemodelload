@@ -96,12 +96,12 @@ chmod -fR 777 ${INPUTDIR}
 #
 if [ "${INSTALL_TYPE}" = "dev" ]
 then
-	echo "Setting permissions..."
+	echo "Setting permissions...${DATALOADSOUTPUT}"
 	chmod -f 666 *config
-	chmod -fR 777 ${DATALOADSOUTPUT}/genemodelload
 	chmod -fR 777 ${DATALOADSOUTPUT}/assembly
 	chmod -fR 777 ${DATALOADSOUTPUT}/ensembl
 	chmod -fR 777 ${DATALOADSOUTPUT}/vega
+	chmod -fR 777 ${DATALOADSOUTPUT}/mgi/genemodelload
 	chmod -fR 777 ${DATALOADSOUTPUT}/mgi/vocload/runTimeBiotype
 	chmod -f 666 ${ASSEMBLYSEQLOAD}/*.config
 	chmod -f 666 ${VEGA_ENSEMBLSEQLOAD}/*.config

@@ -93,14 +93,14 @@ cat ${HOME}/.pgpass
 #
 # reload the database
 #
-echo -e "\nloading test database...."
-${PG_DBUTILS}/bin/loadDB.csh ${PG_DBSERVER} ${PG_DBNAME} ${TEST_DBSCHEMA} ${TEST_DBDUMP}
-STAT=$?
-if [ ${STAT} -ne 0 ]
-then
-	echo -e "\nerror : cannot load database : "
-	echo  ${PG_DBSERVER}, ${PG_DBNAME}, ${TEST_DBDUMP_TO}
-fi
+#echo -e "\nloading test database...."
+#${PG_DBUTILS}/bin/loadDB.csh ${PG_DBSERVER} ${PG_DBNAME} ${TEST_DBSCHEMA} ${TEST_DBDUMP}
+#STAT=$?
+#if [ ${STAT} -ne 0 ]
+#then
+#	echo -e "\nerror : cannot load database : "
+#	echo  ${PG_DBSERVER}, ${PG_DBNAME}, ${TEST_DBDUMP_TO}
+#fi
 
 #
 # step 4
@@ -110,10 +110,14 @@ fi
 #./copydownloads.sh $1
 
 # step 5
-#
-# copy downloads files to genemodeload/input directory
 # copy sophia's .txt files to genemodelload/input directory
 # only need to do this once per TR
+echo -e "\nremoving all ${DATALOADSOUTPUT} files...."
+rm -rf ${ARCHIVEDIR}/*
+rm -rf ${INPUTDIR}/*
+rm -rf ${OUTPUTDIR}/*
+rm -rf ${LOGDIR}/*
+rm -rf ${RPTDIR}/*
 ./copyinputs.sh $1
 
 #
@@ -124,15 +128,12 @@ fi
 echo -e "\nrunning ${GENEMODELLOAD}/bin/genemodelload.sh ", ${GM_PROVIDER}
 if [ "${GM_PROVIDER}" = "Ensembl" ]
 then
-  rm -rf ${INPUTDIR}/Ensembl.lastrun
   ${GENEMODELLOAD}/bin/genemodelload.sh ensembl
 elif [ "${GM_PROVIDER}" = "VEGA" ]
 then
-  rm -rf ${INPUTDIR}/VEGA.lastrun
   ${GENEMODELLOAD}/bin/genemodelload.sh vega
 elif [ "${GM_PROVIDER}" = "NCBI" ]
 then
-  rm -rf ${INPUTDIR}/NCBI.lastrun
   ${GENEMODELLOAD}/bin/genemodelload.sh ncbi
 else
     echo -e "\nvariable GM_PROVIDER has not been set"
