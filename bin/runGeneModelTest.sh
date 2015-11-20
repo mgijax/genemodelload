@@ -93,14 +93,14 @@ cat ${HOME}/.pgpass
 #
 # reload the database
 #
-#echo -e "\nloading test database...."
-#${PG_DBUTILS}/bin/loadDB.csh ${PG_DBSERVER} ${PG_DBNAME} ${TEST_DBSCHEMA} ${TEST_DBDUMP}
-#STAT=$?
-#if [ ${STAT} -ne 0 ]
-#then
-#	echo -e "\nerror : cannot load database : "
-#	echo  ${PG_DBSERVER}, ${PG_DBNAME}, ${TEST_DBDUMP_TO}
-#fi
+echo -e "\nloading test database...."
+${PG_DBUTILS}/bin/loadDB.csh ${PG_DBSERVER} ${PG_DBNAME} ${TEST_DBSCHEMA} ${TEST_DBDUMP}
+STAT=$?
+if [ ${STAT} -ne 0 ]
+then
+	echo -e "\nerror : cannot load database : "
+	echo  ${PG_DBSERVER}, ${PG_DBNAME}, ${TEST_DBDUMP_TO}
+fi
 
 #
 # step 4
@@ -110,7 +110,7 @@ cat ${HOME}/.pgpass
 #./copydownloads.sh $1
 
 # step 5
-# copy sophia's .txt files to genemodelload/input directory
+# copy .txt files to genemodelload/input directory
 # only need to do this once per TR
 echo -e "\nremoving all ${DATALOADSOUTPUT} files...."
 rm -rf ${ARCHIVEDIR}/*
