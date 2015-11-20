@@ -247,7 +247,7 @@ message=${PROVIDER}
 if [ ${RELOAD_GENEMODELS} = "true" ]
 then
     echo "Load gene models and associations for ${PROVIDER}" | tee -a ${LOG}
-    ${ASSEMBLY_WRAPPER} ${GENEMODELLOAD}/${CONFIG} ${ASSEMBLY_CONFIG} >> ${LOG}
+    ${ASSEMBLY_WRAPPER} ${ASSEMBLY_CONFIG} >> ${LOG}
 
     echo "Load SEQ_GeneModel for ${PROVIDER}" | tee -a ${LOG}
     ${GENEMODELLOAD}/bin/seqgenemodelload.sh ${PROVIDER} >> ${LOG} 2>&1
