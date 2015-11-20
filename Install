@@ -91,9 +91,6 @@ chmod -fR 777 ${INPUTDIR}
 # The following steps must all be done on the TEST SERVER: 
 # opens up all permissions
 #
-#
-# The following steps must all be done on the TEST SERVER: 
-#
 if [ "${INSTALL_TYPE}" = "dev" ]
 then
 	echo "Setting permissions...${DATALOADSOUTPUT}"
