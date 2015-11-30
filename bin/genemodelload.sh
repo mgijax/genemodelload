@@ -255,10 +255,12 @@ then
     if [ ${STAT} -ne 0 ]
     then
 	message="${message} seqgenemodelload.sh failed"
+        echo ${message} | tee -a ${LOG}
+	exit 1
     else
 	message="${message} seqgenemodelload.sh successful" 
+        echo ${message} | tee -a ${LOG}
     fi
-    echo ${message} | tee -a ${LOG}
 
     if [ ${PROVIDER} = "ensembl" ]
     then
