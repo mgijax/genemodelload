@@ -91,7 +91,11 @@ chmod -fR 777 ${INPUTDIR}
 # The following steps must all be done on the TEST SERVER: 
 # opens up all permissions
 #
-if [ "${INSTALL_TYPE}" = "dev" ]
+# once the new curator server is ready:
+#	a) replace bhmgidevapp01 with the curator server name
+#	b) do not need the MGI_LIVE check because it will use "live"
+#
+if [ `uname -n` = "bhmgidevapp01" -a "${MGI_LIVE}" = "/usr/local/mgi/test" ]
 then
 	echo "Setting permissions...${DATALOADSOUTPUT}"
 	chmod -f 666 *config
@@ -104,6 +108,7 @@ then
 	chmod -fR 777 ${DATALOADSOUTPUT}/mgi/mrkcacheload
 	chmod -fR 777 ${ASSOCLOAD}
 	chmod -fR 777 ${ASSEMBLYSEQLOAD}
+	chmod -fR 777 ${SEQSEQASSOCLOAD}
 	chmod -fR 777 ${VEGA_ENSEMBLSEQLOAD}
 	chmod -f 666 ${ASSEMBLYSEQLOAD}/*.config
 	chmod -f 666 ${VEGA_ENSEMBLSEQLOAD}/*.config
