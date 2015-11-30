@@ -8,7 +8,7 @@
 # 	mcvload
 # 	update /mgi/all/wts_projects/10300/10308/RawBioTypeEquivalence/biotypemap.txt
 #
-# step 2
+# step 2 :
 #
 # edit these configuration values:
 #
@@ -107,7 +107,7 @@ fi
 #
 # copy produciton /download files to test server
 # only need to do this once per TR
-#./copydownloads.sh $1
+./copydownloads.sh $1
 
 # step 5
 # copy .txt files to genemodelload/input directory
