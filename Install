@@ -100,6 +100,8 @@ then
 	chmod -fR 777 ${DATALOADSOUTPUT}/vega
 	chmod -fR 777 ${DATALOADSOUTPUT}/mgi/genemodelload
 	chmod -fR 777 ${DATALOADSOUTPUT}/mgi/vocload/runTimeBiotype
+	chmod -fR 777 ${DATALOADSOUTPUT}/mgi/seqcacheload
+	chmod -fR 777 ${DATALOADSOUTPUT}/mgi/mrkcacheload
 	chmod -fR 777 ${ASSOCLOAD}
 	chmod -fR 777 ${ASSEMBLYSEQLOAD}
 	chmod -fR 777 ${VEGA_ENSEMBLSEQLOAD}
