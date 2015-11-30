@@ -153,7 +153,7 @@ fi
 #
 echo -e "\nrunning ${SEQCACHELOAD}/seqcoord.csh ", ${GM_PROVIDER}
 ${SEQCACHELOAD}/seqcoord.csh
-echo -e "\nrunning ${SEQCACHELOAD}/marker.csh ", ${GM_PROVIDER}
+echo -e "\nrunning ${SEQCACHELOAD}/seqmarker.csh ", ${GM_PROVIDER}
 ${SEQCACHELOAD}/seqmarker.csh
 echo -e "\nrunning ${MRKCACHELOAD}/mrklabel.csh ", ${GM_PROVIDER}
 ${MRKCACHELOAD}/mrklabel.csh
