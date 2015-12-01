@@ -268,7 +268,7 @@ then
         # order is important, transcripts must be loaded first so 
 	# proteins can be associated with them
         ${VEGA_ENS_WRAPPER} ensembl_transcriptseqload.config true >> ${LOG} 2>&1
-	${VEGA_ENS_WRAPPER} ensembl_proteinseqload.config  true >> ${LOG} 2>&1
+	${VEGA_ENS_WRAPPER} ensembl_proteinseqload.config true >> ${LOG} 2>&1
     elif [ ${PROVIDER} = "vega" ]
     then
 	echo "Load protein/transcript sequences and marker associations for ${PROVIDER}" | tee -a ${LOG}
