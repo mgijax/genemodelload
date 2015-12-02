@@ -7,7 +7,7 @@
 cd `dirname $0`
 
 COMMON_CONFIG=genemodel_common.config
-PROVIDER_CONFIGS="genemodel_ensembl.config genemodel_ncbi.config genemodel_vega.config"
+PROVIDER_CONFIGS="genemodel_ensembl.config genemodel_ncbi.config genemodel_vega.config biotypemapping.config"
 
 #
 #  Function called when the install fails.
@@ -58,14 +58,6 @@ ${DLAINSTALL} ${DEV}
 chmod -f 755 ${GENEMODEL_QC_SH}
 
 #
-# Create the input directory.
-#
-if [ ! -d ${INPUTDIR} ]
-then
-    mkdir -p ${INPUTDIR}
-fi
-
-#
 # Handle installation tasks specific to each provider.
 #
 for i in ${PROVIDER_CONFIGS}
@@ -74,35 +66,6 @@ do
     # Source the provider configuration file.
     #
     . ${i}
-
-    #
-    # If this installation is being done on bhmgiapp01, create symbolic links to
-    # the current gene model file and association file on bhmgiapp01 from the
-    # input directory. This is where the load will look for both files.
-    #
-    if [ ${SERVER_NAME} = "bhmgiapp01" ]
-    then
-        rm -f ${GM_FILE_DEFAULT}
-        ln -s /hobbiton${GM_FILE_CURRENT} ${GM_FILE_DEFAULT}
-
-        rm -f ${ASSOC_FILE_DEFAULT}
-        ln -s /hobbiton${ASSOC_FILE_DEFAULT} ${ASSOC_FILE_DEFAULT}
-
-	rm -rf ${BIOTYPE_FILE_DEFAULT}
-	ln -s /hobbiton${BIOTYPE_FILE_CURRENT} ${BIOTYPE_FILE_DEFAULT}
-
-        rm -rf ${TRANSCRIPT_FILE_DEFAULT}
-        ln -s /hobbiton${TRANSCRIPT_FILE_CURRENT} ${TRANSCRIPT_FILE_DEFAULT}
-
-	if [ ${i} = "genemodel_ensembl.config" ]
-	then
-	    rm -rf ${NCRNA_FILE_DEFAULT}
-	    ln -s /hobbiton${NCRNA_FILE_CURRENT} ${NCRNA_FILE_DEFAULT}
-	fi
-
-        rm -rf ${PROTEIN_FILE_DEFAULT}
-        ln -s /hobbiton${PROTEIN_FILE_CURRENT} ${PROTEIN_FILE_DEFAULT}
-    fi
 
     #
     # For any server, if the association file does not exist already, create one that is writable.
@@ -117,11 +80,45 @@ do
 done
 
 #
-# For any server, the input directory should
-# be opened up to allow the curation staff to publish new association files.
+# For any server, the these directories are opened up
+# to allow the curation staff to publish new association files.
 #
-chmod -f 775 ${INPUTDIR}
-chgrp mgi ${INPUTDIR}
+# The config files needs to be open to allow curators to edit them for testing.
+#
+chmod -fR 777 ${INPUTDIR}
+
+#
+# The following steps must all be done on the TEST SERVER: 
+# opens up all permissions
+#
+# once the new curator server is ready:
+#	a) replace bhmgidevapp01 with the curator server name
+#	b) do not need the MGI_LIVE check because it will use "live"
+#
+if [ `uname -n` = "bhmgidevapp01" -a "${MGI_LIVE}" = "/usr/local/mgi/test" ]
+then
+	echo "Setting permissions...${DATALOADSOUTPUT}"
+	chmod -f 666 *config
+	chmod -fR 777 ${DATALOADSOUTPUT}/assembly
+	chmod -fR 777 ${DATALOADSOUTPUT}/ensembl
+	chmod -fR 777 ${DATALOADSOUTPUT}/vega
+	chmod -fR 777 ${DATALOADSOUTPUT}/mgi/genemodelload
+	chmod -fR 777 ${DATALOADSOUTPUT}/mgi/vocload/runTimeBiotype
+	chmod -fR 777 ${DATALOADSOUTPUT}/mgi/seqcacheload
+	chmod -fR 777 ${DATALOADSOUTPUT}/mgi/mrkcacheload
+	chmod -fR 777 ${ASSOCLOAD}
+	chmod -fR 777 ${ASSEMBLYSEQLOAD}
+	chmod -fR 777 ${SEQSEQASSOCLOAD}
+	chmod -fR 777 ${VEGA_ENSEMBLSEQLOAD}
+	chmod -f 666 ${ASSEMBLYSEQLOAD}/*.config
+	chmod -f 666 ${VEGA_ENSEMBLSEQLOAD}/*.config
+fi
+
+# All Unit Tests
+#echo "Running all unit tests"
+#cd unittest
+#./all_tests.sh || exit 1;
+#cd -
 
 # copy the scripts for curator use into a standard location which exists in
 # their path statements
@@ -160,5 +157,6 @@ if [ -d ${DEPLOY_PATH} ]; then
         done
         echo "Deployed curator files to ${DEPLOY_PATH}"
 fi
+
 exit 0
 

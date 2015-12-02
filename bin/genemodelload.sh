@@ -90,6 +90,7 @@
 cd `dirname $0`
 
 COMMON_CONFIG=genemodel_common.config
+BIOTYPEMAPPING_CONFIG=biotypemapping.config
 
 USAGE="Usage: genemodelload.sh {ensembl | ncbi | vega}"
 
@@ -126,6 +127,17 @@ then
     . ../${COMMON_CONFIG}
 else
     echo "Missing configuration file: ${COMMON_CONFIG}"
+    exit 1
+fi
+
+#
+# Make sure the biotypemapping-specific configuration file exists and source it.
+#
+if [ -f ../${BIOTYPEMAPPING_CONFIG} ]
+then
+    . ../${BIOTYPEMAPPING_CONFIG}
+else
+    echo "Missing configuration file: ${BIOTYPEMAPPING_CONFIG}"
     exit 1
 fi
 
@@ -178,18 +190,40 @@ then
 fi
 
 #
-# Create a temporary file and make sure the it is removed when this script
-# terminates.
+# If the gene models are to be reloaded, the following is done for *all* PROVIDERs:
+#	- reload the PROVIDER/biotype vocabulary
+#	- reload the MRK_BiotypeMapping table
 #
-TMP_FILE=/tmp/`basename $0`.$$
-trap "rm -f ${TMP_FILE}" 0 1 2 15
+if [ ${RELOAD_GENEMODELS} = "true" ]
+then
 
-#
-# Generate the sanity/QC reports.
-#
 echo "" >> ${LOG}
 date >> ${LOG}
+echo "Running BioType-Mapping" | tee -a ${LOG}
+${GENEMODELLOAD}/bin/biotypemapping.sh | tee -a ${LOG}
+STAT=$?
+if [ ${STAT} -ne 0 ]
+then
+        message="${message} ${GENEMODELLOAD}/bin/biotypemapping.sh failed"
+else
+        message="${message} ${GENEMODELLOAD}/bin/biotypemapping.sh successful"
+fi
+echo ${message} | tee -a ${LOG}
+
+fi
+
+### end if [ ${RELOAD_GENEMODELS} = "true" ]
+
+#
+# Run sanity/QC reports
+#
+# a distinct tmp file is created  to allow > 1 curator to run a QC check
+# make sure the tmp file is removed when this script terminates
+#
+date >> ${LOG}
 echo "Generate the sanity/QC reports" | tee -a ${LOG}
+TMP_FILE=/tmp/`basename $0`.$$
+trap "rm -f ${TMP_FILE}" 0 1 2 15
 { ${GENEMODEL_QC_SH} ${PROVIDER} ${ASSOC_FILE_DEFAULT} ${RUNTYPE} 2>&1; echo $? > ${TMP_FILE}; } >> ${LOG}
 if [ `cat ${TMP_FILE}` -eq 1 ]
 then
@@ -216,16 +250,17 @@ then
     ${ASSEMBLY_WRAPPER} ${ASSEMBLY_CONFIG} >> ${LOG}
 
     echo "Load SEQ_GeneModel for ${PROVIDER}" | tee -a ${LOG}
-    ./seqgenemodelload.sh ${PROVIDER} >> ${LOG} 2>&1
+    ${GENEMODELLOAD}/bin/seqgenemodelload.sh ${PROVIDER} >> ${LOG} 2>&1
     STAT=$?
     if [ ${STAT} -ne 0 ]
     then
 	message="${message} seqgenemodelload.sh failed"
+        echo ${message} | tee -a ${LOG}
+	exit 1
     else
 	message="${message} seqgenemodelload.sh successful" 
+        echo ${message} | tee -a ${LOG}
     fi
-    echo ${message} | tee -a ${LOG}
-
 
     if [ ${PROVIDER} = "ensembl" ]
     then
@@ -233,7 +268,7 @@ then
         # order is important, transcripts must be loaded first so 
 	# proteins can be associated with them
         ${VEGA_ENS_WRAPPER} ensembl_transcriptseqload.config true >> ${LOG} 2>&1
-	${VEGA_ENS_WRAPPER} ensembl_proteinseqload.config  true >> ${LOG} 2>&1
+	${VEGA_ENS_WRAPPER} ensembl_proteinseqload.config true >> ${LOG} 2>&1
     elif [ ${PROVIDER} = "vega" ]
     then
 	echo "Load protein/transcript sequences and marker associations for ${PROVIDER}" | tee -a ${LOG}
@@ -271,10 +306,12 @@ TIMESTAMP=`date '+%Y%m%d.%H%M'`
 echo "" >> ${LOG}
 date >> ${LOG}
 echo "Archive input files" | tee -a ${LOG}
-for FILE in ${GM_FILE_DEFAULT} ${ASSOC_FILE_DEFAULT} ${BIOTYPE_FILE_DEFAULT} ${TRANSCRIPT_FILE_DEFAULT} ${PROTEIN_FILE_DEFAULT}
+for FILE in ${GM_FILE_DEFAULT} ${ASSOC_FILE_DEFAULT} ${BIOTYPE_FILE_DEFAULT} ${TRANSCRIPT_FILE_DEFAULT} ${PROTEIN_FILE_DEFAULT} ${LOGDIR}/*
 do
     ARC_FILE=`basename ${FILE}`.${TIMESTAMP}
-    cp -p ${FILE} ${ARCHIVEDIR}/${ARC_FILE}
+    rm -rf ${ARCHIVEDIR}/${ARC_FILE}
+    cp ${FILE} ${ARCHIVEDIR}/${ARC_FILE}
+    chmod -f 777 ${ARCHIVEDIR}/${ARC_FILE}
 done
 
 #

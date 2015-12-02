@@ -1,3 +1,11 @@
+TAG: genemodelload-6-0-2-1
+TAG: genemodelload-tr12070-1
+DATE: 12/02/2015
+STAFF: lec
+CHANGES: 
+1) biotypemapping.config.default
+2) bin/biotypemapping.py
+
 TAG: genemodelload-tr10270-BP
 DATE: 10/28/2015
 STAFF: lec
