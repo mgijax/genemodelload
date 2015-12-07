@@ -30,6 +30,21 @@ else
 fi
 
 #
+# truncate the MRK_BioTypeMapping table
+#
+date
+echo "Truncate the MRK_BioTypeMapping table"
+${MGD_DBSCHEMADIR}/table/MRK_BiotypeMapping_truncate.object
+STAT=$?
+if [ ${STAT} -ne 0 ]
+then
+	message="${message} truncate the MRK_BioTypeMapping table failed"
+else
+	message="${message} truncate the MRK_BioTypeMapping table successful" 
+fi
+echo ${message}
+
+#
 # load vocabulary terms
 #
 date

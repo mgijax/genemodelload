@@ -388,10 +388,6 @@ def bcpFiles():
     #
     '''
 
-    diagFile.write('truncating %s' % biotypeTable)
-    db.sql('truncate table %s' % biotypeTable, None)
-    db.commit()
-
     bcp1 = '''%s %s %s %s '|' '\\n' mgd''' % (bcpCommand, biotypeTable, outputFileDir, bcpFileName)
     diagFile.write('%s\n' % bcp1)
     os.system(bcp1)
