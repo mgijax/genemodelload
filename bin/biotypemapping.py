@@ -14,6 +14,7 @@
 #		field 3: pipe-delimited list of feature types (_MCVTerm_key)
 #		field 4: primary biotype (not used)
 #		field 5: marker type (see MRK_Types)
+#	        field 6: use feature type children (yes/no)
 #
 #	3 provider vocabularies exist:
 #		_vocab_key : 103 (Biotype Ensembl)
