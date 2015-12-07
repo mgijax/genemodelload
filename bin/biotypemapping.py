@@ -89,6 +89,7 @@ mcvTerms = []
 mcvTermKeys = []
 markerType = None
 markerTypeKey = 0
+useMCVchildren = None
 
 #
 # from configuration file
@@ -323,6 +324,7 @@ def processFile():
     global biotypeTerm, biotypeTermKey
     global mcvTerms, mcvTermKeys
     global markerType, markerTypeKey
+    global useMCVchildren
 
     # For each line in the input file
 
@@ -340,6 +342,7 @@ def processFile():
 	    biotypeTerm = tokens[1]
 	    mcvTerms = tokens[2]
 	    markerType = tokens[4]
+	    useMCVchildren = tokens[5]
 	except:
 	    errorFile.write('Invalid Line (missing column(s)) (row %d): %s\n' % (lineNum, line))
 	    continue
@@ -365,9 +368,14 @@ def processFile():
 	# sanity checks passed...
 	#
 
+	if useMCVchildren == 'yes':
+		useMCVchildren = '1'
+	else:
+		useMCVchildren = '0'
+
 	for mcvTermKey in mcvTermKeys:
-		outputFile.write('%d|%d|%d|%d|%d|%s|%s|%s|%s\n' \
-	    	% (biotypeKey, biotypeVocabKey, biotypeTermKey, mcvTermKey, markerTypeKey,
+		outputFile.write('%d|%d|%d|%d|%d|%s|%s|%s|%s|%s\n' \
+	    	% (biotypeKey, biotypeVocabKey, biotypeTermKey, mcvTermKey, markerTypeKey, useMCVchildren,
 			createdByKey, createdByKey, cdate, cdate))
 		biotypeKey = biotypeKey + 1
 
