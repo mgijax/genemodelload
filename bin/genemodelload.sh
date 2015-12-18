@@ -201,9 +201,7 @@ then
 #
 # TR12116
 # for Ensembl provider, remove the version number from the accession ids (if they exist)
-# gunzip the file
-# remove the version number
-# gzip the file again
+# gunzip the file ; remove the version number ; gzip the file again
 #
 if [ ${PROVIDER} = "ensembl" ]
 then
