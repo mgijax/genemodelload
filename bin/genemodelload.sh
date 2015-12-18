@@ -213,7 +213,7 @@ for file1 in ${TRANSCRIPT_FILE_DEFAULT} ${PROTEIN_FILE_DEFAULT} ${NCRNA_FILE_DEF
 do
 file2=`basename ${file1} .gz`
 gunzip ${file1}
-sed 's/\.//g' ${file2} | gzip -c > ${file1}
+sed 's/\.[0-9]*//g' ${file2} | gzip -c > ${file1}
 rm -rf ${file2}
 done
 cd `dirname $0`
