@@ -191,11 +191,35 @@ fi
 
 #
 # If the gene models are to be reloaded, the following is done for *all* PROVIDERs:
+#	- remove version numbers from gz files
 #	- reload the PROVIDER/biotype vocabulary
 #	- reload the MRK_BiotypeMapping table
 #
 if [ ${RELOAD_GENEMODELS} = "true" ]
 then
+
+#
+# TR12116
+# for Ensembl provider, remove the version number from the accession ids (if they exist)
+# gunzip the file
+# remove the version number
+# gzip the file again
+#
+if [ ${PROVIDER} = "ensembl" ]
+then
+echo "" >> ${LOG}
+date >> ${LOG}
+echo "Removing version numbers from gz files..." | tee -a ${LOG}
+cd ${INPUTDIR}
+for file1 in ${TRANSCRIPT_FILE_DEFAULT} ${PROTEIN_FILE_DEFAULT} ${NCRNA_FILE_DEFAULT}
+do
+file2=`basename ${file1} .gz`
+gunzip ${file1}
+sed 's/\.//g' ${file2} | gzip -c > ${file1}
+rm -rf ${file2}
+done
+cd `dirname $0`
+fi
 
 echo "" >> ${LOG}
 date >> ${LOG}
