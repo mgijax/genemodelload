@@ -100,6 +100,7 @@ if [ ${STAT} -ne 0 ]
 then
 	echo -e "\nerror : cannot load database : "
 	echo  ${PG_DBSERVER}, ${PG_DBNAME}, ${TEST_DBDUMP_TO}
+	exit 1
 fi
 
 #
