@@ -73,8 +73,8 @@ then
 cp -r /data/downloads/vega_mus_gtf/${BIOTYPE_FILE_NAME} ${BIOTYPE_FILE_DEFAULT}
 cp -r /data/downloads/vega_mus_cdna/${TRANSCRIPT_FILE_NAME} ${TRANSCRIPT_FILE_DEFAULT}
 cp -r /data/downloads/vega_mus_protein/${PROTEIN_FILE_NAME} ${PROTEIN_FILE_DEFAULT}
-cp -r ${TRDIR}/VEGA/GeneModelLoad/vega_genemodels.txt ${INPUTDIR}
-cp -r ${TRDIR}/VEGA/AssociationLoad/vega_assoc.txt ${INPUTDIR}
+cp -r ${TRDIR}/GeneModelLoad/vega_genemodels.txt ${INPUTDIR}
+cp -r ${TRDIR}/AssociationLoad/vega_assoc.txt ${INPUTDIR}
 
 elif [ "${GM_PROVIDER}" = "NCBI" ]
 then
@@ -82,8 +82,8 @@ then
 # ncbi/entrezgene
 #
 cp -r /data/downloads/entrezgene/${BIOTYPE_FILE_NAME} ${BIOTYPE_FILE_DEFAULT}
-cp -r ${TRDIR}/VEGA/GeneModelLoad/ncbi_genemodels.txt ${INPUTDIR}
-cp -r ${TRDIR}/VEGA/AssociationLoad/ncbi_assoc.txt ${INPUTDIR}
+cp -r ${TRDIR}/GeneModelLoad/ncbi_genemodels.txt ${INPUTDIR}
+cp -r ${TRDIR}/AssociationLoad/ncbi_assoc.txt ${INPUTDIR}
 
 else
     echo "variable GM_PROVIDER has not been set"
