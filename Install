@@ -112,6 +112,7 @@ then
 	chmod -fR 777 ${VEGA_ENSEMBLSEQLOAD}
 	chmod -f 666 ${ASSEMBLYSEQLOAD}/*.config
 	chmod -f 666 ${VEGA_ENSEMBLSEQLOAD}/*.config
+	chmod -fR 777 ${DATALOADSOUTPUT}/mgi/pgdbutilities/logs
 fi
 
 # All Unit Tests

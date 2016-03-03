@@ -217,6 +217,20 @@ sed 's/\.[0-9]*//g' ${file2} | gzip -c > ${file1}
 rm -rf ${file2}
 done
 cd `dirname $0`
+elif [ ${PROVIDER} = "vega" ]
+then
+echo "" >> ${LOG}
+date >> ${LOG}
+echo "Removing version numbers from gz files..." | tee -a ${LOG}
+cd ${INPUTDIR}
+for file1 in ${TRANSCRIPT_FILE_DEFAULT} ${PROTEIN_FILE_DEFAULT}
+do
+file2=`basename ${file1} .gz`
+gunzip ${file1}
+sed 's/\.[0-9]*//g' ${file2} | gzip -c > ${file1}
+rm -rf ${file2}
+done
+cd `dirname $0`
 fi
 
 echo "" >> ${LOG}

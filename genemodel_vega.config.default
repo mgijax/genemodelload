@@ -10,23 +10,23 @@
 #
 # test TR directory
 #
-TRDIR=/mgi/all/wts_projects/12000/12058/VEGA
+TRDIR=/mgi/all/wts_projects/12200/12221/VEGA
 export TRDIR
 
 #
 # used by other wrappers in bin directory :
 #  copydownloads.sh, copyinputs.sh, runTest.sh
 #
-BIOTYPE_FILE_NAME=Mus_musculus.GRCm38.61.gtf.gz
-TRANSCRIPT_FILE_NAME=Mus_musculus.VEGA61.cdna.all.fa.gz
-PROTEIN_FILE_NAME=Mus_musculus.VEGA61.pep.all.fa.gz
+BIOTYPE_FILE_NAME=Mus_musculus.GRCm38.64.gtf.gz
+TRANSCRIPT_FILE_NAME=Mus_musculus.VEGA64.cdna.all.fa.gz
+PROTEIN_FILE_NAME=Mus_musculus.VEGA64.pep.all.fa.gz
 export BIOTYPE_FILE_NAME TRANSCRIPT_FILE_NAME PROTEIN_FILE_NAME
 
 #
 # Reload the gene models (true/false)?  If false, only the associations
 # will be deleted/reloaded.
 #
-RELOAD_GENEMODELS=false
+RELOAD_GENEMODELS=true
 export RELOAD_GENEMODELS
 
 # Full path to the current gene model biotype file
