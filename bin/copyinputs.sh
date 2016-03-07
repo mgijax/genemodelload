@@ -7,13 +7,9 @@
 # 2) SE : manually copy backup file into TEST_DBDUMP
 #
 
-#
-#  If the MGICONFIG environment variable does not have a local override,
-#  use the default "test" settings.
-#
 if [ "${MGICONFIG}" = "" ]
 then
-    MGICONFIG=/usr/local/mgi/test/mgiconfig
+    MGICONFIG=/usr/local/mgi/live/mgiconfig
     export MGICONFIG
 fi
 
