@@ -152,16 +152,7 @@ fi
 #
 # run all cache updates
 #
-echo -e "\nrunning ${SEQCACHELOAD}/seqcoord.csh ", ${GM_PROVIDER}
-${SEQCACHELOAD}/seqcoord.csh
-echo -e "\nrunning ${SEQCACHELOAD}/seqmarker.csh ", ${GM_PROVIDER}
-${SEQCACHELOAD}/seqmarker.csh
-echo -e "\nrunning ${MRKCACHELOAD}/mrklabel.csh ", ${GM_PROVIDER}
-${MRKCACHELOAD}/mrklabel.csh
-echo -e "\nrunning ${MRKCACHELOAD}/mrkref.csh ", ${GM_PROVIDER}
-${MRKCACHELOAD}/mrkref.csh
-echo -e "\nrunning ${MRKCACHELOAD}/mrklocation.csh ", ${GM_PROVIDER}
-${MRKCACHELOAD}/mrklocation.csh
+./runGeneModelCache.sh
 
 #
 # contact MGI-SE-Admin : load EMBOSS sequences

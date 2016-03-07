@@ -1,10 +1,12 @@
+TAG: genemodelload-6-0-3-3
 TAG: genemodelload-6-0-3-2
 TAG: genemodelload-6-0-3-1
-DATE: 03/03/2016
+DATE: 03/03/2016, 03/07/2016
 STAFF: lec
 CHANGES: TR12221/VEGA 64
 1) bin/copyinputs.sh ; fix cp VEGA bug
 2) bin/genemodelload.sh ; remove version number from gz files
+3) bin/runGeneModelCache.sh ; new
 
 TAG: genemodelload-6-0-2-3
 TAG: genemodelload-6-0-2-2
