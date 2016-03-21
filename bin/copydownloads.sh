@@ -12,7 +12,7 @@
 #
 if [ "${MGICONFIG}" = "" ]
 then
-    MGICONFIG=/usr/local/mgi/test/mgiconfig
+    MGICONFIG=/usr/local/mgi/live/mgiconfig
     export MGICONFIG
 fi
 
