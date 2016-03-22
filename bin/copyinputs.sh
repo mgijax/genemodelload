@@ -36,13 +36,13 @@ date
 #
 # The following steps must all be done on the TEST SERVER: 
 #
-if [ "${INSTALL_TYPE}" = "dev" ]
-then
-        echo "server verified as a test server...continuing..."
-else
-        echo "cannot run the test on this server : "
-        exit 1
-fi
+#if [ "${INSTALL_TYPE}" = "dev" ]
+#then
+#        echo "server verified as a test server...continuing..."
+#else
+#        echo "cannot run the test on this server : "
+#        exit 1
+#fi
 
 #
 # copy input files from TR directory to test server

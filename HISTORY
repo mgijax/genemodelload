@@ -1,3 +1,9 @@
+TAG: genemodelload-6-0-3-6
+DATE: 03/22/2016
+STAFF: lec
+CHANGES: TR12220/ENSEMBL 83/84
+1) bin/copyinputs.sh : commented out test check
+
 TAG: genemodelload-6-0-3-5
 TAG: genemodelload-6-0-3-4
 DATE: 03/21/2016
