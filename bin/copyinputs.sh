@@ -3,8 +3,8 @@
 #
 # primarily for testing purposes...
 #
-# 1) curator : copy bhmgiapp01:/data/downloads files to test server
-# 2) SE : manually copy backup file into TEST_DBDUMP
+# 1) copy /data/downloads files to /data/loads/mgi/genemodelload/input directory
+# 2) copy TR files to /data/loads/mgi/genemodelload/input directory
 #
 
 if [ "${MGICONFIG}" = "" ]
@@ -45,9 +45,9 @@ date
 #fi
 
 #
-# copy input files from TR directory to test server
+# copy input files from TR directory to genemodelload input directory
 #
-echo "copy input files from TR directory to test serve..."
+echo "copy input files from TR directory to /data/loads/mgi/genemodelload/input directory..."
 
 if [ "${GM_PROVIDER}" = "Ensembl" ]
 then

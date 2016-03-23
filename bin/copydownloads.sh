@@ -3,7 +3,7 @@
 #
 # primarily for testing purposes...
 #
-# copy bhmgiapp01:/data/downloads files to test server
+# 1) copy bhmgiapp01:/data/downloads files to development server
 #
 
 #
@@ -60,7 +60,7 @@ fi
 #
 # copy download files from production server to test server
 #
-echo "copying download files from production server to test server...."
+echo "copying download files from production server to development server...."
 
 if [ "${GM_PROVIDER}" = "Ensembl" ]
 then
