@@ -1,8 +1,6 @@
 #!/bin/sh
 
 #
-# primarily for testing purposes...
-#
 # 1) copy bhmgiapp01:/data/downloads files to development server
 #
 
