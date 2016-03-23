@@ -473,12 +473,12 @@ echo "Create temp tables for the input data" >> ${LOG}
 cat - <<EOSQL | psql -h${MGD_DBSERVER} -d${MGD_DBNAME} -U${MGD_DBUSER} -e  >> ${LOG}
 
 create table ${GM_TEMP_TABLE} (
-    gmID varchar(80) not null,
+    gmID text not null,
     chromosome varchar(8) not null,
     startCoordinate float not null,
     endCoordinate float not null,
     strand char(1) not null,
-    description varchar(255) not null
+    description text not null
 );
 
 create  index idx_gmID on ${GM_TEMP_TABLE} (gmID);
@@ -488,8 +488,8 @@ create  index idx_chromosome on ${GM_TEMP_TABLE} (chromosome);
 grant all on ${GM_TEMP_TABLE} to public;
 
 create table ${ASSOC_TEMP_TABLE} (
-    mgiID varchar(80) not null,
-    gmID varchar(80) not null
+    mgiID text not null,
+    gmID text not null
 );
 
 create  index idx_assoc_mgiID on ${ASSOC_TEMP_TABLE} (mgiID);
