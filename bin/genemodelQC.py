@@ -119,6 +119,9 @@ import re
 import mgi_utils
 import db
 
+db.setAutoTranslate(False)
+db.setAutoTranslateBE(False)
+
 #
 #  CONSTANTS
 #
@@ -418,64 +421,64 @@ def createInvMarkerReport ():
     fpInvMrkRpt.write(12*'-' + '  ' + 20*'-' + '  ' + 20*'-' + '  ' + \
                       20*'-' + '  ' + 30*'-' + NL)
 
-    cmds = []
-
     #
     # Find any MGI IDs from the association file that:
     # 1) Do not exist in the database.
     # 2) Exist for a non-marker object.
     # 3) Exist for a marker, but the status is not "offical" or "interim".
     #
-    cmds.append('select tmp.mgiID, ' + \
-                       'tmp.gmID, ' + \
-                       'null as name, ' + \
-                       'null as status ' + \
-                'from ' + assocTempTable + ' tmp ' + \
-                'where not exists (select 1 ' + \
-                                  'from ACC_Accession a ' + \
-                                  'where lower(a.accID) = lower(tmp.mgiID)) ' + \
-                'union ' + \
-                'select tmp.mgiID, ' + \
-                       'tmp.gmID, ' + \
-                       't.name, ' + \
-                       'null as status ' + \
-                'from ' + assocTempTable + ' tmp, ' + \
-                     'ACC_Accession a1, ' + \
-                     'ACC_MGIType t ' + \
-                'where lower(a1.accID) = lower(tmp.mgiID) and ' + \
-                      'a1._LogicalDB_key = 1 and ' + \
-                      'a1._MGIType_key != 2 and ' + \
-                      'not exists (select 1 ' + \
-                                  'from ACC_Accession a2 ' + \
-                                  'where lower(a2.accID) = lower(tmp.mgiID) and ' + \
-                                        'a2._LogicalDB_key = 1 and ' + \
-                                        'a2._MGIType_key = 2) and ' + \
-                      'a1._MGIType_key = t._MGIType_key ' + \
-                'union ' + \
-                'select tmp.mgiID, ' + \
-                       'tmp.gmID, ' + \
-                       't.name, ' + \
-                       'ms.status ' + \
-                'from ' + assocTempTable + ' tmp, ' + \
-                     'ACC_Accession a, ' + \
-                     'ACC_MGIType t, ' + \
-                     'MRK_Marker m, ' + \
-                     'MRK_Status ms ' + \
-                'where lower(a.accID) = lower(tmp.mgiID) and ' + \
-                      'a._LogicalDB_key = 1 and ' + \
-                      'a._MGIType_key = 2 and ' + \
-                      'a._MGIType_key = t._MGIType_key and ' + \
-                      'a._Object_key = m._Marker_key and ' + \
-                      'm._Marker_Status_key not in (1,3) and ' + \
-                      'm._Marker_Status_key = ms._Marker_Status_key ' + \
-                'order by mgiID, gmID')
+    cmds = '''(
+                select tmp.mgiID,
+                       tmp.gmID,
+                       null as name,
+                       null as status
+                from %s tmp
+                where not exists (select 1 
+                                  from ACC_Accession a 
+                                  where lower(a.accID) = lower(tmp.mgiID)) 
+                union 
+                select tmp.mgiID,
+                       tmp.gmID,
+                       t.name, 
+                       null as status 
+                from %s tmp, 
+                     ACC_Accession a1, 
+                     ACC_MGIType t 
+                where lower(a1.accID) = lower(tmp.mgiID) and 
+                      a1._LogicalDB_key = 1 and 
+                      a1._MGIType_key != 2 and 
+                      not exists (select 1 
+                                  from ACC_Accession a2 
+                                  where lower(a2.accID) = lower(tmp.mgiID) and 
+                                        a2._LogicalDB_key = 1 and 
+                                        a2._MGIType_key = 2) and 
+                      a1._MGIType_key = t._MGIType_key 
+                union 
+                select tmp.mgiID, 
+                       tmp.gmID, 
+                       t.name, 
+                       ms.status 
+                from %s tmp, 
+                     ACC_Accession a, 
+                     ACC_MGIType t, 
+                     MRK_Marker m, 
+                     MRK_Status ms 
+                where lower(a.accID) = lower(tmp.mgiID) and 
+                      a._LogicalDB_key = 1 and 
+                      a._MGIType_key = 2 and 
+                      a._MGIType_key = t._MGIType_key and 
+                      a._Object_key = m._Marker_key and 
+                      m._Marker_Status_key not in (1,3) and 
+                      m._Marker_Status_key = ms._Marker_Status_key
+                ) 
+                order by mgiID, gmID''' % (assocTempTable, assocTempTable, assocTempTable)
 
     results = db.sql(cmds,'auto')
 
     #
     # Write the records to the report.
     #
-    for r in results[0]:
+    for r in results:
         mgiID = r['mgiID']
         gmID = r['gmID']
         objectType = r['name']
@@ -507,7 +510,7 @@ def createInvMarkerReport ():
                 if list.count(gmID) > 0:
                     list.remove(gmID)
                 assoc[mgiID] = list
-    numErrors = len(results[0])
+    numErrors = len(results)
     fpInvMrkRpt.write(NL + 'Number of Rows: ' + str(numErrors) + NL)
 
     errorCount += numErrors
@@ -537,36 +540,35 @@ def createSecMarkerReport ():
     fpSecMrkRpt.write(16*'-' + '  ' + 20*'-' + '  ' + 50*'-' + '  ' + \
                       16*'-' + NL)
 
-    cmds = []
-
     #
     # Find any MGI IDs from the association file that are secondary IDs
     # for a marker.
     #
-    cmds.append('select tmp.mgiID, ' + \
-                       'tmp.gmID, ' + \
-                       'm.symbol, ' + \
-                       'a2.accID ' + \
-                'from ' + assocTempTable + ' tmp, ' + \
-                     'ACC_Accession a1, ' + \
-                     'ACC_Accession a2, ' + \
-                     'MRK_Marker m ' + \
-                'where lower(tmp.mgiID) = lower(a1.accID) and ' + \
-                      'a1._MGIType_key = 2 and ' + \
-                      'a1._LogicalDB_key = 1 and ' + \
-                      'a1.preferred = 0 and ' + \
-                      'a1._Object_key = a2._Object_key and ' + \
-                      'a2._MGIType_key = 2 and ' + \
-                      'a2._LogicalDB_key = 1 and ' + \
-                      'a2.preferred = 1 and ' + \
-                      'a2._Object_key = m._Marker_key ' + \
-                'order by tmp.mgiID, tmp.gmID')
+    cmds = '''select tmp.mgiID, 
+                       tmp.gmID,
+                       m.symbol,
+                       a2.accID 
+                from %s tmp, 
+                     ACC_Accession a1,
+                     ACC_Accession a2,
+                     MRK_Marker m 
+                where lower(tmp.mgiID) = lower(a1.accID) and 
+                      a1._MGIType_key = 2 and 
+                      a1._LogicalDB_key = 1 and 
+                      a1.preferred = 0 and 
+                      a1._Object_key = a2._Object_key and 
+                      a2._MGIType_key = 2 and 
+                      a2._LogicalDB_key = 1 and 
+                      a2.preferred = 1 and 
+                      a2._Object_key = m._Marker_key
+                order by tmp.mgiID, tmp.gmID
+		''' % (assocTempTable)
 
     results = db.sql(cmds,'auto')
     #
     # Write the records to the report.
     #
-    for r in results[0]:
+    for r in results:
         mgiID = r['mgiID']
         gmID = r['gmID']
 
@@ -584,7 +586,7 @@ def createSecMarkerReport ():
                 if list.count(gmID) > 0:
                     list.remove(gmID)
                 assoc[mgiID] = list
-    numErrors = len(results[0])
+    numErrors = len(results)
     fpSecMrkRpt.write(NL + 'Number of Rows: ' + str(numErrors) + NL)
 
     errorCount += numErrors
@@ -612,26 +614,24 @@ def createMissingGMIDReport ():
                      ('MGI ID','Gene Model ID',NL))
     fpMissGMRpt.write(12*'-' + '  ' + 20*'-' + NL)
 
-    cmds = []
-
     #
     # Find any gene model IDs from the association file that are not in
     # the gene model file.
     #
-    cmds.append('select ta.mgiID, ' + \
-                       'ta.gmID ' + \
-                'from ' + assocTempTable + ' ta ' + \
-                'where not exists (select 1 ' + \
-                                  'from ' + gmTempTable + ' tgm ' + \
-                                  'where lower(tgm.gmID) = lower(ta.gmID)) ' + \
-                'order by ta.gmID')
+    cmds = '''select ta.mgiID, ta.gmID
+                from %s ta 
+                where not exists (select 1 
+                                  from %s tgm 
+                                  where lower(tgm.gmID) = lower(ta.gmID))
+                order by ta.gmID
+		''' % (assocTempTable, gmTempTable)
 
     results = db.sql(cmds,'auto')
 
     #
     # Write the records to the report.
     #
-    for r in results[0]:
+    for r in results:
         mgiID = r['mgiID']
         gmID = r['gmID']
 
@@ -649,7 +649,7 @@ def createMissingGMIDReport ():
                     list.remove(gmID)
                 assoc[mgiID] = list
     
-    numErrors = len(results[0])
+    numErrors = len(results)
     fpMissGMRpt.write(NL + 'Number of Rows: ' + str(numErrors) + NL)
     
     errorCount += numErrors
@@ -679,36 +679,35 @@ def createChrDiscrepReport ():
     fpChrDiscrepRpt.write(20*'-' + '  ' + 3*'-' + '  ' + 12*'-' + '  ' +
                           50*'-' + '  ' + 3*'-' + NL)
 
-    cmds = []
-
     #
     # Find any cases where the marker for the MGI ID in the association
     # file has a different chromosome than what is in the gene model file.
     #
-    cmds.append('select tgm.gmID, ' + \
-                       'tgm.chromosome as gmChr, ' + \
-                       'ta.mgiID, ' + \
-                       'm.symbol, ' + \
-                       'm.chromosome as mrkChr ' + \
-                'from ' + gmTempTable + ' tgm, ' + \
-                      assocTempTable + ' ta, ' + \
-                     'ACC_Accession a, ' + \
-                     'MRK_Marker m ' + \
-                'where lower(tgm.gmID) = lower(ta.gmID) and ' + \
-                      'lower(ta.mgiID) = lower(a.accID) and ' + \
-                      'a._MGIType_key = 2 and ' + \
-                      'a._LogicalDB_key = 1 and ' + \
-                      'a.preferred = 1 and ' + \
-                      'a._Object_key = m._Marker_key and ' + \
-                      'm.chromosome != tgm.chromosome ' + \
-                'order by tgm.gmID')
+    cmds = '''select tgm.gmID, 
+                       tgm.chromosome as gmChr, 
+                       ta.mgiID, 
+                       m.symbol, 
+                       m.chromosome as mrkChr
+                from %s tgm, 
+                      %s ta, 
+                     ACC_Accession a, 
+                     MRK_Marker m 
+                where lower(tgm.gmID) = lower(ta.gmID) and 
+                      lower(ta.mgiID) = lower(a.accID) and 
+                      a._MGIType_key = 2 and 
+                      a._LogicalDB_key = 1 and 
+                      a.preferred = 1 and 
+                      a._Object_key = m._Marker_key and 
+                      m.chromosome != tgm.chromosome 
+                order by tgm.gmID
+		''' % (gmTempTable, assocTempTable)
 
     results = db.sql(cmds,'auto')
 
     #
     # Write the records to the report.
     #
-    for r in results[0]:
+    for r in results:
         mgiID = r['mgiID']
         gmID = r['gmID']
 
@@ -727,7 +726,7 @@ def createChrDiscrepReport ():
                     list.remove(gmID)
                 assoc[mgiID] = list
 
-    numErrors = len(results[0])
+    numErrors = len(results)
     fpChrDiscrepRpt.write(NL + 'Number of Rows: ' + str(numErrors) + NL)
 
     errorCount += numErrors
