@@ -67,6 +67,7 @@ then
 cp -r /data/downloads/vega_mus_gtf/${BIOTYPE_FILE_NAME} ${BIOTYPE_FILE_DEFAULT}
 cp -r /data/downloads/vega_mus_cdna/${TRANSCRIPT_FILE_NAME} ${TRANSCRIPT_FILE_DEFAULT}
 cp -r /data/downloads/vega_mus_protein/${PROTEIN_FILE_NAME} ${PROTEIN_FILE_DEFAULT}
+cp -r /data/downloads/vega_mus_ncrna/${NCRNA_FILE_NAME} ${NCRNA_FILE_DEFAULT}
 cp -r ${TRDIR}/GeneModelLoad/vega_genemodels.txt ${INPUTDIR}
 cp -r ${TRDIR}/AssociationLoad/vega_assoc.txt ${INPUTDIR}
 

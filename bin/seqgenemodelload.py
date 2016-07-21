@@ -154,17 +154,22 @@ def loadSequenceKeyLookup():
 
 def loadVegaEnsemblRawBioTypeByGMIDLookup():
     global rawBioTypeByGMIDLookup
-    # 12/2/2014 - strip off 5 line header
-    junk = inFile.readline()
-    junk = inFile.readline()
-    junk = inFile.readline()
-    junk = inFile.readline()
-    junk = inFile.readline()
 
     for line in inFile.readlines():
+
         columnList =  string.split(line, TAB)
+
+	#
+	# if header, skip it
+	# TR12354/12382/VEGA 65 has no header
+	#
+	if columnList[0].find('#') == 0:
+	    print 'skipping header...%s' % (columnList)
+	    continue
+
         attributeList = string.split(columnList[8], SCOLON)
         gmId = (string.split(attributeList[0], '"'))[1].strip()
+
         #if provider == 'vega':
         #    biotype = string.strip(columnList[1])
         #else:
