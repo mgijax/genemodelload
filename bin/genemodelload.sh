@@ -223,11 +223,11 @@ echo "" >> ${LOG}
 date >> ${LOG}
 echo "Removing version numbers from gz files..." | tee -a ${LOG}
 cd ${INPUTDIR}
-for file1 in ${TRANSCRIPT_FILE_DEFAULT} ${PROTEIN_FILE_DEFAULT}
+for file1 in ${TRANSCRIPT_FILE_DEFAULT} ${PROTEIN_FILE_DEFAULT} ${NCRNA_FILE_DEFAULT}
 do
 file2=`basename ${file1} .gz`
 gunzip ${file1}
-sed 's/\.[0-9]*//g' ${file2} | gzip -c > ${file1}
+sed 's/\.[0-9]*//g' ${file2} | sed 's/\\n//g' | sed 's/\\//g' | gzip -c > ${file1}
 rm -rf ${file2}
 done
 cd `dirname $0`

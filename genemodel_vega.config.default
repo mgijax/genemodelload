@@ -17,10 +17,11 @@ export TRDIR
 # used by other wrappers in bin directory :
 #  copydownloads.sh, copyinputs.sh, runTest.sh
 #
-BIOTYPE_FILE_NAME=Mus_musculus.GRCm38.64.gtf.gz
-TRANSCRIPT_FILE_NAME=Mus_musculus.VEGA64.cdna.all.fa.gz
-PROTEIN_FILE_NAME=Mus_musculus.VEGA64.pep.all.fa.gz
-export BIOTYPE_FILE_NAME TRANSCRIPT_FILE_NAME PROTEIN_FILE_NAME
+BIOTYPE_FILE_NAME=Mus_musculus.GRCm38.65.gtf.gz
+TRANSCRIPT_FILE_NAME=Mus_musculus.VEGA65.cdna.all.fa.gz
+NCRNA_FILE_NAME=Mus_musculus.VEGA65.ncrna.fa.gz
+PROTEIN_FILE_NAME=Mus_musculus.VEGA65.pep.all.fa.gz
+export BIOTYPE_FILE_NAME TRANSCRIPT_FILE_NAME NCRNA_FILE_NAME PROTEIN_FILE_NAME
 
 #
 # Reload the gene models (true/false)?  If false, only the associations
@@ -42,16 +43,26 @@ export BIOTYPE_FILE_CURRENT BIOTYPE_FILE_DEFAULT
 #
 TRANSCRIPT_FILE_CURRENT=${TRANSCRIPTDIR}/${TRANSCRIPT_FILE_NAME}
 # Full path to the default transcript file 
-# Used by vega_ensemblseqload
+# Used by vega_vegaseqload
 #
 TRANSCRIPT_FILE_DEFAULT=${INPUTDIR}/vega_transcripts.gz
 export TRANSCRIPT_FILE_CURRENT TRANSCRIPT_FILE_DEFAULT
+
+# Full path to the default non coding RNA transcript file 
+# Used by vega_vegaseqload
+#
+NCRNA_FILE_DEFAULT=${INPUTDIR}/vega_ncrna.gz
+export NCRNA_FILE_DEFAULT
+# Full path to the current non-coding RNA transcript file 
+#
+NCRNA_FILE_CURRENT=${TRANSCRIPTDIR}/${NCRNA_FILE_NAME}
+export NCRNA_FILE_CURRENT
 
 # Full path to the current protein file
 #
 PROTEIN_FILE_CURRENT=${PROTEINDIR}/${PROTEIN_FILE_NAME}
 # Full path to the default transcript file 
-# Used by vega_ensemblseqload
+# Used by vega_vegaseqload
 #
 PROTEIN_FILE_DEFAULT=${INPUTDIR}/vega_proteins.gz
 export PROTEIN_FILE_CURRENT PROTEIN_FILE_DEFAULT
