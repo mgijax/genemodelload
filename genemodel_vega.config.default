@@ -10,7 +10,7 @@
 #
 # test TR directory
 #
-TRDIR=/mgi/all/wts_projects/12200/12221/VEGA
+TRDIR=/mgi/all/wts_projects/12300/12382/VEGA
 export TRDIR
 
 #
