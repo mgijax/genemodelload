@@ -5,6 +5,7 @@ STAFF: lec
 CHANGES: TR12354/12382/VEGA 65/Ensembl 85
 1) seqgenemodelload.sh/seqgenemodelload.py : VEGA biotype file has no header
 2) genemodel_vega.config
+3) genemodel_ensembl.config
 
 TAG: genemodelload-6-0-4-1
 DATE: 04/28/2016
