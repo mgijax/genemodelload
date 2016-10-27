@@ -1,3 +1,10 @@
+TAG: genemodelload-6-0-6-1
+DATE: 10/27/2016
+STAFF: lec
+CHANGES: TR12422/VEGA 66/ENSEMBL 86
+1) genemodel_vega.config
+2) genemodel_ensembl.config
+
 TAG: genemodelload-6-0-5-1
 DATE: 09/01/2016
 STAFF: lec 
