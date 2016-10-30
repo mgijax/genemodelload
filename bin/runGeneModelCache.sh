@@ -10,6 +10,8 @@ then
     export MGICONFIG
 fi
 
+. ${MGICONFIG}/master.config.sh
+
 echo -e "\nrunning ${SEQCACHELOAD}/seqcoord.csh"
 ${SEQCACHELOAD}/seqcoord.csh
 echo -e "\nrunning ${SEQCACHELOAD}/seqmarker.csh"
