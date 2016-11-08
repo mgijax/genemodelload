@@ -425,7 +425,7 @@ def createInvMarkerReport ():
     # Find any MGI IDs from the association file that:
     # 1) Do not exist in the database.
     # 2) Exist for a non-marker object.
-    # 3) Exist for a marker, but the status is not "offical" or "interim".
+    # 3) Exist for a marker, but the status is not "offical"
     #
     cmds = '''(
                 select tmp.mgiID,
@@ -468,7 +468,7 @@ def createInvMarkerReport ():
                       a._MGIType_key = 2 and 
                       a._MGIType_key = t._MGIType_key and 
                       a._Object_key = m._Marker_key and 
-                      m._Marker_Status_key = 2 and 
+                      m._Marker_Status_key != 1 and
                       m._Marker_Status_key = ms._Marker_Status_key
                 ) 
                 order by mgiID, gmID''' % (assocTempTable, assocTempTable, assocTempTable)
