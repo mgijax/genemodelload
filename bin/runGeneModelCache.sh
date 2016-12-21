@@ -4,7 +4,7 @@
 # run the gene model load cache scripts
 #
 
-if [ "${MGICONFIG}" = "" ]
+if [ -z ${MGICONFIG} ]
 then
     MGICONFIG=/usr/local/mgi/live/mgiconfig
     export MGICONFIG

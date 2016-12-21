@@ -11,6 +11,14 @@
 #
 ###########################################################################
 
+if [ -z ${MGICONFIG} ]
+then
+        MGICONFIG=/usr/local/mgi/live/mgiconfig
+        export MGICONFIG
+fi
+
+. ${MGICONFIG}/master.config.sh
+
 usage ()
 {
     echo "Usage: publishAssocFile provider assoc_file"
@@ -21,16 +29,13 @@ usage ()
 }
 
 CURRENT_DIR=`pwd`
-
-GENEMODELLOADDIR=/usr/local/mgi/live/dataload/genemodelload
-
 COMMON_CONFIG=genemodel_common.config
 
 #
 # The genemodelload product is not installed on all servers, so make sure
 # it exists on this one.
 #
-if [ ! -d ${GENEMODELLOADDIR} ]
+if [ ! -d ${GENEMODELLOAD} ]
 then
     echo "The gene model load software does not exist on this server"; exit 1
 fi
@@ -67,7 +72,7 @@ fi
 #
 # Source the configuration files.
 #
-cd ${GENEMODELLOADDIR}
+cd ${GENEMODELLOAD}
 . ${COMMON_CONFIG}
 . ${CONFIG}
 

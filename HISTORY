@@ -1,3 +1,13 @@
+TAG: genemodelload-6-0-6-5
+DATE: 12/21/2016
+STAFF: lec 
+CHANGES:
+TR12443/NCBI release 106
+remove hardcoded links to MGICONFIG/live:
+publishAssocFile
+runGeneModelQC
+runGeneModelCache.sh
+
 TAG: genemodelload-6-0-6-4
 DATE: 11/08/2016
 STAFF: lec 
