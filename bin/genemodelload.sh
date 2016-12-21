@@ -342,6 +342,8 @@ TIMESTAMP=`date '+%Y%m%d.%H%M'`
 echo "" >> ${LOG}
 date >> ${LOG}
 echo "Archive input files" | tee -a ${LOG}
+if [ ${PROVIDER} = "ensembl" ] || [ ${PROVIDER} = "vega" ]
+then
 for FILE in ${GM_FILE_DEFAULT} ${ASSOC_FILE_DEFAULT} ${BIOTYPE_FILE_DEFAULT} ${TRANSCRIPT_FILE_DEFAULT} ${PROTEIN_FILE_DEFAULT} ${LOGDIR}
 do
     ARC_FILE=`basename ${FILE}`.${TIMESTAMP}
@@ -349,6 +351,17 @@ do
     cp ${FILE} ${ARCHIVEDIR}/${ARC_FILE}
     chmod -f 777 ${ARCHIVEDIR}/${ARC_FILE}
 done
+fi
+if [ ${PROVIDER} = "ncbi" ]
+then
+for FILE in ${GM_FILE_DEFAULT} ${ASSOC_FILE_DEFAULT} ${BIOTYPE_FILE_DEFAULT} ${PROTEIN_FILE_DEFAULT} ${LOGDIR}
+do
+    ARC_FILE=`basename ${FILE}`.${TIMESTAMP}
+    rm -rf ${ARCHIVEDIR}/${ARC_FILE}
+    cp ${FILE} ${ARCHIVEDIR}/${ARC_FILE}
+    chmod -f 777 ${ARCHIVEDIR}/${ARC_FILE}
+done
+fi
 
 #
 # Touch the "lastrun" file to note when the load was run.
