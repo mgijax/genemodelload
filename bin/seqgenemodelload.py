@@ -138,7 +138,7 @@ def loadSequenceKeyLookup():
                 FROM ACC_Accession
                 WHERE _MGIType_key = 19
                 AND _LogicalDB_key = %s
-                AND preferred = 1''' % ldbKey, 'auto')
+                AND preferred = 0''' % ldbKey, 'auto')
     for r in results:
         seqKeyByGMIDLookup[r['accId']] = r['seqKey']
 
