@@ -1,7 +1,8 @@
+TAG: genemodelload-tr12488-2
 TAG: genemodelload-tr12488-1
 DATE: 01/30/2017
 STAFF: sc
-CHANGES: TR9835 Support coordinates on contigs
+CHANGES: TR12432 Use Ensembl/VEGA version IDs in MGI
 1) genemodelload.sh - stop removing versions from seqIDs
 2) seqgenemodelload.py - use the secondary accession ID w/o version for object identity because that is what the gtf file has in it.
 
