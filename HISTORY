@@ -1,6 +1,16 @@
-TAG: assemblyseqload-6-0-11-4
-TAG: assemblyseqload-6-0-11-3
-TAG: assemblyseqload-6-0-11-2
+TAG: genemodelload-6-0-13-?
+DATE:
+STAFF: lec
+CHANGES: 
+1) TR12734/GenFevah/Mouse Genome Project
+bin/biotypemapping.py
+2) remove obsolete VOC_Vocab/BioType VEGA
+delete from voc_term where _vocab_key = 105;
+delete from voc_vocab where _vocab_key = 105;
+
+TAG: genemodelload-6-0-11-4
+TAG: genemodelload-6-0-11-3
+TAG: genemodelload-6-0-11-2
 DATE: 02/12/2018
 STAFF: lec 
 CHANGES:
