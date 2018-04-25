@@ -28,7 +28,6 @@ class BiotypeMappingSanityCheckTest(unittest.TestCase):
 		# vocab keys
 		self.ensemblKey = biotypemapping.ENSEMBL_VOCAB_KEY 
 		self.ncbiKey = biotypemapping.NCBI_VOCAB_KEY
-		self.vegaKey = biotypemapping.VEGA_VOCAB_KEY
 		self.mcvVocabKey = biotypemapping.MCV_VOCAB_KEY
 
 		# Mock database objects for test term lookups
@@ -41,7 +40,7 @@ class BiotypeMappingSanityCheckTest(unittest.TestCase):
 		# once for each vocab
 		self.saveMockTerm(self.ensemblKey, self.biotypeTerm, 1)
 		self.saveMockTerm(self.ncbiKey, self.biotypeTerm, 1)
-		self.saveMockTerm(self.vegaKey, self.biotypeTerm, 1)
+		self.saveMockTerm(self.ncbiKey, self.biotypeTerm, 1)
 		# mock markerTypeKey
 		self.saveMockMarkerType(self.markerType, 1)
 		# mock mcvTerm
@@ -112,17 +111,6 @@ class BiotypeMappingSanityCheckTest(unittest.TestCase):
                 errors = biotypemapping.sanityCheck(biotypeVocab, biotypeTerm, mcvTerms, markerType, lineNum)
                 self.assertEquals(expected, errors)
 
-	def test_vega_vocab(self):
-                biotypeVocab = 'VEGA'
-                biotypeTerm = self.biotypeTerm
-                mcvTerms = self.mcvTerm
-                markerType = self.markerType
-                lineNum = 1
-		
-                expected = []
-                errors = biotypemapping.sanityCheck(biotypeVocab, biotypeTerm, mcvTerms, markerType, lineNum)
-                self.assertEquals(expected, errors)
-
 	def test_invalid_vocab(self):
                 biotypeVocab = 'INVALID VOCAB'
                 biotypeTerm = self.biotypeTerm
@@ -153,14 +141,10 @@ class BiotypeMappingSanityCheckTest(unittest.TestCase):
 			should trigger an error
 		"""
                 biotypeVocab = 'Ensembl'
-                biotypeTerm = 'vegaBiotype'
                 mcvTerms = self.mcvTerm
                 markerType = self.markerType
                 lineNum = 1
 
-		# save a special vega only biotype term
-		self.saveMockTerm(self.vegaKey, 'vegaBiotype', 99)
-		
                 expected = [biotypemapping.INVALID_BIOTYPE_TERM_ERROR % (lineNum, biotypeTerm, biotypeVocab) ]
                 errors = biotypemapping.sanityCheck(biotypeVocab, biotypeTerm, mcvTerms, markerType, lineNum)
                 self.assertEquals(expected, errors)
