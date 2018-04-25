@@ -9,17 +9,18 @@
 # Input:
 #
 #	A tab-delimited file in the format:
-#		field 1: Provider (Ensembl, NCBI, VEGA) (_biotypevocab_key)
+#		field 1: Provider (Ensembl, NCBI, VEGA, MGP) (_biotypevocab_key)
 #		field 2: biotype term (_biotypeterm_key)
 #		field 3: pipe-delimited list of feature types (_MCVTerm_key)
 #		field 4: primary biotype (not used)
 #		field 5: marker type (see MRK_Types)
 #	        field 6: use feature type children (yes/no)
 #
-#	3 provider vocabularies exist:
+#	4 provider vocabularies exist:
 #		_vocab_key : 103 (Biotype Ensembl)
 #		_vocab_key : 104 (Biotype NCBI)
-#		_vocab_key : 105 (Biotype VEGA)
+#		_vocab_key : 105 (Biotype VEGA
+#		_vocab_key : 136 (Biotype Mouse Genome Project)
 #
 # Parameters:
 #
@@ -59,6 +60,7 @@ import loadlib
 ENSEMBL_VOCAB_KEY = 103
 NCBI_VOCAB_KEY = 104
 VEGA_VOCAB_KEY = 105
+MGP_VOCAB_KEY = 136
 
 # MCV vocab key
 MCV_VOCAB_KEY = 79
@@ -279,6 +281,8 @@ def sanityCheck(biotypeVocab, biotypeTerm, mcvTerms, markerType, lineNum):
 	biotypeVocabKey = NCBI_VOCAB_KEY
     elif biotypeVocab == 'VEGA':
 	biotypeVocabKey = VEGA_VOCAB_KEY
+    elif biotypeVocab == 'MGP':
+	biotypeVocabKey = MGP_VOCAB_KEY
     else:
         errors.append( INVALID_VOCAB_ERROR % (lineNum, biotypeVocab) )
 

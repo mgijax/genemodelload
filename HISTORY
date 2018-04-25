@@ -1,6 +1,12 @@
-TAG: assemblyseqload-6-0-11-4
-TAG: assemblyseqload-6-0-11-3
-TAG: assemblyseqload-6-0-11-2
+TAG: genemodelload-6-0-12-1
+DATE: 04/25/2018
+STAFF: lec 
+CHANGES:
+1) TR12734/GenFevah/Biotype only changes
+
+TAG: genemodelload-6-0-11-4
+TAG: genemodelload-6-0-11-3
+TAG: genemodelload-6-0-11-2
 DATE: 02/12/2018
 STAFF: lec 
 CHANGES:
