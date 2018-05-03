@@ -9,8 +9,8 @@
 #      models and/or marker associations for a given provider.
 #      As of MGI4.33 (TR9782) This script also runs the loading of
 #      1) SEQ_GeneModel (A script in this product) 
-#      2) VEGA/Ensembl transcript/protein sequence loads and marker 
-#         associations, VEGA/Ensembl transcript/protein sequence
+#      2) Ensembl transcript/protein sequence loads and marker 
+#         associations, Ensembl transcript/protein sequence
 #         associations  (vega_ensemblseqload)
 #
 #  Usage:
@@ -18,7 +18,7 @@
 #      genemodelload.sh  provider_name
 #
 #      where
-#          provider_name = ensembl, ncbi or vega
+#          provider_name = ensembl, ncbi
 #
 #  Env Vars:
 #
@@ -29,7 +29,6 @@
 #      - Provider-specific configuration file (one of these):
 #          - genemodel_ensembl.config
 #          - genemodel_ncbi.config
-#          - genemodel_vega.config
 #
 #  Inputs:
 #
@@ -92,7 +91,7 @@ cd `dirname $0`
 COMMON_CONFIG=genemodel_common.config
 BIOTYPEMAPPING_CONFIG=biotypemapping.config
 
-USAGE="Usage: genemodelload.sh {ensembl | ncbi | vega}"
+USAGE="Usage: genemodelload.sh {ensembl | ncbi }"
 
 RUNTYPE=live
 
@@ -111,10 +110,6 @@ elif [ "`echo $1 | grep -i '^ncbi$'`" != "" ]
 then
     PROVIDER=ncbi
     CONFIG=genemodel_ncbi.config
-elif [ "`echo $1 | grep -i '^vega$'`" != "" ]
-then
-    PROVIDER=vega
-    CONFIG=genemodel_vega.config
 else
     echo ${USAGE}; exit 1
 fi
@@ -217,20 +212,6 @@ sed 's/\.[0-9]*//g' ${file2} | gzip -c > ${file1}
 rm -rf ${file2}
 done
 cd `dirname $0`
-elif [ ${PROVIDER} = "vega" ]
-then
-echo "" >> ${LOG}
-date >> ${LOG}
-echo "Removing version numbers from gz files..." | tee -a ${LOG}
-cd ${INPUTDIR}
-for file1 in ${TRANSCRIPT_FILE_DEFAULT} ${PROTEIN_FILE_DEFAULT} ${NCRNA_FILE_DEFAULT}
-do
-file2=`basename ${file1} .gz`
-gunzip ${file1}
-sed 's/\.[0-9]*//g' ${file2} | sed 's/\\n//g' | sed 's/\\//g' | gzip -c > ${file1}
-rm -rf ${file2}
-done
-cd `dirname $0`
 fi
 
 echo "" >> ${LOG}
@@ -272,7 +253,7 @@ fi
 # 1) call the assemblyseqload to reload genemodels, coordinates and
 #    marker associations
 # 2) call the seqgenemodelload to reload SEQ_GeneModel
-# 3) if VEGA or Ensembl, call the vega_ensemblseqload to reload 
+# 3) if Ensembl, call the vega_ensemblseqload to reload 
 #    a) transcript and protein sequences 
 #    b) marker associations to transcript and protein sequences
 #    d) relationships between transcript and protein sequences
@@ -303,18 +284,13 @@ then
 	echo "Load protein/transcript sequences and marker associations for ${PROVIDER}" | tee -a ${LOG}
         # order is important, transcripts must be loaded first so 
 	# proteins can be associated with them
-        ${VEGA_ENS_WRAPPER} ensembl_transcriptseqload.config true >> ${LOG} 2>&1
-	${VEGA_ENS_WRAPPER} ensembl_proteinseqload.config true >> ${LOG} 2>&1
-    elif [ ${PROVIDER} = "vega" ]
-    then
-	echo "Load protein/transcript sequences and marker associations for ${PROVIDER}" | tee -a ${LOG}
-        ${VEGA_ENS_WRAPPER} vega_transcriptseqload.config true >> ${LOG} 2>&1
-        ${VEGA_ENS_WRAPPER} vega_proteinseqload.config true >> ${LOG} 2>&1
+        ${ENS_WRAPPER} ensembl_transcriptseqload.config true >> ${LOG} 2>&1
+	${ENS_WRAPPER} ensembl_proteinseqload.config true >> ${LOG} 2>&1
     fi
 #
 # If only the gene model associations are to be reloaded:
 # 1) reload gene model marker associations
-# 2) if VEGA or Ensembl, call the vega_ensemblseqload to reload 
+# 2) if Ensembl, call the vega_ensemblseqload to reload 
 #    marker associations to transcript and protein sequences
 #
 else
@@ -324,13 +300,8 @@ else
     if [ ${PROVIDER} = "ensembl" ]
     then
 	echo "Load protein/transcript marker associations for ${PROVIDER}" | tee -a ${LOG}
-        ${VEGA_ENS_WRAPPER} ensembl_transcriptseqload.config false >> ${LOG} 2>&1
-        ${VEGA_ENS_WRAPPER} ensembl_proteinseqload.config false >> ${LOG} 2>&1
-    elif [ ${PROVIDER} = "vega" ]
-    then
-	echo "Load protein/transcript marker associations for ${PROVIDER}" | tee -a ${LOG}
-        ${VEGA_ENS_WRAPPER} vega_transcriptseqload.config false >> ${LOG} 2>&1
-        ${VEGA_ENS_WRAPPER} vega_proteinseqload.config false >> ${LOG} 2>&1
+        ${ENS_WRAPPER} ensembl_transcriptseqload.config false >> ${LOG} 2>&1
+        ${ENS_WRAPPER} ensembl_proteinseqload.config false >> ${LOG} 2>&1
     fi
 fi
 
@@ -342,7 +313,7 @@ TIMESTAMP=`date '+%Y%m%d.%H%M'`
 echo "" >> ${LOG}
 date >> ${LOG}
 echo "Archive input files" | tee -a ${LOG}
-if [ ${PROVIDER} = "ensembl" ] || [ ${PROVIDER} = "vega" ]
+if [ ${PROVIDER} = "ensembl" ]
 then
 for FILE in ${GM_FILE_DEFAULT} ${ASSOC_FILE_DEFAULT} ${BIOTYPE_FILE_DEFAULT} ${TRANSCRIPT_FILE_DEFAULT} ${PROTEIN_FILE_DEFAULT} ${LOGDIR}
 do

@@ -29,12 +29,6 @@
 # ncbi:
 # 	assemblyseqload/ncbi_assemblyseqload.config
 #
-# vega:
-# 	genemodelload/genemodel_vega.config
-# 	assemblyseqload/vega_assemblyseqload.config
-# 	vega_ensemblseqload/vega_proteinseqload.config
-# 	vega_ensemblseqload/vega_transcriptseqload.config
-#
 
 #
 #  If the MGICONFIG environment variable does not have a local override,
@@ -48,7 +42,7 @@ fi
 
 #
 # $1 = GM_PROVIDER config file
-# genemodel_ensembl.config, genemodel_ncbi.config, genemodel_vega.config
+# genemodel_ensembl.config, genemodel_ncbi.config
 #
 . ${MGICONFIG}/master.config.sh
 . ${GENEMODELLOAD}/genemodel_common.config
@@ -59,9 +53,6 @@ then
 elif [ "`echo $1 | grep -i '^ncbi$'`" != "" ]
 then
         CONFIG=${GENEMODELLOAD}/genemodel_ncbi.config
-elif [ "`echo $1 | grep -i '^vega$'`" != "" ]
-then
-        CONFIG=${GENEMODELLOAD}/genemodel_vega.config
 else
         echo ${USAGE}; exit 1
 fi
@@ -130,9 +121,6 @@ echo -e "\nrunning ${GENEMODELLOAD}/bin/genemodelload.sh ", ${GM_PROVIDER}
 if [ "${GM_PROVIDER}" = "Ensembl" ]
 then
   ${GENEMODELLOAD}/bin/genemodelload.sh ensembl
-elif [ "${GM_PROVIDER}" = "VEGA" ]
-then
-  ${GENEMODELLOAD}/bin/genemodelload.sh vega
 elif [ "${GM_PROVIDER}" = "NCBI" ]
 then
   ${GENEMODELLOAD}/bin/genemodelload.sh ncbi

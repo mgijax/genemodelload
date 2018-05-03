@@ -5,7 +5,7 @@
 # Purpose:
 #       creates bcp file for SEQ_GeneModel for a given provider
 #
-Usage='createSeqGeneModelInput.py provider (vega | ensembl | ncbi)'
+Usage='createSeqGeneModelInput.py provider (ensembl | ncbi)'
 #
 # Env Vars:
 #        1. BCP_FILE_PATH
@@ -96,7 +96,7 @@ markerTypeKeyByRawBioTypeLookup = {} # {rawBioType:_MarkerType_key}
 # loaded from db by provider - maps a gmId to its _Sequence_key
 seqKeyByGMIDLookup = {} # {gmId:_Sequence_key, ...}
 
-# Provider we are loading 'ncbi', 'ensembl', or 'vega'
+# Provider we are loading 'ncbi', 'ensembl'
 provider = ''
 
 # Purpose:  Load biotype translation Lookup; Lookup raw biotype
@@ -143,7 +143,7 @@ def loadSequenceKeyLookup():
         seqKeyByGMIDLookup[r['accId']] = r['seqKey']
 
 # Purpose:  Load lookup of raw biotype by gene model ID for
-#	    either VEGA or Ensembl (file format the same)
+#	    either Ensembl (file format the same)
 # Returns: nothing
 # Assumes: inFile is a valid file descriptor
 # Effects: nothing
@@ -158,7 +158,6 @@ def loadVegaEnsemblRawBioTypeByGMIDLookup():
 
 	#
 	# if header, skip it
-	# TR12354/12382/VEGA 65 has no header
 	#
 	if columnList[0].find('#') == 0:
 	    print 'skipping header...%s' % (columnList)
@@ -167,9 +166,6 @@ def loadVegaEnsemblRawBioTypeByGMIDLookup():
         attributeList = string.split(columnList[8], SCOLON)
         gmId = (string.split(attributeList[0], '"'))[1].strip()
 
-        #if provider == 'vega':
-        #    biotype = string.strip(columnList[1])
-        #else:
 	biotype = ''
 	for a in attributeList:
 	    if string.strip(a).startswith('gene_biotype'):
@@ -233,7 +229,7 @@ def init():
         'Could not open file for writing %s\n' % bcpFilePath
         sys.exit(1)
 
-    if provider == 'ensembl' or provider == 'vega':
+    if provider == 'ensembl':
         loadVegaEnsemblRawBioTypeByGMIDLookup()
 
     elif provider == 'ncbi':

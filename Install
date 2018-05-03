@@ -7,7 +7,7 @@
 cd `dirname $0`
 
 COMMON_CONFIG=genemodel_common.config
-PROVIDER_CONFIGS="genemodel_ensembl.config genemodel_ncbi.config genemodel_vega.config biotypemapping.config"
+PROVIDER_CONFIGS="genemodel_ensembl.config genemodel_ncbi.config biotypemapping.config"
 
 #
 #  Function called when the install fails.
@@ -101,7 +101,6 @@ then
 	chmod -f 666 *config
 	chmod -fR 777 ${DATALOADSOUTPUT}/assembly
 	chmod -fR 777 ${DATALOADSOUTPUT}/ensembl
-	chmod -fR 777 ${DATALOADSOUTPUT}/vega
 	chmod -fR 777 ${DATALOADSOUTPUT}/mgi/genemodelload
 	chmod -fR 777 ${DATALOADSOUTPUT}/mgi/vocload/runTimeBiotype
 	chmod -fR 777 ${DATALOADSOUTPUT}/mgi/seqcacheload
@@ -109,17 +108,9 @@ then
 	chmod -fR 777 ${ASSOCLOAD}
 	chmod -fR 777 ${ASSEMBLYSEQLOAD}
 	chmod -fR 777 ${SEQSEQASSOCLOAD}
-	chmod -fR 777 ${VEGA_ENSEMBLSEQLOAD}
 	chmod -f 666 ${ASSEMBLYSEQLOAD}/*.config
-	chmod -f 666 ${VEGA_ENSEMBLSEQLOAD}/*.config
 	chmod -fR 777 ${DATALOADSOUTPUT}/mgi/pgdbutilities/logs
 fi
-
-# All Unit Tests
-#echo "Running all unit tests"
-#cd unittest
-#./all_tests.sh || exit 1;
-#cd -
 
 # copy the scripts for curator use into a standard location which exists in
 # their path statements

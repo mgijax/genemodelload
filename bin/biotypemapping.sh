@@ -76,20 +76,6 @@ fi
 echo ${message}
 
 date
-echo "Running biotype/vocload : vega.txt"
-rm -rf ${BIOTYPEINPUTDIR}/vega.txt
-grep "^VEGA" ${BIOTYPEINPUT_FILE_DEFAULT} > ${INPUTDIR}/vega.txt
-${VOCLOAD}/runSimpleFullLoadNoArchive.sh biotype_vega.config
-STAT=$?
-if [ ${STAT} -ne 0 ]
-then
-	message="${message} ${VOCLOAD}/runSimpleFullLoadNoArchive.sh biotype_vega.config failed"
-else
-	message="${message} ${VOCLOAD}/runSimpleFullLoadNoArchive.sh biotype_vega.config successful" 
-fi
-echo ${message}
-
-date
 echo "Running biotype/vocload : mgp.txt"
 rm -rf ${INPUTDIR}/mgp.txt
 grep "^MGP" ${BIOTYPEINPUT_FILE_DEFAULT} > ${INPUTDIR}/mgp.txt

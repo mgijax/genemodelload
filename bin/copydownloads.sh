@@ -81,24 +81,6 @@ ls -l /data/downloads/ensembl_mus_cdna/${TRANSCRIPT_FILE_NAME}
 ls -l /data/downloads/ensembl_mus_protein/${PROTEIN_FILE_NAME}
 ls -l /data/downloads/ensembl_mus_ncrna/${NCRNA_FILE_NAME}
 
-elif [ "${GM_PROVIDER}" = "VEGA" ]
-then
-#
-# vega
-#
-rm -rf /data/downloads/vega_mus_gtf/${BIOTYPE_FILE_NAME}
-rm -rf /data/downloads/vega_mus_cdna/${TRANSCRIPT_FILE_NAME}
-rm -rf /data/downloads/vega_mus_protein/${PROTEIN_FILE_NAME}
-rm -rf /data/downloads/vega_mus_ncrna/${NCRNA_FILE_NAME}
-scp bhmgiapp01:/data/downloads/vega_mus_gtf/${BIOTYPE_FILE_NAME} /data/downloads/vega_mus_gtf
-scp bhmgiapp01:/data/downloads/vega_mus_cdna/${TRANSCRIPT_FILE_NAME} /data/downloads/vega_mus_cdna
-scp bhmgiapp01:/data/downloads/vega_mus_protein/${PROTEIN_FILE_NAME} /data/downloads/vega_mus_protein
-scp bhmgiapp01:/data/downloads/vega_mus_ncrna/${NCRNA_FILE_NAME} /data/downloads/vega_mus_ncrna
-ls -l /data/downloads/vega_mus_gtf/${BIOTYPE_FILE_NAME}
-ls -l /data/downloads/vega_mus_cdna/${TRANSCRIPT_FILE_NAME}
-ls -l /data/downloads/vega_mus_protein/${PROTEIN_FILE_NAME}
-ls -l /data/downloads/vega_mus_ncrna/${NCRNA_FILE_NAME}
-
 elif [ "${GM_PROVIDER}" = "NCBI" ]
 then
 #

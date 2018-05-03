@@ -8,6 +8,12 @@ bin/biotypemapping.py
 delete from voc_term where _vocab_key = 105;
 delete from voc_vocab where _vocab_key = 105;
 
+TAG: genemodelload-6-0-12-1
+DATE: 04/25/2018
+STAFF: lec 
+CHANGES:
+1) TR12734/GenFevah/Biotype only changes
+
 TAG: genemodelload-6-0-11-4
 TAG: genemodelload-6-0-11-3
 TAG: genemodelload-6-0-11-2
