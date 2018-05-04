@@ -7,6 +7,7 @@ bin/biotypemapping.py
 2) remove obsolete VOC_Vocab/BioType VEGA
 delete from voc_term where _vocab_key = 105;
 delete from voc_vocab where _vocab_key = 105;
+3) remove VEGA
 
 TAG: genemodelload-6-0-12-1
 DATE: 04/25/2018
