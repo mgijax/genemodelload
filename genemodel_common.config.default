@@ -82,8 +82,8 @@ export ASSOCLOAD_WRAPPER ASSEMBLY_WRAPPER
 
 # Full path to Ensembl seqload scripts.
 #
-ENS_WRAPPER=${VEGA_ENSEMBLSEQLOAD}/bin/ensemblseqload.sh
-ENS_ASSOC_WRAPPER=${VEGA_ENSEMBLSEQLOAD}/bin/run_assocload.sh
+ENS_WRAPPER=${ENSEMBLSEQLOAD}/bin/ensemblseqload.sh
+ENS_ASSOC_WRAPPER=${ENSEMBLSEQLOAD}/bin/run_assocload.sh
 
 export ENS_WRAPPER ENS_ASSOC_WRAPPER
 
