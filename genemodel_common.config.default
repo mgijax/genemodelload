@@ -80,12 +80,12 @@ ASSEMBLY_WRAPPER=${ASSEMBLYSEQLOAD}/bin/assemblyseqload.sh
 
 export ASSOCLOAD_WRAPPER ASSEMBLY_WRAPPER
 
-# Full path to Vega/Ensembl seqload scripts.
+# Full path to Ensembl seqload scripts.
 #
-VEGA_ENS_WRAPPER=${VEGA_ENSEMBLSEQLOAD}/bin/vega_ensemblseqload.sh
-VEGA_ENS_ASSOC_WRAPPER=${VEGA_ENSEMBLSEQLOAD}/bin/run_assocload.sh
+ENS_WRAPPER=${VEGA_ENSEMBLSEQLOAD}/bin/vega_ensemblseqload.sh
+ENS_ASSOC_WRAPPER=${VEGA_ENSEMBLSEQLOAD}/bin/run_assocload.sh
 
-export VEGA_ENS_WRAPPER VEGA_ENS_ASSOC_WRAPPER
+export ENS_WRAPPER ENS_ASSOC_WRAPPER
 
 # test database dump file
 #

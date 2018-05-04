@@ -149,7 +149,7 @@ def loadSequenceKeyLookup():
 # Effects: nothing
 # Throws: nothing
 
-def loadVegaEnsemblRawBioTypeByGMIDLookup():
+def loadEnsemblRawBioTypeByGMIDLookup():
     global rawBioTypeByGMIDLookup
 
     for line in inFile.readlines():
@@ -230,7 +230,7 @@ def init():
         sys.exit(1)
 
     if provider == 'ensembl':
-        loadVegaEnsemblRawBioTypeByGMIDLookup()
+        loadEnsemblRawBioTypeByGMIDLookup()
 
     elif provider == 'ncbi':
         loadNCBIRawBioTypeByGMIDLookup()
