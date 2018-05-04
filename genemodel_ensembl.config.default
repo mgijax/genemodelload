@@ -41,7 +41,7 @@ BIOTYPE_FILE_CURRENT=${BIOTYPEDIR}/${BIOTYPE_FILE_NAME}
 export BIOTYPE_FILE_CURRENT 
 
 # Full path to the default transcript file 
-# Used by vega_ensemblseqload
+# Used by ensemblseqload
 #
 TRANSCRIPT_FILE_DEFAULT=${INPUTDIR}/ensembl_transcripts.gz
 export TRANSCRIPT_FILE_DEFAULT
@@ -51,7 +51,7 @@ TRANSCRIPT_FILE_CURRENT=${TRANSCRIPTDIR}/${TRANSCRIPT_FILE_NAME}
 export TRANSCRIPT_FILE_CURRENT
 
 # Full path to the default non coding RNA transcript file 
-# Used by vega_ensemblseqload
+# Used by ensemblseqload
 #
 NCRNA_FILE_DEFAULT=${INPUTDIR}/ensembl_ncrna.gz
 export NCRNA_FILE_DEFAULT
@@ -61,7 +61,7 @@ NCRNA_FILE_CURRENT=${TRANSCRIPTDIR}/${NCRNA_FILE_NAME}
 export NCRNA_FILE_CURRENT
 
 # Full path to the default transcript file 
-# Used by vega_ensemblseqload
+# Used by ensemblseqload
 #
 PROTEIN_FILE_DEFAULT=${INPUTDIR}/ensembl_proteins.gz
 export PROTEIN_FILE_DEFAULT

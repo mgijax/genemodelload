@@ -20,9 +20,6 @@ then
 elif [ "`echo $1 | grep -i '^ncbi$'`" != "" ]
 then
         CONFIG=${GENEMODELLOAD}/genemodel_ncbi.config
-elif [ "`echo $1 | grep -i '^vega$'`" != "" ]
-then
-        CONFIG=${GENEMODELLOAD}/genemodel_vega.config
 else
         echo ${USAGE}; exit 1
 fi

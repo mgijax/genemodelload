@@ -11,7 +11,7 @@
 #      1) SEQ_GeneModel (A script in this product) 
 #      2) Ensembl transcript/protein sequence loads and marker 
 #         associations, Ensembl transcript/protein sequence
-#         associations  (vega_ensemblseqload)
+#         associations  (ensemblseqload)
 #
 #  Usage:
 #
@@ -253,7 +253,7 @@ fi
 # 1) call the assemblyseqload to reload genemodels, coordinates and
 #    marker associations
 # 2) call the seqgenemodelload to reload SEQ_GeneModel
-# 3) if Ensembl, call the vega_ensemblseqload to reload 
+# 3) if Ensembl, call the ensemblseqload to reload 
 #    a) transcript and protein sequences 
 #    b) marker associations to transcript and protein sequences
 #    d) relationships between transcript and protein sequences
@@ -290,7 +290,7 @@ then
 #
 # If only the gene model associations are to be reloaded:
 # 1) reload gene model marker associations
-# 2) if Ensembl, call the vega_ensemblseqload to reload 
+# 2) if Ensembl, call the ensemblseqload to reload 
 #    marker associations to transcript and protein sequences
 #
 else

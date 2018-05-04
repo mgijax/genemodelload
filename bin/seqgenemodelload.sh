@@ -9,7 +9,7 @@
 #
 #  Usage:
 #
-#      seqgenemodelload.sh <ensembl | ncbi | vega>
+#      seqgenemodelload.sh <ensembl | ncbi
 #
 #
 #  Env Vars:
@@ -63,7 +63,7 @@ cd `dirname $0`
 
 COMMON_CONFIG=genemodel_common.config
 
-USAGE="Usage: test.sh <ensembl | ncbi | vega>"
+USAGE="Usage: test.sh <ensembl | ncbi>"
 
 #
 # Make sure a valid provider name was passed as an argument and determine
@@ -80,10 +80,6 @@ elif [ "`echo $1 | grep -i '^ncbi$'`" != "" ]
 then
     PROVIDER=ncbi
     CONFIG=genemodel_ncbi.config
-elif [ "`echo $1 | grep -i '^vega$'`" != "" ]
-then
-    PROVIDER=vega
-    CONFIG=genemodel_vega.config
 else
     echo ${USAGE}; exit 1
 fi

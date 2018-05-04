@@ -18,13 +18,13 @@
 # PROTEIN_FILE_NAME		genemodelload
 # NCRNA_FILE_NAME		genemodelload
 # RELOAD_GENEMODELS=true 	genemodelload
-# SEQ_RELEASE_DATE		assemblyseqload, vega_ensemblseqload
+# SEQ_RELEASE_DATE		assemblyseqload, ensemblseqload
 #
 # ensembl:
 # 	genemodelload/genemodel_ensembl.config
 # 	assemblyseqload/ensembl_assemblyseqload.config
-# 	vega_ensemblseqload/ensembl_proteinseqload.config
-# 	vega_ensemblseqload/ensembl_transcriptseqload.config
+# 	ensemblseqload/ensembl_proteinseqload.config
+# 	ensemblseqload/ensembl_transcriptseqload.config
 #
 # ncbi:
 # 	assemblyseqload/ncbi_assemblyseqload.config

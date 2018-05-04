@@ -13,7 +13,7 @@
 #      genemodelQC.sh  provider_name  assoc_file [ -gm gm_file ] [ "live" ]
 #
 #      where
-#          provider_name = ensembl, ncbi or vega
+#          provider_name = ensembl, ncbi
 #          assoc_file = path to the association file
 #          gm_file = path to the gene model file (optional)
 #          live = option to let the script know that this is a "live" run
@@ -29,7 +29,6 @@
 #      - Provider-specific configuration file (one of these):
 #          - genemodel_ensembl.config
 #          - genemodel_ncbi.config
-#          - genemodel_vega.config
 #
 #  Inputs:
 #
@@ -119,9 +118,6 @@ else
     elif [ "`echo $1 | grep -i '^ncbi$'`" != "" ]
     then
         CONFIG=genemodel_ncbi.config
-    elif [ "`echo $1 | grep -i '^vega$'`" != "" ]
-    then
-        CONFIG=genemodel_vega.config
     else
         echo ${USAGE}; exit 1
     fi
