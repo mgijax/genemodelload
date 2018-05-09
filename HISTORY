@@ -9,12 +9,12 @@ delete from voc_term where _vocab_key = 105;
 delete from voc_vocab where _vocab_key = 105;
 3) remove VEGA
 
+TAG: genemodelload-6-0-12-3
 TAG: genemodelload-6-0-12-2
 DATE: 05/09/2018
 STAFF: lec 
 CHANGES:
 1) TR12859/Ensembl 92
-
 
 TAG: genemodelload-6-0-12-1
 DATE: 04/25/2018
