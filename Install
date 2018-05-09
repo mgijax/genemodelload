@@ -98,6 +98,7 @@ chmod -fR 777 ${INPUTDIR}
 if [ `uname -n` = "bhmgidevapp01" -a "${MGI_LIVE}" = "/usr/local/mgi/test" ]
 then
 	echo "Setting permissions...${DATALOADSOUTPUT}"
+	chgrp mgi *config
 	chmod -f 666 *config
 	chmod -fR 777 ${DATALOADSOUTPUT}/assembly
 	chmod -fR 777 ${DATALOADSOUTPUT}/ensembl
