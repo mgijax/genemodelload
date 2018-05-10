@@ -319,7 +319,7 @@ for FILE in ${GM_FILE_DEFAULT} ${ASSOC_FILE_DEFAULT} ${BIOTYPE_FILE_DEFAULT} ${T
 do
     ARC_FILE=`basename ${FILE}`.${TIMESTAMP}
     rm -rf ${ARCHIVEDIR}/${ARC_FILE}
-    cp ${FILE} ${ARCHIVEDIR}/${ARC_FILE}
+    cp -r ${FILE} ${ARCHIVEDIR}/${ARC_FILE}
     chmod -f 777 ${ARCHIVEDIR}/${ARC_FILE}
 done
 fi
@@ -329,7 +329,7 @@ for FILE in ${GM_FILE_DEFAULT} ${ASSOC_FILE_DEFAULT} ${BIOTYPE_FILE_DEFAULT} ${P
 do
     ARC_FILE=`basename ${FILE}`.${TIMESTAMP}
     rm -rf ${ARCHIVEDIR}/${ARC_FILE}
-    cp ${FILE} ${ARCHIVEDIR}/${ARC_FILE}
+    cp -r ${FILE} ${ARCHIVEDIR}/${ARC_FILE}
     chmod -f 777 ${ARCHIVEDIR}/${ARC_FILE}
 done
 fi
