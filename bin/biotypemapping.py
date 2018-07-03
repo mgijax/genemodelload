@@ -71,6 +71,7 @@ INVALID_VOCAB_ERROR = "Invalid BioType Vocab (row %d): %s"
 INVALID_BIOTYPE_TERM_ERROR = "Invalid BioType Term (row %d): %s, for vocab %s"
 INVALID_MARKER_TYPE_ERROR = "Invalid Marker Type Term (row %d): %s"
 INVALID_MCV_TERM_ERROR = "Invalid MCV/Feature Type Term (row %d): %s"
+INVALID_PRIMARY_FEATURE_ERROR = "Invalid Primary Feature Type Term (row %d): %s"
 
 ### Globals ###
 
@@ -247,7 +248,7 @@ def verifyMode():
     elif mode not in ['load']:
 	exit(1, 'Invalid Processing Mode:  %s\n' % (mode))
 
-def sanityCheck(biotypeVocab, biotypeTerm, mcvTerms, markerType, lineNum):
+def sanityCheck(biotypeVocab, biotypeTerm, mcvTerms, primaryMCVTerm, markerType, lineNum):
     '''
     #
     # requires:
@@ -264,6 +265,7 @@ def sanityCheck(biotypeVocab, biotypeTerm, mcvTerms, markerType, lineNum):
     global biotypeTermKey
     global mcvTermKeys
     global markerTypeKey
+    global primaryMCVTermKey
 
     errors = []
     mcvTermKeys = []
@@ -304,6 +306,11 @@ def sanityCheck(biotypeVocab, biotypeTerm, mcvTerms, markerType, lineNum):
     	else:
             mcvTermKeys.append(t)
 
+    # lookup the primary feature type
+    primaryMCVTermKey = loadlib.verifyTerm('', MCV_VOCAB_KEY, primaryMCVTerm, lineNum, errorFile)
+    if primaryMCVTermKey == 0:
+        errors.append( INVALID_MARKER_TYPE_ERROR % (lineNum, primaryMCVTerm) )
+
     return errors
 
 def processFile():
@@ -326,6 +333,7 @@ def processFile():
     global mcvTerms, mcvTermKeys
     global markerType, markerTypeKey
     global useMCVchildren
+    global primaryMCVTerm, primaryMCVTermKey
 
     # For each line in the input file
 
@@ -342,6 +350,7 @@ def processFile():
 	    biotypeVocab = tokens[0]
 	    biotypeTerm = tokens[1]
 	    mcvTerms = tokens[2]
+	    primaryMCVTerm = tokens[3]
 	    markerType = tokens[4]
 	    useMCVchildren = tokens[5]
 	except:
@@ -358,7 +367,7 @@ def processFile():
 	# sanity checks
 	#
 
-	errors = sanityCheck(biotypeVocab, biotypeTerm, mcvTerms, markerType, lineNum)
+	errors = sanityCheck(biotypeVocab, biotypeTerm, mcvTerms, primaryMCVTerm, markerType, lineNum)
         if errors :
 	    errorFile.write('\n'.join(errors) + '\n')
 	    errorFile.write(str(tokens) + '\n\n')
@@ -375,8 +384,8 @@ def processFile():
 		useMCVchildren = '0'
 
 	for mcvTermKey in mcvTermKeys:
-		outputFile.write('%d|%d|%d|%d|%d|%s|%s|%s|%s|%s\n' \
-	    	% (biotypeKey, biotypeVocabKey, biotypeTermKey, mcvTermKey, markerTypeKey, useMCVchildren,
+		outputFile.write('%d|%d|%d|%d|%d|%s|%s|%s|%s|%s|%s\n' \
+	    	% (biotypeKey, biotypeVocabKey, biotypeTermKey, mcvTermKey, primaryMCVTermKey, markerTypeKey, useMCVchildren,
 			createdByKey, createdByKey, cdate, cdate))
 		biotypeKey = biotypeKey + 1
 
