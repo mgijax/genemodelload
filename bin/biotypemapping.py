@@ -1,5 +1,3 @@
-#!/usr/local/bin/python
-
 '''
 #
 # Purpose:
@@ -151,7 +149,7 @@ def initConfig():
 def exit(status, message = None):
     '''
     # requires: status, the numeric exit status (integer)
-    #           message (string)
+    #           message (str.
     #
     # effects:
     # Print message to stderr and exits
@@ -161,18 +159,18 @@ def exit(status, message = None):
     '''
 
     if message is not None:
-	sys.stderr.write('\n' + str(message) + '\n')
+        sys.stderr.write('\n' + str(message) + '\n')
 
     try:
-	inputFile.close()
-	diagFile.flush()
-	errorFile.flush()
-	diagFile.write('\n\nEnd Date/Time: %s\n' % (mgi_utils.date()))
+        inputFile.close()
+        diagFile.flush()
+        errorFile.flush()
+        diagFile.write('\n\nEnd Date/Time: %s\n' % (mgi_utils.date()))
         errorFile.write('\nEnd file\n')
-	diagFile.close()
-	errorFile.close()
+        diagFile.close()
+        errorFile.close()
     except:
-	pass
+        pass
 
     sys.exit(status)
  
@@ -193,25 +191,25 @@ def init():
     global inputFileName, errorFileName, diagFileName, outputFileName
 
     try:
-	inputFile = open(inputFileName, 'r')
+        inputFile = open(inputFileName, 'r')
     except:
-	exit(1, 'Could not open file %s\n' % inputFileName)
-	    
+        exit(1, 'Could not open file %s\n' % inputFileName)
+            
     try:
-	diagFile = open(diagFileName, 'w+')
+        diagFile = open(diagFileName, 'w+')
     except:
-	exit(1, 'Could not open file %s\n' % diagFileName)
-	    
+        exit(1, 'Could not open file %s\n' % diagFileName)
+            
     try:
-	errorFile = open(errorFileName, 'w')
+        errorFile = open(errorFileName, 'w')
     except:
-	exit(1, 'Could not open file %s\n' % errorFileName)
-	    
+        exit(1, 'Could not open file %s\n' % errorFileName)
+            
     try:
-	outputFile = open(outputFileName, 'w')
+        outputFile = open(outputFileName, 'w')
     except:
-	exit(1, 'Could not open file %s\n' % outputFileName)
-	    
+        exit(1, 'Could not open file %s\n' % outputFileName)
+            
     # Log all SQL 
     db.set_sqlLogFunction(db.sqlLogAll)
 
@@ -243,10 +241,10 @@ def verifyMode():
     global DEBUG, bcpon
 
     if mode == 'preview':
-	DEBUG = 1
-	bcpon = 0
+        DEBUG = 1
+        bcpon = 0
     elif mode not in ['load']:
-	exit(1, 'Invalid Processing Mode:  %s\n' % (mode))
+        exit(1, 'Invalid Processing Mode:  %s\n' % (mode))
 
 def sanityCheck(biotypeVocab, biotypeTerm, mcvTerms, primaryMCVTerm, markerType, lineNum):
     '''
@@ -276,19 +274,19 @@ def sanityCheck(biotypeVocab, biotypeTerm, mcvTerms, primaryMCVTerm, markerType,
     biotypeVocabKey = 0
 
     if biotypeVocab == 'Ensembl':
-	biotypeVocabKey = ENSEMBL_VOCAB_KEY
+        biotypeVocabKey = ENSEMBL_VOCAB_KEY
     elif biotypeVocab == 'NCBI':
-	biotypeVocabKey = NCBI_VOCAB_KEY
+        biotypeVocabKey = NCBI_VOCAB_KEY
     elif biotypeVocab == 'MGP':
-	biotypeVocabKey = MGP_VOCAB_KEY
+        biotypeVocabKey = MGP_VOCAB_KEY
     else:
         errors.append( INVALID_VOCAB_ERROR % (lineNum, biotypeVocab) )
 
     # Lookup the biotype _term_key for this vocab/term
     if biotypeVocabKey:
-	biotypeTermKey = loadlib.verifyTerm('', biotypeVocabKey, biotypeTerm, lineNum, errorFile)
-	if biotypeTermKey == 0:
-	    errors.append( INVALID_BIOTYPE_TERM_ERROR % (lineNum, biotypeTerm, biotypeVocab) )
+        biotypeTermKey = loadlib.verifyTerm('', biotypeVocabKey, biotypeTerm, lineNum, errorFile)
+        if biotypeTermKey == 0:
+            errors.append( INVALID_BIOTYPE_TERM_ERROR % (lineNum, biotypeTerm, biotypeVocab) )
 
     # lookup the _marker_type_key
     markerTypeKey = loadlib.verifyMarkerType(markerType, lineNum, errorFile)
@@ -300,10 +298,10 @@ def sanityCheck(biotypeVocab, biotypeTerm, mcvTerms, primaryMCVTerm, markerType,
     #
     tokens = mcvTerms.split('|')
     for r in tokens:
-	t = loadlib.verifyTerm('', MCV_VOCAB_KEY, r, lineNum, errorFile)
-	if t == 0:
+        t = loadlib.verifyTerm('', MCV_VOCAB_KEY, r, lineNum, errorFile)
+        if t == 0:
             errors.append( INVALID_MCV_TERM_ERROR % (lineNum, r) )
-    	else:
+        else:
             mcvTermKeys.append(t)
 
     # lookup the primary feature type
@@ -341,53 +339,53 @@ def processFile():
 
     for line in inputFile.readlines():
 
-	lineNum = lineNum + 1
+        lineNum = lineNum + 1
 
-	# Split the line into tokens
-	tokens = line[:-1].split('\t')
+        # Split the line into tokens
+        tokens = line[:-1].split('\t')
 
-	try:
-	    biotypeVocab = tokens[0]
-	    biotypeTerm = tokens[1]
-	    mcvTerms = tokens[2]
-	    primaryMCVTerm = tokens[3]
-	    markerType = tokens[4]
-	    useMCVchildren = tokens[5]
-	except:
-	    errorFile.write('Invalid Line (missing column(s)) (row %d): %s\n' % (lineNum, line))
-	    continue
+        try:
+            biotypeVocab = tokens[0]
+            biotypeTerm = tokens[1]
+            mcvTerms = tokens[2]
+            primaryMCVTerm = tokens[3]
+            markerType = tokens[4]
+            useMCVchildren = tokens[5]
+        except:
+            errorFile.write('Invalid Line (missing column(s)) (row %d): %s\n' % (lineNum, line))
+            continue
 
-	#
-	# skip header
-	#
-	if biotypeVocab == "Source":
-		continue
+        #
+        # skip header
+        #
+        if biotypeVocab == "Source":
+                continue
 
-	#
-	# sanity checks
-	#
+        #
+        # sanity checks
+        #
 
-	errors = sanityCheck(biotypeVocab, biotypeTerm, mcvTerms, primaryMCVTerm, markerType, lineNum)
+        errors = sanityCheck(biotypeVocab, biotypeTerm, mcvTerms, primaryMCVTerm, markerType, lineNum)
         if errors :
-	    errorFile.write('\n'.join(errors) + '\n')
-	    errorFile.write(str(tokens) + '\n\n')
-	    bcpon = 0
-	    continue
+            errorFile.write('\n'.join(errors) + '\n')
+            errorFile.write(str(tokens) + '\n\n')
+            bcpon = 0
+            continue
 
-	#
-	# sanity checks passed...
-	#
+        #
+        # sanity checks passed...
+        #
 
-	if useMCVchildren == 'yes':
-		useMCVchildren = '1'
-	else:
-		useMCVchildren = '0'
+        if useMCVchildren == 'yes':
+                useMCVchildren = '1'
+        else:
+                useMCVchildren = '0'
 
-	for mcvTermKey in mcvTermKeys:
-		outputFile.write('%d|%d|%d|%d|%d|%s|%s|%s|%s|%s|%s\n' \
-	    	% (biotypeKey, biotypeVocabKey, biotypeTermKey, mcvTermKey, primaryMCVTermKey, markerTypeKey, useMCVchildren,
-			createdByKey, createdByKey, cdate, cdate))
-		biotypeKey = biotypeKey + 1
+        for mcvTermKey in mcvTermKeys:
+                outputFile.write('%d|%d|%d|%d|%d|%s|%s|%s|%s|%s|%s\n' \
+                % (biotypeKey, biotypeVocabKey, biotypeTermKey, mcvTermKey, primaryMCVTermKey, markerTypeKey, useMCVchildren,
+                        createdByKey, createdByKey, cdate, cdate))
+                biotypeKey = biotypeKey + 1
 
     # end of "for line in inputFile.readlines():"
 
@@ -417,30 +415,29 @@ def main():
     #
     '''
 
-    print 'initConfig()'
+    print('initConfig()')
     initConfig()
 
-    print 'verifyMode()'
+    print('verifyMode()')
     verifyMode()
 
-    print 'init()'
+    print('init()')
     init()
 
-    print 'processFile()'
+    print('processFile()')
     processFile()
 
     if not DEBUG and bcpon:
-	print 'sanity check PASSED : loading data'
-	bcpFiles()
-	exit(0)
+        print('sanity check PASSED : loading data')
+        bcpFiles()
+        exit(0)
     else:
-	exit(1)
+        exit(1)
 
 if __name__ == '__main__':
 
         #db.setTrace()
-	db.sql('start transaction', None)
+        db.sql('start transaction', None)
 
-	# do main processing
-	main()
-
+        # do main processing
+        main()

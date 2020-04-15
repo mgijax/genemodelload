@@ -1,4 +1,3 @@
-#!/usr/local/bin/python
 #
 #  genemodelQC.py
 ###########################################################################
@@ -114,7 +113,6 @@
 
 import sys
 import os
-import string
 import re
 import mgi_utils
 import db
@@ -168,7 +166,7 @@ def checkArgs ():
     global assocFile, gmFile
 
     if len(sys.argv) != 3:
-        print USAGE
+        print(USAGE)
         sys.exit(1)
 
     assocFile = sys.argv[1]
@@ -193,12 +191,12 @@ def openFiles ():
     try:
         fpGM = open(gmFile, 'r')
     except:
-        print 'Cannot open input file: ' + gmFile
+        print('Cannot open input file: ' + gmFile)
         sys.exit(1)
     try:
         fpAssoc = open(assocFile, 'r')
     except:
-        print 'Cannot open input file: ' + assocFile
+        print('Cannot open input file: ' + assocFile)
         sys.exit(1)
 
     #
@@ -207,12 +205,12 @@ def openFiles ():
     try:
         fpGMBCP = open(gmBCPFile, 'w')
     except:
-        print 'Cannot open output file: ' + gmBCPFile
+        print('Cannot open output file: ' + gmBCPFile)
         sys.exit(1)
     try:
         fpAssocBCP = open(assocBCPFile, 'w')
     except:
-        print 'Cannot open output file: ' + assocBCPFile
+        print('Cannot open output file: ' + assocBCPFile)
         sys.exit(1)
 
     #
@@ -221,27 +219,27 @@ def openFiles ():
     try:
         fpInvMrkRpt = open(invMrkRptFile, 'a')
     except:
-        print 'Cannot open report file: ' + invMrkRptFile
+        print('Cannot open report file: ' + invMrkRptFile)
         sys.exit(1)
     try:
         fpSecMrkRpt = open(secMrkRptFile, 'a')
     except:
-        print 'Cannot open report file: ' + secMrkRptFile
+        print('Cannot open report file: ' + secMrkRptFile)
         sys.exit(1)
     try:
         fpMissGMRpt = open(missGMRptFile, 'a')
     except:
-        print 'Cannot open report file: ' + missGMRptFile
+        print('Cannot open report file: ' + missGMRptFile)
         sys.exit(1)
     try:
         fpChrDiscrepRpt = open(chrDiscrepRptFile, 'a')
     except:
-        print 'Cannot open report file: ' + chrDiscrepRptFile
+        print('Cannot open report file: ' + chrDiscrepRptFile)
         sys.exit(1)
     try:
         fpRptNamesRpt = open(rptNamesFile, 'a')
     except:
-        print 'Cannot open report file: ' + invMrkRptFile
+        print('Cannot open report file: ' + invMrkRptFile)
         sys.exit(1)
     return
 
@@ -277,7 +275,7 @@ def closeFiles ():
 def loadTempTables ():
     global assoc
 
-    print 'Create a bcp file from the gene model input file'
+    print('Create a bcp file from the gene model input file')
     sys.stdout.flush()
 
     #
@@ -296,19 +294,19 @@ def loadTempTables ():
         description = tokens[5]
 
         if len(re.findall('[^0-9]',startCoordinate)) > 0:
-            print 'Invalid start coordinate (line ' + str(count) + ')'
+            print('Invalid start coordinate (line ' + str(count) + ')')
             fpGMBCP.close()
             closeFiles()
             sys.exit(1)
 
         if len(re.findall('[^0-9]',endCoordinate)) > 0:
-            print 'Invalid end coordinate (line ' + str(count) + ')'
+            print('Invalid end coordinate (line ' + str(count) + ')')
             fpGMBCP.close()
             closeFiles()
             sys.exit(1)
 
         if strand != '-' and strand != '+':
-            print 'Invalid strand (line ' + str(count) + ')'
+            print('Invalid strand (line ' + str(count) + ')')
             fpGMBCP.close()
             closeFiles()
             sys.exit(1)
@@ -325,7 +323,7 @@ def loadTempTables ():
     #
     fpGMBCP.close()
 
-    print 'Create a bcp file from the association input file'
+    print('Create a bcp file from the association input file')
     sys.stdout.flush()
 
     #
@@ -340,7 +338,7 @@ def loadTempTables ():
         gmID = tokens[1]
 
         if re.match('MGI:[0-9]+',mgiID) == None:
-            print 'Invalid MGI ID (line ' + str(count) + ')'
+            print('Invalid MGI ID (line ' + str(count) + ')')
             fpAssocBCP.close()
             closeFiles()
             sys.exit(1)
@@ -352,7 +350,7 @@ def loadTempTables ():
         # input file. The value for each dictionary entry is a list of the
         # gene model IDs that are associated with the MGI ID key.
         #
-        if assoc.has_key(mgiID):
+        if mgiID in assoc:
             list = assoc[mgiID]
             list.append(gmID)
             assoc[mgiID] = list
@@ -371,7 +369,7 @@ def loadTempTables ():
     #
     # Load the temp tables with the input data.
     #
-    print 'Load the gene model data into the temp table: ' + gmTempTable
+    print('Load the gene model data into the temp table: ' + gmTempTable)
     sys.stdout.flush()
 
     bcpCmd = '%s %s %s %s "/" %s "\\t" "\\n" mgd' % \
@@ -379,11 +377,11 @@ def loadTempTables ():
         gmBCPFile)
 
     rc = os.system(bcpCmd)
-    if rc <> 0:
+    if rc != 0:
         closeFiles()
         sys.exit(1)
 
-    print 'Load the association data into the temp table: ' + assocTempTable
+    print('Load the association data into the temp table: ' + assocTempTable)
     sys.stdout.flush()
 
     bcpCmd = '%s %s %s %s "/" %s "\\t" "\\n" mgd' % \
@@ -391,7 +389,7 @@ def loadTempTables ():
         assocBCPFile)
 
     rc = os.system(bcpCmd)
-    if rc <> 0:
+    if rc != 0:
         closeFiles()
         sys.exit(1)
 
@@ -408,10 +406,10 @@ def loadTempTables ():
 def createInvMarkerReport ():
     global assoc, errorCount, errorReportNames
 
-    print 'Create the invalid marker report'
-    fpInvMrkRpt.write(string.center('Invalid Marker Report',110) + NL)
-    fpInvMrkRpt.write(string.center(provider,110) + NL)
-    fpInvMrkRpt.write(string.center('(' + timestamp + ')',110) + 2*NL)
+    print('Create the invalid marker report')
+    fpInvMrkRpt.write(str.center('Invalid Marker Report',110) + NL)
+    fpInvMrkRpt.write(str.center(provider,110) + NL)
+    fpInvMrkRpt.write(str.center('(' + timestamp + ')',110) + 2*NL)
     fpInvMrkRpt.write('%-12s  %-20s  %-20s  %-20s  %-30s%s' %
                      ('MGI ID','Gene Model ID','Associated Object',
                       'Marker Status','Reason',NL))
@@ -502,7 +500,7 @@ def createInvMarkerReport ():
         # association doesn't get written to the load-ready association file.
         #
         if liveRun == "1":
-            if assoc.has_key(mgiID):
+            if mgiID in assoc:
                 list = assoc[mgiID]
                 if list.count(gmID) > 0:
                     list.remove(gmID)
@@ -512,8 +510,8 @@ def createInvMarkerReport ():
 
     errorCount += numErrors
     if numErrors > 0:
-	if not invMrkRptFile in errorReportNames:
-	    errorReportNames.append(invMrkRptFile + NL)
+        if not invMrkRptFile in errorReportNames:
+            errorReportNames.append(invMrkRptFile + NL)
     return
 
 
@@ -527,10 +525,10 @@ def createInvMarkerReport ():
 def createSecMarkerReport ():
     global assoc, errorCount, errorReportNames
 
-    print 'Create the secondary marker report'
-    fpSecMrkRpt.write(string.center('Secondary Marker Report',108) + NL)
-    fpSecMrkRpt.write(string.center(provider,108) + NL)
-    fpSecMrkRpt.write(string.center('(' + timestamp + ')',108) + 2*NL)
+    print('Create the secondary marker report')
+    fpSecMrkRpt.write(str.center('Secondary Marker Report',108) + NL)
+    fpSecMrkRpt.write(str.center(provider,108) + NL)
+    fpSecMrkRpt.write(str.center('(' + timestamp + ')',108) + 2*NL)
     fpSecMrkRpt.write('%-16s  %-20s  %-50s  %-16s%s' %
                      ('Secondary MGI ID','Gene Model ID',
                       'Marker Symbol','Primary MGI ID',NL))
@@ -559,7 +557,7 @@ def createSecMarkerReport ():
                       a2.preferred = 1 and 
                       a2._Object_key = m._Marker_key
                 order by tmp.mgiID, tmp.gmID
-		''' % (assocTempTable)
+                ''' % (assocTempTable)
 
     results = db.sql(cmds,'auto')
     #
@@ -578,7 +576,7 @@ def createSecMarkerReport ():
         # association doesn't get written to the load-ready association file.
         #
         if liveRun == "1":
-            if assoc.has_key(mgiID):
+            if mgiID in assoc:
                 list = assoc[mgiID]
                 if list.count(gmID) > 0:
                     list.remove(gmID)
@@ -588,8 +586,8 @@ def createSecMarkerReport ():
 
     errorCount += numErrors
     if numErrors > 0:
-	if not secMrkRptFile in errorReportNames:
-	    errorReportNames.append(secMrkRptFile + NL)
+        if not secMrkRptFile in errorReportNames:
+            errorReportNames.append(secMrkRptFile + NL)
     return
 
 
@@ -603,10 +601,10 @@ def createSecMarkerReport ():
 def createMissingGMIDReport ():
     global assoc, errorCount, errorReportNames
 
-    print 'Create the missing gene model ID report'
-    fpMissGMRpt.write(string.center('Missing Gene Model ID Report',80) + NL)
-    fpMissGMRpt.write(string.center(provider,80) + NL)
-    fpMissGMRpt.write(string.center('(' + timestamp + ')',80) + 2*NL)
+    print('Create the missing gene model ID report')
+    fpMissGMRpt.write(str.center('Missing Gene Model ID Report',80) + NL)
+    fpMissGMRpt.write(str.center(provider,80) + NL)
+    fpMissGMRpt.write(str.center('(' + timestamp + ')',80) + 2*NL)
     fpMissGMRpt.write('%-12s  %-20s%s' %
                      ('MGI ID','Gene Model ID',NL))
     fpMissGMRpt.write(12*'-' + '  ' + 20*'-' + NL)
@@ -621,7 +619,7 @@ def createMissingGMIDReport ():
                                   from %s tgm 
                                   where lower(tgm.gmID) = lower(ta.gmID))
                 order by ta.gmID
-		''' % (assocTempTable, gmTempTable)
+                ''' % (assocTempTable, gmTempTable)
 
     results = db.sql(cmds,'auto')
 
@@ -640,7 +638,7 @@ def createMissingGMIDReport ():
         # association doesn't get written to the load-ready association file.
         #
         if liveRun == "1":
-            if assoc.has_key(mgiID):
+            if mgiID in assoc:
                 list = assoc[mgiID]
                 if list.count(gmID) > 0:
                     list.remove(gmID)
@@ -651,7 +649,7 @@ def createMissingGMIDReport ():
     
     errorCount += numErrors
     if numErrors > 0:
-	if not missGMRptFile in errorReportNames:
+        if not missGMRptFile in errorReportNames:
             errorReportNames.append(missGMRptFile + NL)
     return
 
@@ -666,10 +664,10 @@ def createMissingGMIDReport ():
 def createChrDiscrepReport ():
     global assoc, errorCount, errorReportNames
 
-    print 'Create the chromosome discrepancy report'
-    fpChrDiscrepRpt.write(string.center('Chromosome Discrepancy Report',96) + NL)
-    fpChrDiscrepRpt.write(string.center(provider,96) + NL)
-    fpChrDiscrepRpt.write(string.center('(' + timestamp + ')',96) + 2*NL)
+    print('Create the chromosome discrepancy report')
+    fpChrDiscrepRpt.write(str.center('Chromosome Discrepancy Report',96) + NL)
+    fpChrDiscrepRpt.write(str.center(provider,96) + NL)
+    fpChrDiscrepRpt.write(str.center('(' + timestamp + ')',96) + 2*NL)
     fpChrDiscrepRpt.write('%-20s  %-3s  %-12s  %-50s  %-3s%s' %
                          ('Gene Model ID','Chr','MGI ID',
                           'Marker Symbol','Chr',NL))
@@ -697,7 +695,7 @@ def createChrDiscrepReport ():
                       a._Object_key = m._Marker_key and 
                       m.chromosome != tgm.chromosome 
                 order by tgm.gmID
-		''' % (gmTempTable, assocTempTable)
+                ''' % (gmTempTable, assocTempTable)
 
     results = db.sql(cmds,'auto')
 
@@ -717,7 +715,7 @@ def createChrDiscrepReport ():
         # association doesn't get written to the load-ready association file.
         #
         if liveRun == "1":
-            if assoc.has_key(mgiID):
+            if mgiID in assoc:
                 list = assoc[mgiID]
                 if list.count(gmID) > 0:
                     list.remove(gmID)
@@ -728,7 +726,7 @@ def createChrDiscrepReport ():
 
     errorCount += numErrors
     if numErrors > 0:
-	if not chrDiscrepRptFile in errorReportNames:
+        if not chrDiscrepRptFile in errorReportNames:
             errorReportNames.append(chrDiscrepRptFile + NL)
     return
 
@@ -745,12 +743,12 @@ def createAssocLoadFile ():
     try:
         fpAssocLoad = open(assocLoadFile, 'w')
     except:
-        print 'Cannot open output file: ' + assocLoadFile
+        print('Cannot open output file: ' + assocLoadFile)
         sys.exit(1)
 
     fpAssocLoad.write('MGI' + TAB + logicalDB + NL)
 
-    mgiIDList = assoc.keys()
+    mgiIDList = list(assoc.keys())
     mgiIDList.sort()
 
     for mgiID in mgiIDList:
@@ -777,7 +775,7 @@ if liveRun == "1":
     createAssocLoadFile()
 
 if errorCount > 0:
-    names = string.join(errorReportNames,'' )
+    names = str.join('', errorReportNames)
     fpRptNamesRpt.write(names)
     fpRptNamesRpt.close()
     sys.exit(2)

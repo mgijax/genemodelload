@@ -502,7 +502,7 @@ EOSQL
 echo "" >> ${LOG}
 date >> ${LOG}
 echo "Generate the QC reports" >> ${LOG}
-{ ${GENEMODEL_QC} ${ASSOC_FILE_QC} ${GM_FILE_QC} 2>&1; echo $? > ${TMP_FILE}; } >> ${LOG}
+{ ${PYTHON} ${GENEMODEL_QC} ${ASSOC_FILE_QC} ${GM_FILE_QC} 2>&1; echo $? > ${TMP_FILE}; } >> ${LOG}
 if [ `cat ${TMP_FILE}` -eq 1 ]
 then
     echo "An error occurred while generating the QC reports"

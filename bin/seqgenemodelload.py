@@ -1,5 +1,3 @@
-#!/usr/local/bin/python
-
 ##########################################################################
 #
 # Purpose:
@@ -52,7 +50,6 @@ Usage='createSeqGeneModelInput.py provider (ensembl | ncbi)'
 
 import sys
 import os
-import string
 import mgi_utils
 import db
 
@@ -128,10 +125,10 @@ def loadSequenceKeyLookup():
 
     ldbName =  os.environ['PROVIDER_LOGICALDB']
     results = db.sql('''SELECT _LogicalDB_key
-		FROM ACC_LogicalDB
-		WHERE name = '%s' ''' % ldbName, 'auto')
+                FROM ACC_LogicalDB
+                WHERE name = '%s' ''' % ldbName, 'auto')
     if len(results) == 0:
-        print 'LogicalDB name not in database: %s' % ldbName
+        print('LogicalDB name not in database: %s' % ldbName)
         sys.exit(1)
     ldbKey = results[0]['_LogicalDB_key']
     results = db.sql('''SELECT accId, _Object_key as seqKey
@@ -154,32 +151,32 @@ def loadEnsemblRawBioTypeByGMIDLookup():
 
     for line in inFile.readlines():
 
-        columnList =  string.split(line, TAB)
+        columnList =  str.split(line, TAB)
 
-	#
-	# if header, skip it
-	#
-	if columnList[0].find('#') == 0:
-	    print 'skipping header...%s' % (columnList)
-	    continue
+        #
+        # if header, skip it
+        #
+        if columnList[0].find('#') == 0:
+            print('skipping header...%s' % (columnList))
+            continue
 
-        attributeList = string.split(columnList[8], SCOLON)
-        gmId = (string.split(attributeList[0], '"'))[1].strip()
+        attributeList = str.split(columnList[8], SCOLON)
+        gmId = (str.split(attributeList[0], '"'))[1].strip()
 
-	biotype = ''
-	for a in attributeList:
-	    if string.strip(a).startswith('gene_biotype'):
-		temp = string.split(a)[1]
-		biotype = temp[1:-1]
+        biotype = ''
+        for a in attributeList:
+            if str.strip(a).startswith('gene_biotype'):
+                temp = str.split(a)[1]
+                biotype = temp[1:-1]
 
         # there are redundant id/biotype lines in the input, all IDs have the
         # same biotype for each of the redundant lines so save only one pair
         # but just in case check
-        if rawBioTypeByGMIDLookup.has_key(gmId):
+        if gmId in rawBioTypeByGMIDLookup:
             b = rawBioTypeByGMIDLookup[gmId]
             if b != biotype:
-                print 'Differing biotypes for %s: %s and %s' % (gmId, b, biotype)
-	 	continue
+                print('Differing biotypes for %s: %s and %s' % (gmId, b, biotype))
+                continue
         rawBioTypeByGMIDLookup[gmId] = biotype
         #print '%s %s %s' % (gmId, biotype, CRT)
 
@@ -197,9 +194,9 @@ def loadNCBIRawBioTypeByGMIDLookup():
     header = inFile.readline()
 
     for line in inFile.readlines():
-        columnList =  string.split(line, TAB)
+        columnList =  str.split(line, TAB)
         taxid = columnList[0]
-        if string.strip(taxid) == '10090':
+        if str.strip(taxid) == '10090':
             gmId = columnList[1]
             biotype = columnList[9]
             rawBioTypeByGMIDLookup[gmId] = biotype
@@ -213,12 +210,12 @@ def loadNCBIRawBioTypeByGMIDLookup():
 def init():
     global inFile, provider, bcpFilePath, bcpFile
 
-    print '%s' % mgi_utils.date()
-    print 'Initializing'
+    print('%s' % mgi_utils.date())
+    print('Initializing')
 
     inFile = sys.stdin
     if len(sys.argv) != 2:
-            print Usage
+            print(Usage)
             sys.exit(1)
 
     provider = sys.argv[1]
@@ -248,7 +245,7 @@ def init():
 # Throws: nothing
 
 def run ():
-    print 'Creating bcp file for %s ' % provider
+    print('Creating bcp file for %s ' % provider)
     # current count of gm IDs found in database, but not in input
     notInInputCtr = 0
 
@@ -256,33 +253,33 @@ def run ():
     # will not translate
     noTranslationCtr = 0
 
-    for gmId in seqKeyByGMIDLookup.keys():
-	sequenceKey = seqKeyByGMIDLookup[gmId]
+    for gmId in list(seqKeyByGMIDLookup.keys()):
+        sequenceKey = seqKeyByGMIDLookup[gmId]
 
-	if rawBioTypeByGMIDLookup.has_key(gmId):
-	    rawBioType = rawBioTypeByGMIDLookup[gmId]
-	else:
-	    print '%s is not in the input file' % gmId
-	    notInInputCtr = notInInputCtr + 1
-	    continue
+        if gmId in rawBioTypeByGMIDLookup:
+            rawBioType = rawBioTypeByGMIDLookup[gmId]
+        else:
+            print('%s is not in the input file' % gmId)
+            notInInputCtr = notInInputCtr + 1
+            continue
 
-	if markerTypeKeyByRawBioTypeLookup.has_key(rawBioType):
-	    markerTypeKey = markerTypeKeyByRawBioTypeLookup[rawBioType]
-	else:
-	    print 'GM ID %s raw biotype %s has no translation in the database' \
-		% (gmId, rawBioType)
-	    noTranslationCtr = noTranslationCtr + 1
-	    continue
+        if rawBioType in markerTypeKeyByRawBioTypeLookup:
+            markerTypeKey = markerTypeKeyByRawBioTypeLookup[rawBioType]
+        else:
+            print('GM ID %s raw biotype %s has no translation in the database' \
+                % (gmId, rawBioType))
+            noTranslationCtr = noTranslationCtr + 1
+            continue
 
-	bcpFile.write('%s%s%s%s%s%s%s%s%s%s%s%s%s%s%s%s' % \
-	    (sequenceKey, TAB, markerTypeKey, TAB, rawBioType, TAB, \
-		TAB, TAB, CREATEDBY_KEY, TAB, CREATEDBY_KEY, TAB, \
-		cdate, TAB, cdate, CRT) )
+        bcpFile.write('%s%s%s%s%s%s%s%s%s%s%s%s%s%s%s%s' % \
+            (sequenceKey, TAB, markerTypeKey, TAB, rawBioType, TAB, \
+                TAB, TAB, CREATEDBY_KEY, TAB, CREATEDBY_KEY, TAB, \
+                cdate, TAB, cdate, CRT) )
 
-    print '\n%s %s gene model Ids in the database but not in the input file' % \
-	(notInInputCtr, provider)
+    print('\n%s %s gene model Ids in the database but not in the input file' % \
+        (notInInputCtr, provider))
 
-    print '\n%s %s gene model Ids not loaded because unable to translate biotype\n' % (noTranslationCtr, provider)
+    print('\n%s %s gene model Ids not loaded because unable to translate biotype\n' % (noTranslationCtr, provider))
 
 #
 # Main
@@ -292,4 +289,3 @@ init()
 run()
 inFile.close()
 bcpFile.close()
-

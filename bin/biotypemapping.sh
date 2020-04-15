@@ -95,7 +95,7 @@ echo ${message}
 date
 echo "Running biotypemapping"
 cd ${OUTPUTDIR}
-${GENEMODELLOAD}/bin/biotypemapping.py
+${PYTHON} ${GENEMODELLOAD}/bin/biotypemapping.py
 STAT=$?
 if [ ${STAT} -ne 0 ]
 then
