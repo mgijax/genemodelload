@@ -10,7 +10,7 @@
 #
 # test TR directory
 #
-TRDIR=/mgi/all/wts_projects/13100/13175/NCBI
+TRDIR=/mgi/all/wts_projects/13300/13389/NCBI
 export TRDIR
 
 #
