@@ -2,8 +2,9 @@
 
 #
 # 1) copy bhmgiapp01:/data/downloads files to development server
+# 2) copy TRDIR genemodel and assoc files to development server
 #
-
+# Usage: copydownloads.sh ensembl/ncbi
 #
 #  If the MGICONFIG environment variable does not have a local override,
 #  use the default "test" settings.
@@ -77,7 +78,10 @@ ls -l /data/downloads/ensembl_mus_gtf/${BIOTYPE_FILE_NAME}
 ls -l /data/downloads/ensembl_mus_cdna/${TRANSCRIPT_FILE_NAME}
 ls -l /data/downloads/ensembl_mus_protein/${PROTEIN_FILE_NAME}
 ls -l /data/downloads/ensembl_mus_ncrna/${NCRNA_FILE_NAME}
-
+cp -r ${TRDIR}/GeneModelLoad/ensembl_genemodels.txt ${INPUTDIR}
+cp -r ${TRDIR}/AssociationLoad/ensembl_assoc.txt ${INPUTDIR}
+ls -l ${INPUTDIR}/ensembl_genemodels.txt
+ls -l  ${INPUTDIR}/ensembl_assoc.txt
 elif [ "${GM_PROVIDER}" = "NCBI" ]
 then
 #
@@ -86,6 +90,10 @@ then
 rm -rf /data/downloads/entrezgene/${BIOTYPE_FILE_NAME}
 scp bhmgiapp01:/data/downloads/entrezgene/${BIOTYPE_FILE_NAME} /data/downloads/entrezgene
 ls -l /data/downloads/entrezgene/${BIOTYPE_FILE_NAME}
+cp -r ${TRDIR}/GeneModelLoad/ncbi_genemodels.txt ${INPUTDIR}
+cp -r ${TRDIR}/AssociationLoad/ncbi_assoc.txt ${INPUTDIR}
+ls -l ${INPUTDIR}/ncbi_genemodels.txt
+ls -l ${INPUTDIR}/ncbi_assoc.txt
 
 else
     echo "variable GM_PROVIDER has not been set"

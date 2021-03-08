@@ -4,7 +4,8 @@
 # 1) copy /data/downloads files to /data/loads/mgi/genemodelload/input directory
 # 2) copy TR files to /data/loads/mgi/genemodelload/input directory
 #
-
+# Usage: copyinputs.sh ensembl/ncbi
+#
 if [ "${MGICONFIG}" = "" ]
 then
     MGICONFIG=/usr/local/mgi/live/mgiconfig
