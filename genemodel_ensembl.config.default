@@ -1,4 +1,5 @@
 
+
 #format: sh
 #
 #  genemodel_ensembl.config.default
@@ -11,14 +12,14 @@
 #
 # test TR directory
 #
-TRDIR=/mgi/all/wts_projects/13200/13291/ENSEMBL
+TRDIR=/mgi/all/wts2_projects/700/WTS2-744/ENSEMBL
 export TRDIR
 
 #
 # used by other wrappers in bin directory :
 #  copydownloads.sh, copyinputs.sh, runTest.sh
 #
-BIOTYPE_FILE_NAME=Mus_musculus.GRCm39.103.gtf.gz
+BIOTYPE_FILE_NAME=Mus_musculus.GRCm39.105.gtf.gz
 TRANSCRIPT_FILE_NAME=Mus_musculus.GRCm39.cdna.all.fa.gz
 NCRNA_FILE_NAME=Mus_musculus.GRCm39.ncrna.fa.gz
 PROTEIN_FILE_NAME=Mus_musculus.GRCm39.pep.all.fa.gz
@@ -28,7 +29,7 @@ export BIOTYPE_FILE_NAME TRANSCRIPT_FILE_NAME NCRNA_FILE_NAME PROTEIN_FILE_NAME
 # Reload the gene models (true/false)?  If false, only the associations
 # will be deleted/reloaded.
 #
-RELOAD_GENEMODELS=false
+RELOAD_GENEMODELS=true
 export RELOAD_GENEMODELS
 
 # Full path to the default biotype file 
