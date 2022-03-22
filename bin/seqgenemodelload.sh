@@ -9,7 +9,7 @@
 #
 #  Usage:
 #
-#      seqgenemodelload.sh <ensembl | ncbi | ensemblreg
+#      seqgenemodelload.sh <ensembl | ncbi | ensemblreg | vistareg>
 #
 #
 #  Env Vars:

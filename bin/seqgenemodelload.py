@@ -3,7 +3,7 @@
 # Purpose:
 #       creates bcp file for SEQ_GeneModel for a given provider
 #
-Usage='createSeqGeneModelInput.py provider (ensembl | ncbi)'
+Usage='createSeqGeneModelInput.py provider (ensembl | ncbi | ensemblreg | vistareg)'
 #
 # Env Vars:
 #        1. BCP_FILE_PATH
