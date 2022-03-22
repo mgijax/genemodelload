@@ -120,7 +120,7 @@ export ASSEMBLY_CONFIG
 
 # use the VISTA Reg Genomic Sequence Load user
 #
-USERKEY=1410
+USERKEY=1628
 export USERKEY
 
 # path to bcp file
