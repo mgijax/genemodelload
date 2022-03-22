@@ -226,15 +226,16 @@ def init():
         'Could not open file for writing %s\n' % bcpFilePath
         sys.exit(1)
 
-    if provider == 'ensembl':
+    if provider in ('ensembl', 'vistareg'):
         loadEnsemblRawBioTypeByGMIDLookup()
 
     elif provider == 'ncbi':
         loadNCBIRawBioTypeByGMIDLookup()
 
     else:
-        'Provider not recognized: %s' % provider
+        print('Provider not recognized: %s' % provider)
         sys.exit(1)
+
     loadSequenceKeyLookup()
     loadMarkerTypeKeyLookup()
 
