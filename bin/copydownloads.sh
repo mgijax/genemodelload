@@ -4,7 +4,7 @@
 # 1) copy bhmgiapp01:/data/downloads files to development server
 # 2) copy TRDIR genemodel and assoc files to development server
 #
-# Usage: copydownloads.sh ensembl/ncbi
+# Usage: copydownloads.sh ensembl/ncbi/ensemblreg/vistareg
 #
 #  If the MGICONFIG environment variable does not have a local override,
 #  use the default "test" settings.
@@ -26,6 +26,12 @@ then
 elif [ "`echo $1 | grep -i '^ncbi$'`" != "" ]
 then
         CONFIG=${GENEMODELLOAD}/genemodel_ncbi.config
+elif [ "`echo $1 | grep -i '^ensemblreg$'`" != "" ]
+then
+        CONFIG=${GENEMODELLOAD}/genemodel_ensemblreg.config
+elif [ "`echo $1 | grep -i '^vistareg$'`" != "" ]
+then
+        CONFIG=${GENEMODELLOAD}/genemodel_vistareg.config
 else
 	echo ${USAGE}; exit 1
 fi
@@ -94,6 +100,29 @@ cp -r ${TRDIR}/GeneModelLoad/ncbi_genemodels.txt ${INPUTDIR}
 cp -r ${TRDIR}/AssociationLoad/ncbi_assoc.txt ${INPUTDIR}
 ls -l ${INPUTDIR}/ncbi_genemodels.txt
 ls -l ${INPUTDIR}/ncbi_assoc.txt
+
+#elif [ "${GM_PROVIDER}" = "EnsemblReg" ]
+#then
+#
+# ensembl regulatory
+#
+#rm -rf /data/downloads/ensembl_mus_regulatory/${BIOTYPE_FILE_NAME}
+#scp bhmgiapp01:/data/downloads/ensembl_mus_regulatory/${BIOTYPE_FILE_NAME} /data/downloads/ensembl_mus_regulatory
+#ls -l /data/downloads/ensembl_mus_regulatory/${BIOTYPE_FILE_NAME}
+#cp -r ${TRDIR}/GeneModelLoad/????_genemodels.txt ${INPUTDIR}
+#cp -r ${TRDIR}/AssociationLoad/????_assoc.txt ${INPUTDIR}
+#ls -l ${INPUTDIR}/????_genemodels.txt
+#ls -l ${INPUTDIR}/????_assoc.txt
+
+elif [ "${GM_PROVIDER}" = "VISTAReg" ]
+then
+#
+# vista regulatory
+#
+ls -l /mgi/all/wts2_projects/800/WTS2-813/VISTA/gff3/VISTA_mm9_mm10_b39.gff3
+cp -r ${TRDIR}/GeneModelLoad/VISTA_genemodels.txt ${INPUTDIR}/vistareg_genemodels.txt
+cp -r ${TRDIR}/AssociationLoad/MGI_VISTA_association_load ${INPUTDIR}/vistareg_assoc.txt
+ls -l ${INPUTDIR}
 
 else
     echo "variable GM_PROVIDER has not been set"

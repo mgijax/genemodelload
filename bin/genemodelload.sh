@@ -91,7 +91,7 @@ cd `dirname $0`
 COMMON_CONFIG=genemodel_common.config
 BIOTYPEMAPPING_CONFIG=biotypemapping.config
 
-USAGE="Usage: genemodelload.sh {ensembl | ncbi }"
+USAGE="Usage: genemodelload.sh {ensembl | ncbi | ensemblreg}"
 
 RUNTYPE=live
 
@@ -110,6 +110,14 @@ elif [ "`echo $1 | grep -i '^ncbi$'`" != "" ]
 then
     PROVIDER=ncbi
     CONFIG=genemodel_ncbi.config
+elif [ "`echo $1 | grep -i '^ensemblreg$'`" != "" ]
+then
+    PROVIDER=ensemblreg
+    CONFIG=genemodel_ensemblreg.config
+elif [ "`echo $1 | grep -i '^vistareg$'`" != "" ]
+then
+    PROVIDER=vistareg
+    CONFIG=genemodel_vistareg.config
 else
     echo ${USAGE}; exit 1
 fi
@@ -326,6 +334,26 @@ fi
 if [ ${PROVIDER} = "ncbi" ]
 then
 for FILE in ${GM_FILE_DEFAULT} ${ASSOC_FILE_DEFAULT} ${BIOTYPE_FILE_DEFAULT} ${PROTEIN_FILE_DEFAULT} ${LOGDIR}
+do
+    ARC_FILE=`basename ${FILE}`.${TIMESTAMP}
+    rm -rf ${ARCHIVEDIR}/${ARC_FILE}
+    cp -r ${FILE} ${ARCHIVEDIR}/${ARC_FILE}
+    chmod -f 777 ${ARCHIVEDIR}/${ARC_FILE}
+done
+fi
+if [ ${PROVIDER} = "ensemblreg" ]
+then
+for FILE in ${GM_FILE_DEFAULT} ${ASSOC_FILE_DEFAULT} ${BIOTYPE_FILE_DEFAULT} ${LOGDIR}
+do
+    ARC_FILE=`basename ${FILE}`.${TIMESTAMP}
+    rm -rf ${ARCHIVEDIR}/${ARC_FILE}
+    cp -r ${FILE} ${ARCHIVEDIR}/${ARC_FILE}
+    chmod -f 777 ${ARCHIVEDIR}/${ARC_FILE}
+done
+fi
+if [ ${PROVIDER} = "vistareg" ]
+then
+for FILE in ${GM_FILE_DEFAULT} ${ASSOC_FILE_DEFAULT} ${BIOTYPE_FILE_DEFAULT} ${LOGDIR}
 do
     ARC_FILE=`basename ${FILE}`.${TIMESTAMP}
     rm -rf ${ARCHIVEDIR}/${ARC_FILE}

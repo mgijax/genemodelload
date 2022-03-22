@@ -305,7 +305,7 @@ def loadTempTables ():
             closeFiles()
             sys.exit(1)
 
-        if strand != '-' and strand != '+':
+        if strand != '-' and strand != '+' and strand != '.':
             print('Invalid strand (line ' + str(count) + ')')
             fpGMBCP.close()
             closeFiles()

@@ -29,7 +29,13 @@
 # ncbi:
 # 	assemblyseqload/ncbi_assemblyseqload.config
 #
-
+# ensemblreg:
+# 	genemodelload/genemodel_ensemblreg.config
+# 	assemblyseqload/ensembl_assemblyseqload.config
+#
+# vistareg:
+# 	genemodelload/genemodel_vistareg.config
+# 	assemblyseqload/ensembl_assemblyseqload.config
 #
 #  If the MGICONFIG environment variable does not have a local override,
 #  use the default "test" settings.
@@ -53,6 +59,12 @@ then
 elif [ "`echo $1 | grep -i '^ncbi$'`" != "" ]
 then
         CONFIG=${GENEMODELLOAD}/genemodel_ncbi.config
+elif [ "`echo $1 | grep -i '^ensemblreg$'`" != "" ]
+then
+        CONFIG=${GENEMODELLOAD}/genemodel_ensemblreg.config
+elif [ "`echo $1 | grep -i '^vistareg$'`" != "" ]
+then
+        CONFIG=${GENEMODELLOAD}/genemodel_vistareg.config
 else
         echo ${USAGE}; exit 1
 fi
@@ -84,15 +96,15 @@ cat ${HOME}/.pgpass
 #
 # reload the database
 #
-echo -e "\nloading test database...."
-${PG_DBUTILS}/bin/loadDB.csh ${PG_DBSERVER} ${PG_DBNAME} ${TEST_DBSCHEMA} ${TEST_DBDUMP}
-STAT=$?
-if [ ${STAT} -ne 0 ]
-then
-	echo -e "\nerror : cannot load database : "
-	echo  ${PG_DBSERVER}, ${PG_DBNAME}, ${TEST_DBDUMP_TO}
-	exit 1
-fi
+#echo -e "\nloading test database...."
+#${PG_DBUTILS}/bin/loadDB.csh ${PG_DBSERVER} ${PG_DBNAME} ${TEST_DBSCHEMA} ${TEST_DBDUMP}
+#STAT=$?
+#if [ ${STAT} -ne 0 ]
+#then
+#	echo -e "\nerror : cannot load database : "
+#	echo  ${PG_DBSERVER}, ${PG_DBNAME}, ${TEST_DBDUMP_TO}
+#	exit 1
+#fi
 
 #
 # step 4
@@ -124,6 +136,12 @@ then
 elif [ "${GM_PROVIDER}" = "NCBI" ]
 then
   ${GENEMODELLOAD}/bin/genemodelload.sh ncbi
+elif [ "${GM_PROVIDER}" = "EnsemblReg" ]
+then
+  ${GENEMODELLOAD}/bin/genemodelload.sh ensemblreg
+elif [ "${GM_PROVIDER}" = "VISTAReg" ]
+then
+  ${GENEMODELLOAD}/bin/genemodelload.sh vistareg
 else
     echo -e "\nvariable GM_PROVIDER has not been set"
     exit 1

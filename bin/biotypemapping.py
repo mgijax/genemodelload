@@ -15,9 +15,10 @@
 #	        field 6: use feature type children (yes/no)
 #
 #	4 provider vocabularies exist:
-#		_vocab_key : 103 (Biotype Ensembl)
-#		_vocab_key : 104 (Biotype NCBI)
-#		_vocab_key : 136 (Biotype Mouse Genome Project)
+#		_vocab_key : 103 (BioType Ensembl)
+#		_vocab_key : 104 (BioType NCBI)
+#		_vocab_key : 136 (BioType Mouse Genome Project)
+#		_vocab_key : 175 (BioType VISTA)
 #
 # Parameters:
 #
@@ -57,6 +58,7 @@ import loadlib
 ENSEMBL_VOCAB_KEY = 103
 NCBI_VOCAB_KEY = 104
 MGP_VOCAB_KEY = 136
+VISTA_VOCAB_KEY = 175
 
 # MCV vocab key
 MCV_VOCAB_KEY = 79
@@ -279,6 +281,8 @@ def sanityCheck(biotypeVocab, biotypeTerm, mcvTerms, primaryMCVTerm, markerType,
         biotypeVocabKey = NCBI_VOCAB_KEY
     elif biotypeVocab == 'MGP':
         biotypeVocabKey = MGP_VOCAB_KEY
+    elif biotypeVocab == 'VISTA':
+        biotypeVocabKey = VISTA_VOCAB_KEY
     else:
         errors.append( INVALID_VOCAB_ERROR % (lineNum, biotypeVocab) )
 

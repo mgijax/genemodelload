@@ -1,23 +1,23 @@
 #format: sh
 #
-#  genemodel_ncbi.config.default
+#  genemodel_vistareg.config.default
 #
 #  This file sets up the environment variables that are needed by the
-#  gene model QC reports and loader that are specific to NCBI.
+#  gene model QC reports and loader that are specific to VISTA Reg.
 #
 ###########################################################################
 
 #
 # test TR directory
 #
-TRDIR=/mgi/all/wts_projects/13200/13291/NCBI
+TRDIR=/mgi/all/wts2_projects/800/WTS2-813/VISTA
 export TRDIR
 
 #
 # used by other wrappers in bin directory :
 #  copydownloads.sh, copyinputs.sh, runTest.sh
 #
-BIOTYPE_FILE_NAME=gene_info.gz
+BIOTYPE_FILE_NAME=VISTA_mm9_mm10_b39.gff3
 export BIOTYPE_FILE_NAME
 
 #
@@ -27,84 +27,77 @@ export BIOTYPE_FILE_NAME
 RELOAD_GENEMODELS=false
 export RELOAD_GENEMODELS
 
-# Full path to the default biotype file
-# Used to create gene model ID to biotype mapping for createSeqGeneTrapInput.py
-#
-BIOTYPE_FILE_DEFAULT=${INPUTDIR}/ncbi_biotypes.gz
-export BIOTYPE_FILE_DEFAULT
-
-#
 # Gene model provider name.
 #
-GM_PROVIDER=NCBI
+GM_PROVIDER=VISTAReg
 export GM_PROVIDER
 
-# Full path to the current gene model file
+# Full path to the current gene model file 
 #
-GM_FILE_CURRENT=${GENEMODELDIR}/ncbi_genemodels.txt
+GM_FILE_CURRENT=${GENEMODELDIR}/vistareg_genemodels.txt
 export GM_FILE_CURRENT
 
 # Full path to the default gene model and association files.
 #
-GM_FILE_DEFAULT=${INPUTDIR}/ncbi_genemodels.txt
-ASSOC_FILE_DEFAULT=${INPUTDIR}/ncbi_assoc.txt
+GM_FILE_DEFAULT=${INPUTDIR}/vistareg_genemodels.txt
+ASSOC_FILE_DEFAULT=${INPUTDIR}/vistareg_assoc.txt
 export GM_FILE_DEFAULT ASSOC_FILE_DEFAULT
 
 # Full path to the "cleaned up" QC-ready gene model and association files
 # that are created and used by the sanity/QC report script.
 #
-GM_FILE_QC=${OUTPUTDIR}/ncbi_genemodels_qc.txt
-ASSOC_FILE_QC=${OUTPUTDIR}/ncbi_assoc_qc.txt
+GM_FILE_QC=${OUTPUTDIR}/vistareg_genemodels_qc.txt
+ASSOC_FILE_QC=${OUTPUTDIR}/vistareg_assoc_qc.txt
 export GM_FILE_QC ASSOC_FILE_QC
 
 # Full path to the load-ready gene model and association file that are
 # created by the sanity/QC report script and used as input by the assembly
 # sequence loader and the association loader.
 #
-GM_FILE_LOAD=${OUTPUTDIR}/ncbi_genemodels_load.txt
-ASSOC_FILE_LOAD=${OUTPUTDIR}/ncbi_assoc_load.txt
+GM_FILE_LOAD=${OUTPUTDIR}/vistareg_genemodels.txt
+ASSOC_FILE_LOAD=${OUTPUTDIR}/vistareg_assoc_load.txt
 export GM_FILE_LOAD ASSOC_FILE_LOAD
 
 # Minimum number of lines expected for the input files (for sanity check).
 #
-GM_FILE_MINIMUM_SIZE=25000
-ASSOC_FILE_MINIMUM_SIZE=25000
+GM_FILE_MINIMUM_SIZE=20000
+ASSOC_FILE_MINIMUM_SIZE=20000
 export GM_FILE_MINIMUM_SIZE ASSOC_FILE_MINIMUM_SIZE
 
 # The logical DB for the header of the load-ready association file.
 #
-ASSOC_FILE_LOGICALDB="NCBI Gene Model"
+ASSOC_FILE_LOGICALDB="VISTA Enhancer Element"
 export ASSOC_FILE_LOGICALDB
 
 # Full path to the log files.
 #
-GENEMODELQC_LOGFILE=${LOGDIR}/ncbi_genemodelQC.log
-GENEMODELLOAD_LOGFILE=${LOGDIR}/ncbi_genemodelload.log
+GENEMODELQC_LOGFILE=${LOGDIR}/vistareg_genemodelQC.log
+GENEMODELLOAD_LOGFILE=${LOGDIR}/vistareg_genemodelload.log
 export GENEMODELQC_LOGFILE GENEMODELLOAD_LOGFILE
 
 # Temp table that will be loaded from the input files.
 #
-GM_TEMP_TABLE=NCBI_GM
-ASSOC_TEMP_TABLE=NCBI_Assoc
+GM_TEMP_TABLE=VISTA_GM
+ASSOC_TEMP_TABLE=VISTA_Assoc
 export GM_TEMP_TABLE ASSOC_TEMP_TABLE
 
 # Full path to the bcp files for loading the input files into temp tables.
 #
-GM_FILE_BCP=${OUTPUTDIR}/ncbi_genemodels.bcp
-ASSOC_FILE_BCP=${OUTPUTDIR}/ncbi_assoc.bcp
+GM_FILE_BCP=${OUTPUTDIR}/vistareg_genemodels.bcp
+ASSOC_FILE_BCP=${OUTPUTDIR}/vistareg_assoc.bcp
 export GM_FILE_BCP ASSOC_FILE_BCP
 
 # Full path to the sanity/QC reports.
 #
-GM_SANITY_RPT=${RPTDIR}/ncbi_genemodels_sanity.rpt
-ASSOC_SANITY_RPT=${RPTDIR}/ncbi_assoc_sanity.rpt
-INVALID_MARKER_RPT=${RPTDIR}/ncbi_invalid_marker.rpt
-SEC_MARKER_RPT=${RPTDIR}/ncbi_sec_marker.rpt
-MISSING_GMID_RPT=${RPTDIR}/ncbi_missing_gmid.rpt
-CHR_DISCREP_RPT=${RPTDIR}/ncbi_chr_discrep.rpt
+GM_SANITY_RPT=${RPTDIR}/vistareg_genemodels_sanity.rpt
+ASSOC_SANITY_RPT=${RPTDIR}/vistareg_assoc_sanity.rpt
+INVALID_MARKER_RPT=${RPTDIR}/vistareg_invalid_marker.rpt
+SEC_MARKER_RPT=${RPTDIR}/vistareg_sec_marker.rpt
+MISSING_GMID_RPT=${RPTDIR}/vistareg_missing_gmid.rpt
+CHR_DISCREP_RPT=${RPTDIR}/vistareg_chr_discrep.rpt
 
 # names of reports containing discrepancies for a given run
-RPT_NAMES_RPT=${RPTDIR}/ncbi_reportsWithDiscrepancies.rpt
+RPT_NAMES_RPT=${RPTDIR}/vistareg_reportsWithDiscrepancies.rpt
 
 export GM_SANITY_RPT ASSOC_SANITY_RPT
 export INVALID_MARKER_RPT SEC_MARKER_RPT
@@ -112,24 +105,28 @@ export MISSING_GMID_RPT CHR_DISCREP_RPT RPT_NAMES_RPT
 
 # Name of the configuration file for the assemblyseqload.
 #
-ASSEMBLY_CONFIG=ncbi_assemblyseqload.config
+ASSEMBLY_CONFIG=vistareg_assemblyseqload.config
 export ASSEMBLY_CONFIG
 
 #
 # seqgenemodelload.sh configuration
 #
 
-# use the NCBI Genomic Sequence Load user
-USERKEY=1409
+# use the VISTA Reg Genomic Sequence Load user
+#
+USERKEY=1410
 export USERKEY
 
 # path to bcp file
-BCP_FILE_PATH=${OUTPUTDIR}/SEQ_GeneModel.ncbi.bcp
+#
+BCP_FILE_PATH=${OUTPUTDIR}/SEQ_GeneModel.vistareg.bcp
 
 # full path to the log file
-SEQGENEMODELLOAD_LOGFILE=${LOGDIR}/ncbi_seqgenemodelload.log
+#
+SEQGENEMODELLOAD_LOGFILE=${LOGDIR}/vistareg_seqgenemodelload.log
 
 # logicalDB of the gene model sequence provider
+#
 PROVIDER_LOGICALDB=${ASSOC_FILE_LOGICALDB}
 
 export BCP_FILE_PATH SEQGENEMODELLOAD_LOGFILE PROVIDER_LOGICALDB

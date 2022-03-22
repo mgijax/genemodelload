@@ -13,7 +13,7 @@
 #      genemodelQC.sh  provider_name  assoc_file [ -gm gm_file ] [ "live" ]
 #
 #      where
-#          provider_name = ensembl, ncbi
+#          provider_name = ensembl, ncbi, ensemblreg
 #          assoc_file = path to the association file
 #          gm_file = path to the gene model file (optional)
 #          live = option to let the script know that this is a "live" run
@@ -118,6 +118,12 @@ else
     elif [ "`echo $1 | grep -i '^ncbi$'`" != "" ]
     then
         CONFIG=genemodel_ncbi.config
+    elif [ "`echo $1 | grep -i '^ensemblreg$'`" != "" ]
+    then
+        CONFIG=genemodel_ensemblreg.config
+    elif [ "`echo $1 | grep -i '^vistareg$'`" != "" ]
+    then
+        CONFIG=genemodel_vistareg.config
     else
         echo ${USAGE}; exit 1
     fi
@@ -251,6 +257,7 @@ trap "rm -f ${TMP_FILE}" 0 1 2 15
 #
 if [ "`head -1 ${ASSOC_FILE} | grep -i '^MGI ID'`" = "" ]
 then
+    echo $ASSOC_FILE | tee -a ${LOG}
     echo "Invalid header record in association file" | tee -a ${LOG}
     exit 1
 fi
@@ -366,6 +373,12 @@ checkLineCount ()
     FILE=$1        # The input file to check
     REPORT=$2      # The sanity report to write to
     NUM_LINES=$3   # The minimum number of lines expected in the input file
+
+    # vistareg : skip these checks
+    if [ CONFIG != "genemodel_vistareg.config" ]
+    then
+        return 0
+    fi
 
     COUNT=`cat ${FILE} | wc -l | sed 's/ //g'`
     if [ ${COUNT} -lt ${NUM_LINES} ]

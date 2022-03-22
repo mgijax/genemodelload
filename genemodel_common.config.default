@@ -45,10 +45,6 @@ export INPUTDIR OUTPUTDIR LOGDIR RPTDIR ARCHIVEDIR
 #
 GENEMODELDIR=/data/genemodels/current/models
 
-# Full path to the gene model biotypes directory 
-#
-BIOTYPEDIR=/data/genemodels/current/biotypes
-
 # Full path to the transcripts directory 
 #
 TRANSCRIPTDIR=/data/genemodels/current/transcripts
@@ -57,7 +53,7 @@ TRANSCRIPTDIR=/data/genemodels/current/transcripts
 #
 PROTEINDIR=/data/genemodels/current/proteins
 
-export GENEMODELDIR BIOTYPEDIR TRANSCRIPTDIR PROTEINDIR
+export GENEMODELDIR TRANSCRIPTDIR PROTEINDIR
 
 # Number of columns expected for the input files (for sanity check).
 #

@@ -89,6 +89,20 @@ else
 fi
 echo ${message}
 
+date
+echo "Running biotype/vocload : vistareg.txt"
+rm -rf ${INPUTDIR}/vistareg.txt
+grep "^VISTA" ${BIOTYPEINPUT_FILE_DEFAULT} > ${INPUTDIR}/vistareg.txt
+${VOCLOAD}/runSimpleFullLoadNoArchive.sh biotype_vista.config
+STAT=$?
+if [ ${STAT} -ne 0 ]
+then
+	message="${message} ${VOCLOAD}/runSimpleFullLoadNoArchive.sh biotype_vista.config failed"
+else
+	message="${message} ${VOCLOAD}/runSimpleFullLoadNoArchive.sh biotype_vista.config successful" 
+fi
+echo ${message}
+
 #
 # Execute biotypemapping.py
 #

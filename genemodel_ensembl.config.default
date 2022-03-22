@@ -1,5 +1,3 @@
-
-
 #format: sh
 #
 #  genemodel_ensembl.config.default
@@ -37,10 +35,6 @@ export RELOAD_GENEMODELS
 #
 BIOTYPE_FILE_DEFAULT=${INPUTDIR}/ensembl_biotypes.gz
 export BIOTYPE_FILE_DEFAULT 
-# Full path to the current gene model biotype file 
-#
-BIOTYPE_FILE_CURRENT=${BIOTYPEDIR}/${BIOTYPE_FILE_NAME}
-export BIOTYPE_FILE_CURRENT 
 
 # Full path to the default transcript file 
 # Used by ensemblseqload
