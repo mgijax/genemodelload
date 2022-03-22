@@ -63,7 +63,7 @@ cd `dirname $0`
 
 COMMON_CONFIG=genemodel_common.config
 
-USAGE="Usage: test.sh <ensembl | ncbi | ensemblreg>"
+USAGE="Usage: seqgenemodelload.sh <ensembl | ncbi | ensemblreg | vistareg>"
 
 #
 # Make sure a valid provider name was passed as an argument and determine
@@ -84,6 +84,10 @@ elif [ "`echo $1 | grep -i '^ensemblreg$'`" != "" ]
 then
     PROVIDER=ncbi
     CONFIG=genemodel_ensemblreg.config
+elif [ "`echo $1 | grep -i '^vistareg$'`" != "" ]
+then
+    PROVIDER=ncbi
+    CONFIG=genemodel_vistareg.config
 else
     echo ${USAGE}; exit 1
 fi
