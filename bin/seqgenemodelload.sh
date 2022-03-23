@@ -82,11 +82,11 @@ then
     CONFIG=genemodel_ncbi.config
 elif [ "`echo $1 | grep -i '^ensemblreg$'`" != "" ]
 then
-    PROVIDER=ncbi
+    PROVIDER=ensembl
     CONFIG=genemodel_ensemblreg.config
 elif [ "`echo $1 | grep -i '^vistareg$'`" != "" ]
 then
-    PROVIDER=ncbi
+    PROVIDER=vistareg
     CONFIG=genemodel_vistareg.config
 else
     echo ${USAGE}; exit 1
@@ -133,7 +133,7 @@ then
 fi
 
 echo "Creating bcp file" | tee -a  ${LOG}
-echo ${BIOTYPE_FILE_DEFAULT} | tee -a ${LOG}
+echo ${BIOTYPE_FILE_DEFAULT}, ${PROVIDER}, ${CONFIG} | tee -a ${LOG}
 gunzip -c ${BIOTYPE_FILE_DEFAULT} | ${PYTHON} ./seqgenemodelload.py ${PROVIDER} >> ${LOG} 2>&1
 STAT=$?
 if [ $STAT -ne 0 ]
@@ -168,8 +168,7 @@ cat - <<EOSQL | psql -h${MGD_DBSERVER} -d${MGD_DBNAME} -U${MGD_DBUSER} -e  >> ${
 select _Object_key as _Sequence_key
 into temp tmp_gmKey
 from ACC_Accession a
-join acc_logicaldb ldb on
-	ldb._logicaldb_key = a._logicaldb_key
+join acc_logicaldb ldb on ldb._logicaldb_key = a._logicaldb_key
 where _MGIType_key = 19
 and preferred = 1
 and ldb.name = '${PROVIDER_LOGICALDB}'
