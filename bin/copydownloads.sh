@@ -101,18 +101,18 @@ cp -r ${TRDIR}/AssociationLoad/ncbi_assoc.txt ${INPUTDIR}
 ls -l ${INPUTDIR}/ncbi_genemodels.txt
 ls -l ${INPUTDIR}/ncbi_assoc.txt
 
-#elif [ "${GM_PROVIDER}" = "EnsemblReg" ]
-#then
+elif [ "${GM_PROVIDER}" = "EnsemblReg" ]
+then
 #
 # ensembl regulatory
 #
-#rm -rf /data/downloads/ensembl_mus_regulatory/${BIOTYPE_FILE_NAME}
-#scp bhmgiapp01:/data/downloads/ensembl_mus_regulatory/${BIOTYPE_FILE_NAME} /data/downloads/ensembl_mus_regulatory
-#ls -l /data/downloads/ensembl_mus_regulatory/${BIOTYPE_FILE_NAME}
-#cp -r ${TRDIR}/GeneModelLoad/????_genemodels.txt ${INPUTDIR}
-#cp -r ${TRDIR}/AssociationLoad/????_assoc.txt ${INPUTDIR}
-#ls -l ${INPUTDIR}/????_genemodels.txt
-#ls -l ${INPUTDIR}/????_assoc.txt
+rm -rf /data/downloads/ensembl_mus_regulatory/${BIOTYPE_FILE_NAME}
+scp bhmgiapp01:/data/downloads/ensembl_mus_regulatory/${BIOTYPE_FILE_NAME} /data/downloads/ensembl_mus_regulatory
+ls -l /data/downloads/ensembl_mus_regulatory/${BIOTYPE_FILE_NAME}
+cp -r ${TRDIR}/GeneModelLoad/ensembl_genemodels.txt ${INPUTDIR}/ensemblreg_genemodels.txt
+cp -r ${TRDIR}/AssociationLoad/ensembl_assoc.txt ${INPUTDIR}/ensemblreg_assoc.txt
+ls -l ${INPUTDIR}/ensemlreg_genemodels.txt
+ls -l ${INPUTDIR}/ensemlreg_assoc.txt
 
 elif [ "${GM_PROVIDER}" = "VISTAReg" ]
 then
@@ -120,9 +120,9 @@ then
 # vista regulatory
 #
 ls -l /mgi/all/wts2_projects/800/WTS2-813/VISTA/gff3/VISTA_mm9_mm10_b39.gff3
+cp -r ${TRDIR}/gtf/VISTA_mm9_mm10_b39.gtf.gz ${INPUTDIR}/vistareg_biotypes.gz
 cp -r ${TRDIR}/GeneModelLoad/VISTA_genemodels.txt ${INPUTDIR}/vistareg_genemodels.txt
 cp -r ${TRDIR}/AssociationLoad/MGI_VISTA_association_load ${INPUTDIR}/vistareg_assoc.txt
-cp -r ${TRDIR}/gtf/VISTA_mm9_mm10_b39.gtf.gz ${INPUTDIR}/vistareg_biotypes.gz
 ls -l ${INPUTDIR}
 
 else
