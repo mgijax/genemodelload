@@ -122,7 +122,7 @@ ls -l /mgi/all/wts2_projects/800/WTS2-813/VISTA/gff3/VISTA_mm9_mm10_b39.gff3
 cp -r ${TRDIR}/gtf/VISTA_mm9_mm10_b39.gtf.gz ${INPUTDIR}/vistareg_biotypes.gz
 cp -r ${TRDIR}/GeneModelLoad/VISTA_genemodels.txt ${INPUTDIR}/vistareg_genemodels.txt
 cp -r ${TRDIR}/AssociationLoad/MGI_VISTA_association_load ${INPUTDIR}/vistareg_assoc.txt
-ls -l ${INPUTDIR}/vistareg_biotypes.txt
+ls -l ${INPUTDIR}/vistareg_biotypes.gz
 ls -l ${INPUTDIR}/vistareg_genemodels.txt
 ls -l ${INPUTDIR}/vistareg_assoc.txt
 
