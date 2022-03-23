@@ -109,8 +109,8 @@ then
 rm -rf /data/downloads/ensembl_mus_regulatory/${BIOTYPE_FILE_NAME}
 scp bhmgiapp01:/data/downloads/ensembl_mus_regulatory/${BIOTYPE_FILE_NAME} /data/downloads/ensembl_mus_regulatory
 ls -l /data/downloads/ensembl_mus_regulatory/${BIOTYPE_FILE_NAME}
-cp -r ${TRDIR}/GeneModelLoad/ensembl_genemodels.txt ${INPUTDIR}/ensemblreg_genemodels.txt
-cp -r ${TRDIR}/AssociationLoad/ensembl_assoc.txt ${INPUTDIR}/ensemblreg_assoc.txt
+cp -r ${TRDIR}/GeneModelLoad/RRensembl_genemodels.txt ${INPUTDIR}/ensemblreg_genemodels.txt
+cp -r ${TRDIR}/AssociationLoad/MGI_ENSMUSR_association_load ${INPUTDIR}/ensemblreg_assoc.txt
 ls -l ${INPUTDIR}/ensemlreg_genemodels.txt
 ls -l ${INPUTDIR}/ensemlreg_assoc.txt
 
