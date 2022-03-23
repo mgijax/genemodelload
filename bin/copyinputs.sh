@@ -72,14 +72,14 @@ cp -r /data/downloads/entrezgene/${BIOTYPE_FILE_NAME} ${BIOTYPE_FILE_DEFAULT}
 cp -r ${TRDIR}/GeneModelLoad/ncbi_genemodels.txt ${INPUTDIR}
 cp -r ${TRDIR}/AssociationLoad/ncbi_assoc.txt ${INPUTDIR}
 
-#elif [ "${GM_PROVIDER}" = "EnsemblReg" ]
-#then
+elif [ "${GM_PROVIDER}" = "EnsemblReg" ]
+then
 #
 # ensembl regulatory
 #
-#cp -r /data/downloads/ensembl_mus_regulatory/${BIOTYPE_FILE_NAME} ${BIOTYPE_FILE_DEFAULT}
-#cp -r ${TRDIR}/GeneModelLoad/????_genemodels.txt ${INPUTDIR}
-#cp -r ${TRDIR}/AssociationLoad/????_assoc.txt ${INPUTDIR}
+cp -r /data/downloads/ensembl_mus_gtf/${BIOTYPE_FILE_NAME} ${BIOTYPE_FILE_DEFAULT}
+cp -r ${TRDIR}/GeneModelLoad/ensembl_genemodels.txt ${INPUTDIR}/ensemblreg_genemodels.txt
+cp -r ${TRDIR}/AssociationLoad/ensembl_assoc.txt ${INPUTDIR}/ensemblreg_assoc.txt
 
 elif [ "${GM_PROVIDER}" = "VISTAReg" ]
 then
