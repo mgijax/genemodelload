@@ -106,11 +106,10 @@ then
 #
 # ensembl regulatory
 #
-rm -rf /data/downloads/ensembl_mus_regulatory/${BIOTYPE_FILE_NAME}
-scp bhmgiapp01:/data/downloads/ensembl_mus_regulatory/${BIOTYPE_FILE_NAME} /data/downloads/ensembl_mus_regulatory
-ls -l /data/downloads/ensembl_mus_regulatory/${BIOTYPE_FILE_NAME}
+cp -r ${TRDIR}/gtf/mus_musculus.GRCm39.Regulatory_Build.regulatory_features.20201021.gtf.gz ${INPUTDIR}/ensemblreg_biotypes.gz
 cp -r ${TRDIR}/GeneModelLoad/RRensembl_genemodels.txt ${INPUTDIR}/ensemblreg_genemodels.txt
 cp -r ${TRDIR}/AssociationLoad/MGI_ENSMUSR_association_load ${INPUTDIR}/ensemblreg_assoc.txt
+ls -l ${INPUTDIR}/ensemblreg_biotypes.txt
 ls -l ${INPUTDIR}/ensemblreg_genemodels.txt
 ls -l ${INPUTDIR}/ensemblreg_assoc.txt
 
@@ -123,7 +122,9 @@ ls -l /mgi/all/wts2_projects/800/WTS2-813/VISTA/gff3/VISTA_mm9_mm10_b39.gff3
 cp -r ${TRDIR}/gtf/VISTA_mm9_mm10_b39.gtf.gz ${INPUTDIR}/vistareg_biotypes.gz
 cp -r ${TRDIR}/GeneModelLoad/VISTA_genemodels.txt ${INPUTDIR}/vistareg_genemodels.txt
 cp -r ${TRDIR}/AssociationLoad/MGI_VISTA_association_load ${INPUTDIR}/vistareg_assoc.txt
-ls -l ${INPUTDIR}
+ls -l ${INPUTDIR}/vistareg_biotypes.txt
+ls -l ${INPUTDIR}/vistareg_genemodels.txt
+ls -l ${INPUTDIR}/vistareg_assoc.txt
 
 else
     echo "variable GM_PROVIDER has not been set"

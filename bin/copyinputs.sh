@@ -20,7 +20,7 @@ then
         CONFIG=${GENEMODELLOAD}/genemodel_ensembl.config
 elif [ "`echo $1 | grep -i '^ncbi$'`" != "" ]
 then
-        CONFIG=${GENEMODELLOAD}/genemodel_ncbi.config
+        CONFIG=${GENEMODELLOAD}/ncbi.config
 elif [ "`echo $1 | grep -i '^ensemblreg$'`" != "" ]
 then
         CONFIG=${GENEMODELLOAD}/genemodel_ensemblreg.config
@@ -77,7 +77,7 @@ then
 #
 # ensembl regulatory
 #
-cp -r /data/downloads/ensembl_mus_gtf/${BIOTYPE_FILE_NAME} ${BIOTYPE_FILE_DEFAULT}
+cp -r ${TRDIR}/gtf/mus_musculus.GRCm39.Regulatory_Build.regulatory_features.20201021.gtf.gz ${INPUTDIR}/ensemblreg_biotypes.gz
 cp -r ${TRDIR}/GeneModelLoad/RRensembl_genemodels.txt ${INPUTDIR}/ensemblreg_genemodels.txt
 cp -r ${TRDIR}/AssociationLoad/MGI_ENSMUSR_association_load ${INPUTDIR}/ensemblreg_assoc.txt
 
