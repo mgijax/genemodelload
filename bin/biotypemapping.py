@@ -19,6 +19,7 @@
 #		_vocab_key : 104 (BioType NCBI)
 #		_vocab_key : 136 (BioType Mouse Genome Project)
 #		_vocab_key : 175 (BioType VISTA)
+#		_vocab_key : 176 (BioType Ensembl Regulatory Feature)
 #
 # Parameters:
 #
@@ -58,7 +59,8 @@ import loadlib
 ENSEMBL_VOCAB_KEY = 103
 NCBI_VOCAB_KEY = 104
 MGP_VOCAB_KEY = 136
-VISTA_VOCAB_KEY = 175
+ENSEMBLREG_VOCAB_KEY = 176
+VISTAREG_VOCAB_KEY = 175
 
 # MCV vocab key
 MCV_VOCAB_KEY = 79
@@ -281,21 +283,23 @@ def sanityCheck(biotypeVocab, biotypeTerm, mcvTerms, primaryMCVTerm, markerType,
         biotypeVocabKey = NCBI_VOCAB_KEY
     elif biotypeVocab == 'MGP':
         biotypeVocabKey = MGP_VOCAB_KEY
+    elif biotypeVocab == 'EnsemblR':
+        biotypeVocabKey = ENSEMBLREG_VOCAB_KEY
     elif biotypeVocab == 'VISTA':
-        biotypeVocabKey = VISTA_VOCAB_KEY
+        biotypeVocabKey = VISTAREG_VOCAB_KEY
     else:
-        errors.append( INVALID_VOCAB_ERROR % (lineNum, biotypeVocab) )
+        errors.append(INVALID_VOCAB_ERROR % (lineNum, biotypeVocab) )
 
     # Lookup the biotype _term_key for this vocab/term
     if biotypeVocabKey:
         biotypeTermKey = loadlib.verifyTerm('', biotypeVocabKey, biotypeTerm, lineNum, errorFile)
         if biotypeTermKey == 0:
-            errors.append( INVALID_BIOTYPE_TERM_ERROR % (lineNum, biotypeTerm, biotypeVocab) )
+            errors.append(INVALID_BIOTYPE_TERM_ERROR % (lineNum, biotypeTerm, biotypeVocab) )
 
     # lookup the _marker_type_key
     markerTypeKey = loadlib.verifyMarkerType(markerType, lineNum, errorFile)
     if markerTypeKey == 0:
-        errors.append( INVALID_MARKER_TYPE_ERROR % (lineNum, markerType) )
+        errors.append(INVALID_MARKER_TYPE_ERROR % (lineNum, markerType) )
 
     # 
     # mcv/feature types
@@ -304,14 +308,14 @@ def sanityCheck(biotypeVocab, biotypeTerm, mcvTerms, primaryMCVTerm, markerType,
     for r in tokens:
         t = loadlib.verifyTerm('', MCV_VOCAB_KEY, r, lineNum, errorFile)
         if t == 0:
-            errors.append( INVALID_MCV_TERM_ERROR % (lineNum, r) )
+            errors.append(INVALID_MCV_TERM_ERROR % (lineNum, r) )
         else:
             mcvTermKeys.append(t)
 
     # lookup the primary feature type
     primaryMCVTermKey = loadlib.verifyTerm('', MCV_VOCAB_KEY, primaryMCVTerm, lineNum, errorFile)
     if primaryMCVTermKey == 0:
-        errors.append( INVALID_MARKER_TYPE_ERROR % (lineNum, primaryMCVTerm) )
+        errors.append(INVALID_MARKER_TYPE_ERROR % (lineNum, primaryMCVTerm) )
 
     return errors
 

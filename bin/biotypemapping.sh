@@ -92,7 +92,7 @@ echo ${message}
 date
 echo "Running biotype/vocload : ensemblreg.txt"
 rm -rf ${INPUTDIR}/ensemblreg.txt
-grep "^VISTA" ${BIOTYPEINPUT_FILE_DEFAULT} > ${INPUTDIR}/ensemblreg.txt
+grep "^EnsemblR" ${BIOTYPEINPUT_FILE_DEFAULT} > ${INPUTDIR}/ensemblreg.txt
 ${VOCLOAD}/runSimpleFullLoadNoArchive.sh biotype_ensemblreg.config
 STAT=$?
 if [ ${STAT} -ne 0 ]
