@@ -235,7 +235,7 @@ def init():
         'Could not open file for writing %s\n' % bcpFilePath
         sys.exit(1)
 
-    if provider in ('ensembl', 'vistareg'):
+    if provider in ('ensembl', 'ensemblreg', 'vistareg'):
         loadEnsemblRawBioTypeByGMIDLookup()
 
     elif provider == 'ncbi':
