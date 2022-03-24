@@ -106,9 +106,7 @@ then
 #
 # ensembl regulatory
 #
-rm -rf /data/downloads/ftp.ensembl.org/pub/current_regulation/*
-scp bhmgiapp01:/data/downloads/ftp.ensembl.org/pub/current_regulation/mus_musculus/mus_musculus.GRCm39.Regulatory_Build.regulatory_features.20201021.gff.gz /data/downloads/ftp.ensembl.org/pub/current_regulation
-cp -r /data/downloads/ftp.ensembl.org/pub/current_regulation/mus_musculus.GRCm39.Regulatory_Build.regulatory_features.20201021.gff.gz ${INPUTDIR}/ensemblreg_biotypes.gz
+cp -r ${TRDIR}/gtf/mus_musculus.GRCm39.Regulatory_Build.regulatory_features.20201021.gtf.gz ${INPUTDIR}/ensemblreg_biotypes.gz
 cp -r ${TRDIR}/GeneModelLoad/RRensembl_genemodels.txt ${INPUTDIR}/ensemblreg_genemodels.txt
 cp -r ${TRDIR}/AssociationLoad/MGI_ENSMUSR_association_load ${INPUTDIR}/ensemblreg_assoc.txt
 ls -l ${INPUTDIR}/ensemblreg_biotypes.gz
