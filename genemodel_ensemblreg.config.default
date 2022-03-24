@@ -72,7 +72,7 @@ export GM_FILE_MINIMUM_SIZE ASSOC_FILE_MINIMUM_SIZE
 
 # The logical DB for the header of the load-ready association file.
 #
-ASSOC_FILE_LOGICALDB="Ensembl Gene Model"
+ASSOC_FILE_LOGICALDB="Ensembl Regulatory Feature"
 export ASSOC_FILE_LOGICALDB
 
 # Full path to the log files.
@@ -125,7 +125,7 @@ export USERKEY
 
 # path to bcp file
 #
-BCP_FILE_PATH=${OUTPUTDIR}/SEQ_GeneModel.ensembl.bcp
+BCP_FILE_PATH=${OUTPUTDIR}/SEQ_GeneModel.ensemblreg.bcp
 
 # full path to the log file
 #
