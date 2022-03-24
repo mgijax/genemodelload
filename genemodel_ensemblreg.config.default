@@ -125,7 +125,7 @@ export USERKEY
 
 # path to bcp file
 #
-BCP_FILE_PATH=${OUTPUTDIR}/SEQ_GeneModel.ensembl.bcp
+BCP_FILE_PATH=${OUTPUTDIR}/SEQ_GeneModel.ensemblreg.bcp
 
 # full path to the log file
 #
