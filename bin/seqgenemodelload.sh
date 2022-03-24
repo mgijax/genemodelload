@@ -82,7 +82,7 @@ then
     CONFIG=genemodel_ncbi.config
 elif [ "`echo $1 | grep -i '^ensemblreg$'`" != "" ]
 then
-    PROVIDER=ensembl
+    PROVIDER=ensemblreg
     CONFIG=genemodel_ensemblreg.config
 elif [ "`echo $1 | grep -i '^vistareg$'`" != "" ]
 then

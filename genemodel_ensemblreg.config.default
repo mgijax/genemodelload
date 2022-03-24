@@ -30,7 +30,7 @@ export RELOAD_GENEMODELS
 # Full path to the default biotype file 
 #  Used to create gene model ID to biotype mapping for createSeqGeneTrapInput.py
 #
-BIOTYPE_FILE_DEFAULT=${INPUTDIR}/ensembl_biotypes.gz
+BIOTYPE_FILE_DEFAULT=${INPUTDIR}/ensemblreg_biotypes.gz
 export BIOTYPE_FILE_DEFAULT 
 
 # Gene model provider name.
