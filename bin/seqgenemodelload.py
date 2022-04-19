@@ -142,7 +142,7 @@ def loadSequenceKeyLookup():
                 AND preferred = 1''' % ldbKey, 'auto')
     for r in results:
         seqKeyByGMIDLookup[r['accId']] = r['seqKey']
-    print(seqKeyByGMIDLookup)
+    #print(seqKeyByGMIDLookup)
 
 # Purpose:  Load lookup of raw biotype by gene model ID for
 #	    either Ensembl (file format the same)
