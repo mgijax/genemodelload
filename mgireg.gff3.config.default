@@ -1,0 +1,24 @@
+#format: sh
+#
+#  mgireg.gff3.config.default
+#
+#  This file sets up the environment variables that are needed for 
+#  generating the MGIreg.gff3 file
+#
+###########################################################################
+#
+MOUSE_ASSEMBLY="GRCm39"
+export MOUSE_ASSEMBLY
+
+# Full path the the ensembl.gff file
+# Used by the MGIreg.gff3 script that creates this gff3 file
+ENSEMBL_GFF=${DATADOWNLOADS}/ftp.ensembl.org/pub/current_regulation/mus_musculus/mus_musculus.GRCm39.Regulatory_Build.regulatory_features.20201021.gff.gz
+export ENSEMBL_GFF
+
+# Local unzipped version of ENSEMBL_GFF
+ENSEMBL_GFF_DEFAULT=${INPUTDIR}/ensembl.gff
+export ENSEMBL_GFF_DEFAULT
+
+# source url for ENSEMBL_GFF
+ENSEMBL_GFF_URL=http://ftp.ensembl.org/pub/current_regulation/mus_musculus/mus_musculus.GRCm39.Regulatory_Build.regulatory_features.20201021.gff.gz
+export ENSEMBL_GFF_URL
