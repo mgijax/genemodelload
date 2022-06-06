@@ -255,6 +255,7 @@ def writeGffFile():
 
         # get the SO term if the mcvID mapped to SO
         mcvID = r['mcvID']
+        soTermName = ''
         if mcvID in mcvIdToSODict:
             soTermName = mcvIdToSODict[mcvID][1]
 
