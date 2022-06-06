@@ -22,3 +22,7 @@ export ENSEMBL_GFF_DEFAULT
 # source url for ENSEMBL_GFF
 ENSEMBL_GFF_URL=http://ftp.ensembl.org/pub/current_regulation/mus_musculus/mus_musculus.GRCm39.Regulatory_Build.regulatory_features.20201021.gff.gz
 export ENSEMBL_GFF_URL
+
+# ftp distribution directory
+DISTRIBDIR=${FTPROOT}/pub/mgigff3
+export DISTRIBDIR
