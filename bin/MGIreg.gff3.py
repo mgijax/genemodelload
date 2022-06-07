@@ -151,7 +151,7 @@ def init():
         and t._term_key = a._object_key
         and a._mgitype_key = 13
         and a._logicaldb_key = 146
-        order by ev.provider, ev.genomicchromosome, ev.startcoordinate ''', 'auto')
+        order by ev.genomicchromosome, ev.startcoordinate ''', 'auto')
 
     # Create lookup of bounds by ensembl id
 
