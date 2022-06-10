@@ -227,8 +227,8 @@ def writeGffFile():
     column9 = ''
 
     # template for column nine
-    column9EnsTemplate = 'ID=%s; Name=%s; description=%s; curie=%s; Dbxref=%s; bound_start=%s; bound_end=%s; mgi_type=%s; so_term_name=%s'
-    column9VisTemplate = 'ID=%s; Name=%s; description=%s; curie=%s; Dbxref=%s; mgi_type=%s; so_term_name=%s'
+    column9EnsTemplate = 'ID=%s;Name=%s;description=%s;curie=%s;Dbxref=%s;bound_start=%s;bound_end=%s;mgi_type=%s;so_term_name=%s'
+    column9VisTemplate = 'ID=%s;Name=%s;description=%s;curie=%s;Dbxref=%s;mgi_type=%s;so_term_name=%s'
     # components of column 9
     iid = 'reg%s'           # some generated internal id
     name = ''               # marker symbol
