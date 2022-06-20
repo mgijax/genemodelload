@@ -48,7 +48,7 @@ if [ $# -ne 2 -a $# -ne 4 ]
 then
     usage
 else
-    if [ "`echo $1 | egrep -i '^ensembl$|^ncbi$'|^ensemblreg$'|^vistareg$'`" = "" ]
+    if [ "`echo $1 | egrep -i '^ensembl$|^ncbi$|^ensemblreg$|^vistareg$'`" = "" ]
     then
         usage
     fi
