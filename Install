@@ -7,7 +7,7 @@
 cd `dirname $0`
 
 COMMON_CONFIG=genemodel_common.config
-PROVIDER_CONFIGS="biotypemapping.config genemodel_ensembl.config genemodel_ncbi.config genemodel_ensemblreg.config genemodel_vistareg.config"
+PROVIDER_CONFIGS="biotypemapping.config genemodel_ensembl.config genemodel_ncbi.config genemodel_ensemblreg.config genemodel_vistareg.config mgireg.gff3.config"
 
 #
 #  Function called when the install fails.
