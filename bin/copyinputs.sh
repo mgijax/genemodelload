@@ -4,14 +4,14 @@
 # 1) copy /data/downloads files to /data/loads/mgi/genemodelload/input directory
 # 2) copy TR files to /data/loads/mgi/genemodelload/input directory
 #
-# Usage: copyinputs.sh ensembl/ncbi/ensemblseq/vistareg
+# Usage: copyinputs.sh ensembl/ncbi/ensemblreg/vistareg
 #
 if [ "${MGICONFIG}" = "" ]
 then
     MGICONFIG=/usr/local/mgi/live/mgiconfig
     export MGICONFIG
 fi
-
+echo ${MGICONFIG}
 . ${MGICONFIG}/master.config.sh
 . ${GENEMODELLOAD}/genemodel_common.config
 
@@ -62,7 +62,9 @@ cp -r /data/downloads/ftp.ensembl.org/pub/current_fasta/mus_musculus/pep/${PROTE
 cp -r /data/downloads/ftp.ensembl.org/pub/current_fasta/mus_musculus/ncrna/${NCRNA_FILE_NAME} ${NCRNA_FILE_DEFAULT}
 
 cp -r /data/downloads/ftp.ensembl.org/pub/current_gtf/mus_musculus/${BIOTYPE_FILE_NAME} ${INPUTDIR}/ensembl_biotypes.gz
+echo "cp -r ${TRDIR}/GeneModelLoad/ensembl_genemodels.txt ${INPUTDIR}"
 cp -r ${TRDIR}/GeneModelLoad/ensembl_genemodels.txt ${INPUTDIR}
+echo "cp -r ${TRDIR}/AssociationLoad/ensembl_assoc.txt ${INPUTDIR}"
 cp -r ${TRDIR}/AssociationLoad/ensembl_assoc.txt ${INPUTDIR}
 
 
@@ -80,7 +82,7 @@ then
 #
 # ensembl regulatory
 #
-cp -r ${TRDIR}/gtf/mus_musculus.GRCm39.Regulatory_Build.regulatory_features.20201021.gtf.gz ${INPUTDIR}/ensemblreg_biotypes.gz
+cp -r ${TRDIR}/gtf/${BIOTYPE_FILE_NAME} ${INPUTDIR}/ensemblreg_biotypes.gz
 cp -r ${TRDIR}/GeneModelLoad/RRensembl_genemodels.txt ${INPUTDIR}/ensemblreg_genemodels.txt
 cp -r ${TRDIR}/AssociationLoad/MGI_ENSMUSR_association_load ${INPUTDIR}/ensemblreg_assoc.txt
 
