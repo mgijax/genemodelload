@@ -23,7 +23,7 @@ usage ()
 {
     echo "Usage: publishAssocFile provider assoc_file"
     echo "       where"
-    echo "           provider = ensembl, ncbi"
+    echo "           provider = ensembl, ensemblreg, ncbi"
     echo "           assoc_file = path to the association file"
     exit 1
 }
@@ -51,6 +51,9 @@ else
     if [ "`echo $1 | grep -i '^ensembl$'`" != "" ]
     then
         CONFIG=genemodel_ensembl.config
+    elif [ "`echo $1 | grep -i '^ensemblreg$'`" != "" ]
+    then
+        CONFIG=genemodel_ensemblreg.config
     elif [ "`echo $1 | grep -i '^ncbi$'`" != "" ]
     then
         CONFIG=genemodel_ncbi.config
