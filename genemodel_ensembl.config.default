@@ -10,14 +10,14 @@
 #
 # test TR directory
 #
-TRDIR=/mgi/all/wts2_projects/900/WTS2-943/ENSEMBL
+TRDIR=/mgi/all/wts2_projects/1000/WTS2-1064/ENSEMBL
 export TRDIR
 
 #
 # used by other wrappers in bin directory :
 #  copydownloads.sh, copyinputs.sh, runTest.sh
 #
-BIOTYPE_FILE_NAME=Mus_musculus.GRCm39.107.gtf.gz
+BIOTYPE_FILE_NAME=Mus_musculus.GRCm39.108.gtf.gz
 TRANSCRIPT_FILE_NAME=Mus_musculus.GRCm39.cdna.all.fa.gz
 NCRNA_FILE_NAME=Mus_musculus.GRCm39.ncrna.fa.gz
 PROTEIN_FILE_NAME=Mus_musculus.GRCm39.pep.all.fa.gz

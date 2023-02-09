@@ -1,6 +1,11 @@
+TAG: genemodelload-6-0-22-5
+DATE: 02/09/2023
+STAFF: sc
+CHANGES: ensembl 108 config changes: WTS2-1064 
+
 TAG: genemodelload-6-0-22-4
 TAG: genemodelload-6-0-22-3
-DATE: 01/06/2022
+DATE: 01/06/2023
 STAFF: sc
 CHANGES: FL2-114 - add ability to publish ensembl reg region
     association files. updated some filenames in copy* scripts
