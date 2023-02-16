@@ -106,9 +106,13 @@ CHR_DISCREP_RPT=${RPTDIR}/ncbi_chr_discrep.rpt
 # names of reports containing discrepancies for a given run
 RPT_NAMES_RPT=${RPTDIR}/ncbi_reportsWithDiscrepancies.rpt
 
+# names of reports containing warnings (report and load) for a given run
+WARNING_RPT_NAMES_RPT=${RPTDIR}/ensembl_reportsWithWarnings.rpt
+
 export GM_SANITY_RPT ASSOC_SANITY_RPT
 export INVALID_MARKER_RPT SEC_MARKER_RPT
 export MISSING_GMID_RPT CHR_DISCREP_RPT RPT_NAMES_RPT
+export WARNING_RPT_NAMES_RPT
 
 # Name of the configuration file for the assemblyseqload.
 #

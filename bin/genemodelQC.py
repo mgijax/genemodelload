@@ -144,6 +144,7 @@ missGMRptFile = os.environ['MISSING_GMID_RPT']
 chrDiscrepRptFile = os.environ['CHR_DISCREP_RPT']
 # names of reports that contain discrepancies
 rptNamesFile = os.environ['RPT_NAMES_RPT']
+warningRptNamesFile = os.environ['WARNING_RPT_NAMES_RPT']
 
 assocLoadFile = os.environ['ASSOC_FILE_LOAD']
 logicalDB = os.environ['ASSOC_FILE_LOGICALDB']
@@ -152,6 +153,10 @@ timestamp = mgi_utils.date()
 
 errorCount = 0
 errorReportNames = []
+
+warningCount = 0
+warningReportNames = []
+
 assoc = {}
 
 
@@ -239,8 +244,9 @@ def openFiles ():
     try:
         fpRptNamesRpt = open(rptNamesFile, 'a')
     except:
-        print('Cannot open report file: ' + invMrkRptFile)
+        print('Cannot open report file: ' + rptNamesFile)
         sys.exit(1)
+
     return
 
 
@@ -662,16 +668,16 @@ def createMissingGMIDReport ():
 # Throws: Nothing
 #
 def createChrDiscrepReport ():
-    global assoc, errorCount, errorReportNames
+    global assoc, errorCount, warningCount, errorReportNames, warningReportNames
 
     print('Create the chromosome discrepancy report')
     fpChrDiscrepRpt.write(str.center('Chromosome Discrepancy Report',96) + NL)
     fpChrDiscrepRpt.write(str.center(provider,96) + NL)
     fpChrDiscrepRpt.write(str.center('(' + timestamp + ')',96) + 2*NL)
-    fpChrDiscrepRpt.write('%-20s  %-3s  %-12s  %-50s  %-3s%s' %
-                         ('Gene Model ID','Chr','MGI ID',
+    fpChrDiscrepRpt.write('%-5s  %-20s  %-3s  %-12s  %-50s  %-3s%s' %
+                         ('Load?', 'Gene Model ID','Chr','MGI ID',
                           'Marker Symbol','Chr',NL))
-    fpChrDiscrepRpt.write(20*'-' + '  ' + 3*'-' + '  ' + 12*'-' + '  ' +
+    fpChrDiscrepRpt.write(5*'-' + '  ' + 20*'-' + '  ' + 3*'-' + '  ' + 12*'-' + '  ' +
                           50*'-' + '  ' + 3*'-' + NL)
 
     #
@@ -702,11 +708,25 @@ def createChrDiscrepReport ():
     #
     # Write the records to the report.
     #
+
+    # Load genetic chr 'XY' and genomic chr 'X' or 'Y', these are not mismatches
+    print('db results: %s' % results)
+    xyResults  = []
+    noloadResults = []
     for r in results:
+        gmChr = r['gmChr']
+        mrkChr = r['mrkChr']
+        if mrkChr == 'XY' and (gmChr == 'X' or gmChr == 'Y'):
+            xyResults.append(r)
+        else:
+            noloadResults.append(r)
+    print('no load results: %s' % noloadResults)
+    print('xy results: %s' % xyResults)
+    for r in noloadResults:
         mgiID = r['mgiID']
         gmID = r['gmID']
 
-        fpChrDiscrepRpt.write('%-20s  %-3s  %-12s  %-50s  %-3s%s' %
+        fpChrDiscrepRpt.write('No     %-20s  %-3s  %-12s  %-50s  %-3s%s' %
             (gmID, r['gmChr'], mgiID, r['symbol'], r['mrkChr'], NL))
 
         #
@@ -721,13 +741,34 @@ def createChrDiscrepReport ():
                     list.remove(gmID)
                 assoc[mgiID] = list
 
-    numErrors = len(results)
-    fpChrDiscrepRpt.write(NL + 'Number of Rows: ' + str(numErrors) + NL)
+    numErrors = len(noloadResults)
 
-    errorCount += numErrors
-    if numErrors > 0:
+    for r in xyResults:
+        mgiID = r['mgiID']
+        gmID = r['gmID']
+
+        fpChrDiscrepRpt.write('Yes    %-20s  %-3s  %-12s  %-50s  %-3s%s' %
+            (gmID, r['gmChr'], mgiID, r['symbol'], r['mrkChr'], NL))
+
+    numWarnings = len(xyResults)
+
+    fpChrDiscrepRpt.write(NL + 'Number of Rows Not Loaded: ' + str(numErrors) + NL)
+    fpChrDiscrepRpt.write(NL + 'Number of Rows Loaded: ' + str(numWarnings) + NL)
+
+    errorCount += numErrors 
+    warningCount += numWarnings
+
+    if numWarnings > 0: 
+        print('numWarnings > 0')
+        if not chrDiscrepRptFile in warningReportNames:
+            print('appending chrDiscrepRptFile to warningReportNames')
+            warningReportNames.append(chrDiscrepRptFile + NL)
+    if numErrors > 0: 
+        print('numErrors > 0')
         if not chrDiscrepRptFile in errorReportNames:
+            print('appending chrDiscrepRptFile to errorReportNames')
             errorReportNames.append(chrDiscrepRptFile + NL)
+
     return
 
 
@@ -773,11 +814,16 @@ closeFiles()
 
 if liveRun == "1":
     createAssocLoadFile()
-
+RC=0
 if errorCount > 0:
     names = str.join('', errorReportNames)
+    fpRptNamesRpt.write('Reports with Errors: ' + NL )
     fpRptNamesRpt.write(names)
-    fpRptNamesRpt.close()
-    sys.exit(2)
-else:
-    sys.exit(0)
+    RC=2
+if warningCount > 0:
+    names = str.join('', warningReportNames)
+    fpRptNamesRpt.write('Reports with Warnings: ' + NL )
+    fpRptNamesRpt.write(names)
+    RC=2
+fpRptNamesRpt.close()
+sys.exit(RC)
