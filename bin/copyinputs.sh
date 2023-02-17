@@ -20,7 +20,7 @@ then
         CONFIG=${GENEMODELLOAD}/genemodel_ensembl.config
 elif [ "`echo $1 | grep -i '^ncbi$'`" != "" ]
 then
-        CONFIG=${GENEMODELLOAD}/ncbi.config
+        CONFIG=${GENEMODELLOAD}/genemodel_ncbi.config
 elif [ "`echo $1 | grep -i '^ensemblreg$'`" != "" ]
 then
         CONFIG=${GENEMODELLOAD}/genemodel_ensemblreg.config
