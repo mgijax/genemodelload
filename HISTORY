@@ -1,3 +1,9 @@
+TAG: genemodelload-6-0-22-7
+DATE: 02/20/2023
+STAFF: sc
+CHANGES: FL2-209 - Genemodelload - update QC to allow geneticChr='XY' and genomicChr='X' or 'Y'
+bug in copyinputs.sh new NCBI config name
+
 TAG: genemodelload-6-0-22-6
 DATE: 02/16/2023
 STAFF: sc
