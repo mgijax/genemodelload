@@ -101,6 +101,7 @@ INVALID_MARKER_RPT=${RPTDIR}/vistareg_invalid_marker.rpt
 SEC_MARKER_RPT=${RPTDIR}/vistareg_sec_marker.rpt
 MISSING_GMID_RPT=${RPTDIR}/vistareg_missing_gmid.rpt
 CHR_DISCREP_RPT=${RPTDIR}/vistareg_chr_discrep.rpt
+DUP_GM_ID_RPT=${RPTDIR}/vistareg_dup_gm_id.rpt
 
 # names of reports containing discrepancies for a given run
 RPT_NAMES_RPT=${RPTDIR}/vistareg_reportsWithDiscrepancies.rpt
@@ -110,8 +111,8 @@ WARNING_RPT_NAMES_RPT=${RPTDIR}/ensembl_reportsWithWarnings.rpt
 
 export GM_SANITY_RPT ASSOC_SANITY_RPT
 export INVALID_MARKER_RPT SEC_MARKER_RPT
-export MISSING_GMID_RPT CHR_DISCREP_RPT RPT_NAMES_RPT
-export WARNING_RPT_NAMES_RPT
+export MISSING_GMID_RPT CHR_DISCREP_RPT DUP_GM_ID_RPT
+export RPT_NAMES_RPT WARNING_RPT_NAMES_RPT
 
 # Name of the configuration file for the assemblyseqload.
 #
