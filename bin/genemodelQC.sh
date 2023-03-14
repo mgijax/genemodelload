@@ -220,6 +220,9 @@ LOG=${GENEMODELQC_LOGFILE}
 rm -rf ${LOG}
 touch ${LOG}
 
+echo "MGD_DBSERVER: ${MGD_DBSERVER}" | tee -a ${LOG}
+echo "MGD_DBNAME: ${MGD_DBNAME}" | tee -a ${LOG}
+
 #
 # Make sure the input files exist (regular file or symbolic link).
 #
@@ -237,7 +240,7 @@ fi
 #
 # Initialize the report files to make sure the current user can write to them.
 #
-RPT_LIST="${GM_SANITY_RPT} ${ASSOC_SANITY_RPT} ${INVALID_MARKER_RPT} ${SEC_MARKER_RPT} ${MISSING_GMID_RPT} ${CHR_DISCREP_RPT} ${RPT_NAMES_RPT}"
+RPT_LIST="${GM_SANITY_RPT} ${ASSOC_SANITY_RPT} ${INVALID_MARKER_RPT} ${SEC_MARKER_RPT} ${MISSING_GMID_RPT} ${CHR_DISCREP_RPT} ${CHR_DISCREP_RPT} ${DUP_GM_ID_RPT} ${RPT_NAMES_RPT}"
 
 for i in ${RPT_LIST}
 do
@@ -409,11 +412,12 @@ then
     GM_FILE_ERROR=1
 fi
 
-checkDupFields ${GM_FILE_QC} ${GM_SANITY_RPT} 1 "Gene Model IDs"
-if [ $? -ne 0 ]
-then
-    GM_FILE_ERROR=1
-fi
+# 3/9/2023 - moved this to the python script
+#checkDupFields ${GM_FILE_QC} ${GM_SANITY_RPT} 1 "Gene Model IDs"
+#if [ $? -ne 0 ]
+#then
+#    GM_FILE_ERROR=1
+#fi
 
 checkColumns ${GM_FILE_QC} ${GM_SANITY_RPT} ${GM_FILE_COLUMNS}
 if [ $? -ne 0 ]
