@@ -29,6 +29,7 @@
 #          SEC_MARKER_RPT
 #          MISSING_GMID_RPT
 #          CHR_DISCREP_RPT
+#          DUP_GM_ID_RPT
 #          ASSOC_FILE_LOAD
 #          ASSOC_FILE_LOGICALDB
 #	   RPT_NAMES_RPT
@@ -71,6 +72,7 @@
 #
 #      - QC report (${CHR_DISCREP_RPT})
 #
+#      - QC report (${DUP_GM_ID_RPT})
 #  Exit Codes:
 #
 #      0:  Successful completion
@@ -142,6 +144,8 @@ invMrkRptFile = os.environ['INVALID_MARKER_RPT']
 secMrkRptFile = os.environ['SEC_MARKER_RPT']
 missGMRptFile = os.environ['MISSING_GMID_RPT']
 chrDiscrepRptFile = os.environ['CHR_DISCREP_RPT']
+dupGMIDRptFile =  os.environ['DUP_GM_ID_RPT']
+
 # names of reports that contain discrepancies
 rptNamesFile = os.environ['RPT_NAMES_RPT']
 warningRptNamesFile = os.environ['WARNING_RPT_NAMES_RPT']
@@ -189,7 +193,7 @@ def checkArgs ():
 def openFiles ():
     global fpGM, fpAssoc, fpGMBCP, fpAssocBCP
     global fpInvMrkRpt, fpSecMrkRpt, fpMissGMRpt, fpChrDiscrepRpt
-    global fpRptNamesRpt
+    global fpDupGMIDRpt, fpRptNamesRpt
     #
     # Open the input files.
     #
@@ -242,6 +246,12 @@ def openFiles ():
         print('Cannot open report file: ' + chrDiscrepRptFile)
         sys.exit(1)
     try:
+        fpDupGMIDRpt = open(dupGMIDRptFile, 'a')
+    except:
+        print('Cannot open report file: ' + dupGMIDRptFile)
+        sys.exit(1)
+
+    try:
         fpRptNamesRpt = open(rptNamesFile, 'a')
     except:
         print('Cannot open report file: ' + rptNamesFile)
@@ -260,7 +270,7 @@ def openFiles ():
 def closeFiles ():
     global fpGM, fpAssoc, fpGMBCP, fpAssocBCP
     global fpInvMrkRpt, fpSecMrkRpt, fpMissGMRpt, fpChrDiscrepRpt
-    global fpRptNamesRpt
+    global fpDupGMIDRpt, fpRptNamesRpt
 
     fpGM.close()
     fpAssoc.close()
@@ -268,6 +278,7 @@ def closeFiles ():
     fpSecMrkRpt.close()
     fpMissGMRpt.close()
     fpChrDiscrepRpt.close()
+    fpDupGMIDRpt.close()
     return
 
 
@@ -771,7 +782,83 @@ def createChrDiscrepReport ():
 
     return
 
+#
+# Purpose: Create the Duplicate GM ID report.
+# Returns: Nothing
+# Assumes: Nothing
+# Effects: Nothing
+# Throws: Nothing
+# Notes: Duplicates for NCBI if one GM is on X and one on Y is warning
+#        All others are errors
+def createDupGMIDReport ():
+    global assoc, errorCount, warningCount, errorReportNames, warningReportNames
 
+    print('Create the duplicate GM ID report')
+    fpDupGMIDRpt.write(str.center('Duplicate GM ID Report',96) + NL)
+    fpDupGMIDRpt.write(str.center(provider,96) + NL)
+    fpDupGMIDRpt.write(str.center('(' + timestamp + ')',96) + 2*NL)
+    fpDupGMIDRpt.write('%-5s  %-20s  %-3s  %s' %
+                         ('Load?', 'Gene Model ID','Chr',NL))
+    fpDupGMIDRpt.write(5*'-' + '  ' + 20*'-' + '  ' + 3*'-' + NL)
+
+    #
+    # Find any cases where the GM ID in the GM file is duplicated 
+    #
+    cmd = '''select tgm.gmID
+                into temporary table dupes
+                from %s tgm
+                group by tgm.gmID
+                having count(*) > 1''' % gmTempTable
+
+    db.sql(cmd, None)
+
+    cmd = '''select tgm.gmID, tgm.chromosome
+                from  %s tgm, dupes d
+                where lower(tgm.gmID) = lower(d.gmID)''' % gmTempTable
+
+    results = db.sql(cmd, 'auto')
+
+    # Add all the dupes to the dictionary
+    dupeDict = {}
+    for r in results:
+        gmID = r['gmID']
+        chromosome = r['chromosome']
+        if gmID not in dupeDict:
+            dupeDict[gmID] = []
+        dupeDict[gmID].append(chromosome)
+
+    numWarnings = 0
+    numErrors = 0
+    
+    for gmID in dupeDict:
+        chromList = dupeDict[gmID]
+        if provider == 'NCBI' and 'X' in chromList and 'Y' in chromList:
+            fpDupGMIDRpt.write('Yes      %-20s  %-3s' % (gmID, str.join(', ', chromList)) + NL)
+            numWarnings += 1
+        else:
+            fpDupGMIDRpt.write('No       %-20s  %-3s' % (gmID, str.join(', ', chromList)) + NL)
+            numErrors += 1
+
+    fpDupGMIDRpt.write(NL + NL + 'Number of Rows Not Loaded: ' + str(numErrors) + NL)
+    if provider == 'NCBI':
+        fpDupGMIDRpt.write(NL + 'Number of Rows Loaded: ' + str(numWarnings) + NL)
+
+    errorCount += numErrors 
+    warningCount += numWarnings
+
+    if numWarnings > 0: 
+        print('numWarnings > 0')
+        if not dupGMIDRptFile in warningReportNames:
+            print('appending dupGMIDRptFile to warningReportNames')
+            warningReportNames.append(dupGMIDRptFile + NL)
+    if numErrors > 0: 
+        print('numErrors > 0')
+        if not dupGMIDRptFile in errorReportNames:
+            print('appending dupGMIDRptFile to errorReportNames')
+            errorReportNames.append(dupGMIDRptFile + NL)
+
+    return
+        
 #
 # Purpose: Create the load-ready association file from the dictionary of
 #          associations that did not have any discrepancies.
@@ -810,6 +897,7 @@ createInvMarkerReport()
 createSecMarkerReport()
 createMissingGMIDReport()
 createChrDiscrepReport()
+createDupGMIDReport()
 closeFiles()
 
 if liveRun == "1":
