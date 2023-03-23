@@ -96,15 +96,15 @@ cat ${HOME}/.pgpass
 #
 # reload the database
 #
-#echo -e "\nloading test database...."
-#${PG_DBUTILS}/bin/loadDB.csh ${PG_DBSERVER} ${PG_DBNAME} ${TEST_DBSCHEMA} ${TEST_DBDUMP}
-#STAT=$?
-#if [ ${STAT} -ne 0 ]
-#then
-#	echo -e "\nerror : cannot load database : "
-#	echo  ${PG_DBSERVER}, ${PG_DBNAME}, ${TEST_DBDUMP_TO}
-#	exit 1
-#fi
+echo -e "\nloading test database...."
+${PG_DBUTILS}/bin/loadDB.csh ${PG_DBSERVER} ${PG_DBNAME} ${TEST_DBSCHEMA} ${TEST_DBDUMP}
+STAT=$?
+if [ ${STAT} -ne 0 ]
+then
+	echo -e "\nerror : cannot load database : "
+	echo  ${PG_DBSERVER}, ${PG_DBNAME}, ${TEST_DBDUMP_TO}
+	exit 1
+fi
 
 #
 # step 4
