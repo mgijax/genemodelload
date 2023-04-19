@@ -175,18 +175,13 @@ def loadEnsemblRawBioTypeByGMIDLookup():
             continue
 
         attributeList = str.split(columnList[8], SCOLON)
-        #x#print('attributeList: %s' % attributeList)
         gmId = (str.split(attributeList[0], '"'))[1].strip()
-        #print('gmId: %s' % gmId)
 
         biotype = ''
 
         for a in attributeList:
             #print('a: %s' % a)
             if str.strip(a).startswith('gene_biotype'):
-                #temp = str.split(a)[1]
-                #print('temp: %s' % temp)
-                #biotype = temp[1:-1]
                 biotype = a.split('"')[1]
                 #print('biotype: %s' % biotype)
         # there are redundant id/biotype lines in the input, all IDs have the
