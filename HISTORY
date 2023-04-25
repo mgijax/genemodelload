@@ -1,3 +1,13 @@
+TAG: genemodelload-6-0-22-??
+DATE: ???
+STAFF: 
+CHANGES: 
+1. all config: DUP_GM_ID_REPORT
+2. copy scripts had errors - fixed per Sophia
+3. genemodelQC.py move -  checking for dup GMs from genemodelQC.sh to here
+4. genemodelQC.py create new dup GM IDs report
+5. runGeneModelTest.sh - uncomment the reload of the database
+
 TAG: genemodelload-6-0-22-7
 DATE: 02/20/2023
 STAFF: sc
