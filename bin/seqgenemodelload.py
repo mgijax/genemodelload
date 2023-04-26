@@ -44,6 +44,8 @@ Usage='createSeqGeneModelInput.py provider (ensembl | ncbi | ensemblreg | vistar
 #  Date        SE   Change Description
 #  ----------  ---  -------------------------------------------------------
 #
+#  04/14/2023  sc   Update to parse ensemblreg raw biotypes
+#
 #  01/20/2010  sc   Initial development
 #
 ###########################################################################
@@ -162,7 +164,7 @@ def loadEnsemblRawBioTypeByGMIDLookup():
     print('loadEnsemblRawBioTypeByGMIDLookup()')
 
     for line in inFile.readlines():
-
+        #print('biotype file line: %s' % line)
         columnList = str.split(line, TAB)
 
         #
@@ -174,13 +176,14 @@ def loadEnsemblRawBioTypeByGMIDLookup():
 
         attributeList = str.split(columnList[8], SCOLON)
         gmId = (str.split(attributeList[0], '"'))[1].strip()
+
         biotype = ''
 
         for a in attributeList:
+            #print('a: %s' % a)
             if str.strip(a).startswith('gene_biotype'):
-                temp = str.split(a)[1]
-                biotype = temp[1:-1]
-
+                biotype = a.split('"')[1]
+                #print('biotype: %s' % biotype)
         # there are redundant id/biotype lines in the input, all IDs have the
         # same biotype for each of the redundant lines so save only one pair
         # but just in case check
@@ -190,7 +193,6 @@ def loadEnsemblRawBioTypeByGMIDLookup():
                 print('Differing biotypes for %s: %s and %s' % (gmId, b, biotype))
                 continue
         rawBioTypeByGMIDLookup[gmId] = biotype
-        #print('%s %s %s' % (gmId, biotype, CRT))
 
 # Purpose:  Load lookup of raw biotype by gene model ID for
 #           either NCBI
