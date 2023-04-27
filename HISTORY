@@ -1,3 +1,4 @@
+TAG: genemodelload-6-0-22-11
 TAG: genemodelload-6-0-22-10
 DATE: 04/26/2023
 STAFF: sc
@@ -8,6 +9,7 @@ wts2-1050/Florida Too Project
 3. genemodelQC.py move -  checking for dup GMs from genemodelQC.sh to here
 4. genemodelQC.py create new dup GM IDs report
 5. runGeneModelTest.sh - uncomment the reload of the database
+6. mgireg.gff3.config.default - updated the mgireg gff3 path
 
 TAG: genemodelload-6-0-22-9
 TAG: genemodelload-6-0-22-8
