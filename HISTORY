@@ -1,3 +1,10 @@
+TAG: genemodelload-6-0-23-1
+DATE: 01/16/2023
+STAFF: lec
+CHANGES: 
+wts2-1064/fl2-694/ENSEMBL release 111
+#       modified:   genemodel_ensembl.config.default
+
 TAG: genemodelload-6-0-22-14
 TAG: genemodelload-6-0-22-13
 DATE: 08/18/2023, 09/07/2023
