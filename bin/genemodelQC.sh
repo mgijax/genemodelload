@@ -353,13 +353,13 @@ checkColumns ()
     cat ${FILE} | awk -F'	' '
         BEGIN {error=0}
         {
-        if ( $0 == "" )
-            break
-        for ( i=1; i<=columns; i++ ) {
-            if ( $i == "" ) {
-                printf("%s\n", $0)
-                error=1
-                break
+        if ( $0 != "" ) {
+            for ( i=1; i<=columns; i++ ) {
+                if ( $i == "" ) {
+                    printf("%s\n", $0)
+                    error=1
+                    break
+                    }
                 }
             }
         }
