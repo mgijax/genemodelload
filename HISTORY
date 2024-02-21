@@ -1,5 +1,11 @@
+TAG: genemodelload-6-0-23-2
+DATE: 02/21/2024
+STAFF: dbm
+CHANGES: 
+1) genemodelQC.sh: remove break command from awk loop for rocky
+
 TAG: genemodelload-6-0-23-1
-DATE: 01/16/2023
+DATE: 01/16/2024
 STAFF: lec
 CHANGES: 
 wts2-1064/fl2-694/ENSEMBL release 111
