@@ -111,7 +111,7 @@ fi
 #
 # copy produciton /download files to test server
 # only need to do this once per TR
-./copydownloads.sh $1
+${GENEMODELLOAD}/bin/copydownloads.sh $1
 
 # step 5
 # copy .txt files to genemodelload/input directory
@@ -122,7 +122,7 @@ rm -rf ${INPUTDIR}/*
 rm -rf ${OUTPUTDIR}/*
 rm -rf ${LOGDIR}/*
 rm -rf ${RPTDIR}/*
-./copyinputs.sh $1
+${GENEMODELLOAD}/bin/copyinputs.sh $1
 
 #
 # step 6
@@ -158,7 +158,7 @@ fi
 #
 # run all cache updates
 #
-./runGeneModelCache.sh
+${GENEMODELLOAD}/bin/runGeneModelCache.sh
 
 #
 # contact MGI-SE-Admin : load EMBOSS sequences
