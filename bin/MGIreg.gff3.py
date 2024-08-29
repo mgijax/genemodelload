@@ -216,6 +216,7 @@ def init():
         bound_start = ''
         bound_end = ''
         tokens = str.split(line, TAB)
+        gffTerm = tokens[2]
         col9 = tokens[8]
         fields = str.split(col9, ';')
         for f in fields:
@@ -232,7 +233,7 @@ def init():
         else:
             if ens_id not in boundDict:
                 boundDict[ens_id] = []
-            boundDict[ens_id].append([bound_start, bound_end])
+            boundDict[ens_id].append([bound_start, bound_end, gffTerm])
 
     # Create lookup of bounds by ncbi id
     fpN = open(ncbiGFF, 'r', encoding='latin-1')
@@ -247,6 +248,7 @@ def init():
         bound_start = ''
         bound_end = ''
         tokens = str.split(line, TAB)
+        gffTerm = tokens[2]
         bound_start = tokens[4]
         bound_end = tokens[3]
         t1 = str.split(line, 'Dbxref=GeneID:')
@@ -258,7 +260,7 @@ def init():
         else:
             if ncbi_id not in boundDict:
                 boundDict[ncbi_id] = []
-            boundDict[ncbi_id].append([bound_start, bound_end])
+            boundDict[ncbi_id].append([bound_start, bound_end, gffTerm])
 
     return 0
 
@@ -366,12 +368,12 @@ def writeGffFile():
 
         column1 = r['genomicchromosome']
         column2 = provider
-        column3 = soTermName
         column4 = startcoordinate
         column5 = endCoordinate
 
         # only 1 GFF row per Marker
         if provider == 'VISTA':
+            column3 = soTermName
             column9 = column9VisTemplate % (iid % displayId, r['symbol'], r['name'], r['markerID'], dbxref, r['mcvTerm'], soTermName)
             fp.write(column1 + TAB)
             fp.write(column2 + TAB)
@@ -390,10 +392,13 @@ def writeGffFile():
             for b in boundDict[seqID]:
                 bound_start = b[0]
                 bound_end = b[1]
+                gffTerm = b[2]
 
                 if provider == 'ENSEMBL':
+                    column3 = soTermName
                     column9 = column9EnsTemplate % (iid % displayId, r['symbol'], r['name'], r['markerID'], dbxref, bound_start, bound_end, r['mcvTerm'], soTermName)
                 elif provider == 'NCBI':
+                    column3 = gffTerm
                     column9 = column9NcbiTemplate % (iid % displayId, r['symbol'], r['name'], r['markerID'], dbxref, bound_start, bound_end, r['mcvTerm'], soTermName)
 
                 fp.write(column1 + TAB)
