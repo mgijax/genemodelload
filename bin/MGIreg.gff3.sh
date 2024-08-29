@@ -65,6 +65,10 @@ echo `date`: Start MGIreg.gff3 public report | tee -a ${LOG}
 echo "gunzip -c ${ENSEMBL_GFF} > ${ENSEMBL_GFF_DEFAULT}" | tee -a ${LOG}
 gunzip -c ${ENSEMBL_GFF} > ${ENSEMBL_GFF_DEFAULT}
 
+# unzip and copy to input dir the ncbi gff we get the bounds from
+echo "gunzip -c ${NCBI_GFF} > ${NCBI_GFF_DEFAULT}" | tee -a ${LOG}
+gunzip -c ${NCBI_GFF} > ${NCBI_GFF_DEFAULT}
+
 echo `date`: $i | tee -a ${LOG}
 ${PYTHON} ${GENEMODELLOAD}/bin/MGIreg.gff3.py >> ${LOG} 2>&1
 
@@ -72,8 +76,6 @@ ${PYTHON} ${GENEMODELLOAD}/bin/MGIreg.gff3.py >> ${LOG} 2>&1
 # Copy report to ftp site
 #
 cd ${OUTPUTDIR}
-
-echo `date`: Copy report to ftp site | tee -a ${LOG}
 
 cat MGIreg.gff3 | gzip -cf9 > MGIreg.gff3.gz
 touch MGIreg.gff3.gz

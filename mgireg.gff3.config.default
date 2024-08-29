@@ -15,13 +15,24 @@ export MOUSE_ASSEMBLY
 ENSEMBL_GFF=${DATADOWNLOADS}/ftp.ensembl.org/pub/current_regulation/mus_musculus/mus_musculus.GRCm39.Regulatory_Build.regulatory_features.20220822.gff.gz
 export ENSEMBL_GFF
 
+NCBI_GFF=${DATADOWNLOADS}/ftp.ncbi.nih.gov/genomes/refseq/vertebrate_mammalian/Mus_musculus/annotation_releases/GCF_000001635.27-RS_2024_02/GCF_000001635.27_GRCm39_genomic.gff.gz
+export NCBI_GFF
+
 # Local unzipped version of ENSEMBL_GFF
 ENSEMBL_GFF_DEFAULT=${INPUTDIR}/ensembl.gff
 export ENSEMBL_GFF_DEFAULT
 
+# Local unzipped version of NCBI_GFF
+NCBI_GFF_DEFAULT=${INPUTDIR}/ncbi.gff
+export NCBI_GFF_DEFAULT
+
 # source url for ENSEMBL_GFF
 ENSEMBL_GFF_URL=http://ftp.ensembl.org/pub/current_regulation/mus_musculus/mus_musculus.GRCm39.Regulatory_Build.regulatory_features.20220822.gff.gz
 export ENSEMBL_GFF_URL
+
+# source url for NCBI_GFF
+NCBI_GFF_URL=https://ftp.ncbi.nih.gov/genomes/refseq/vertebrate_mammalian/Mus_musculus/annotation_releases/GCF_000001635.27-RS_2024_02/GCF_000001635.27_GRCm39_genomic.gff.gz
+export NCBI_GFF_URL
 
 # ftp distribution directory
 DISTRIBDIR=${FTPROOT}/pub/mgigff3
