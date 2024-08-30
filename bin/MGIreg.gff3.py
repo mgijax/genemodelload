@@ -13,7 +13,7 @@
 #   7. strand: '.'
 #   8. frame: '.'
 #   9. feature attributes: Creator; Sequence_tag_ID; GenBank_ID; DBxref; Type
-#	- where: 
+#	  where: 
 #         'ID' an internal ID
 #   	  'Name' Marker Symbol
 #	  'description' Marker name
@@ -53,7 +53,6 @@
  
 import sys
 import os
-import string
 import mgi_utils
 import reportlib
 import db
@@ -123,48 +122,27 @@ def init():
     fp = open('%s/%s' % (outputDir, fileName), 'w')
 
     #
-    # create SO ID to SO Term lookup
+    # create MCV & SO ID lookup
     #
-
-    # get MCV terms with their accids
-    db.sql('''
-        select a.accid as mcvID, t._term_key as mcvTermKey, 
-        t.term as mcvTerm, t.note as mcvNote
-        into temporary table mcv
-        from voc_term t, acc_accession a
-        where a._logicaldb_key = 146
-        and a._mgitype_key = 13
-        and a._object_key = t._term_key
-        ''', None)
-
-    # pull in the SO ID - it has same _term_key, but different ldb
-    db.sql('''
-        select a.accid as soID, m.*
-        into temporary table mcv_so
-        from acc_accession a, mcv m
-        where m.mcvTermKey = a._object_key
-        and a._mgitype_key = 13 
-        and a._logicaldb_key = 145
-        ''', None)
-
-    # now get the SO term for the SO ID = this requires joining to the accession table AND to the term table for the SO vocab
-    # we are not using everything in the select clause, but I left it be for cut/paste debugging if needed later 
-    # this query was a bear to put together.
     results = db.sql('''
-        select t.term as soTerm, t.note as soNote, ms.soID, 
-        t._term_key as soTermKey,  ms.mcvTerm, ms.mcvNote, ms.mcvID, ms.mcvTermKey
-        from voc_term t, acc_accession a, mcv_so ms
-        where ms.soID = a.accid
-        and a._mgitype_key = 13
-        and a._logicaldb_key = 145
-        and a._object_key = t._term_key
-        and t._vocab_key = 138
+        select a1.accid as mcvID, a2.accid as soID, 
+            t1._term_key as mcvTermKey, t1.term as mcvTerm, 
+            t3.term as soTerm, t3._term_key as sotermKey
+        from acc_accession a1, voc_term t1, acc_accession a2, acc_accession a3, voc_term t3
+        where a1._logicaldb_key = 146
+        and a1._mgitype_key = 13
+        and a1._object_key = t1._term_key
+        and t1._term_key = a2._object_key
+        and a2._mgitype_key = 13
+        and a2._logicaldb_key = 145
+        and a2.accid = a3.accid
+        and a3._mgitype_key = 13
+        and a3._logicaldb_key = 145
+        and a3._object_key = t3._term_key
+        and t3._vocab_key = 138
         ''', 'auto')
-
-    # not sure if we need the SO ID but getting it now just in case
     for r in results:
-        soList = [r['soID'], r['soTerm']]
-        mcvIdToSODict[r['mcvID']] = soList
+        mcvIdToSODict[r['mcvID']] = [r['soID'], r['soTerm']]
 
     db.sql('''
         (
