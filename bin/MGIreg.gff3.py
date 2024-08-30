@@ -1,12 +1,12 @@
 
 '''
-#Report:
+# Report:
 #       Tab-delimited file of Ensembl, NCBI, VISTA regulatory region coordinates
 #       (Cre and More Project (CREAM))
 #
-#   1. chromosome: e.g. '19' 
-#   2. source of feature: mrk_location_cache.provider.  'Ensembl Reg' , 'NCBI Gene Model', or 'VISTA'
-#   3. gene feature: MGI Feature Type e.g. CTCF binding site or enhancer 
+#   1. chromosome
+#   2. source of feature: mrk_location_cache.provider
+#   3. gene feature: if NCBI, use GFF/field 3, else use SO Term Name
 #   4. start coordinate
 #   5. end coordinate
 #   6. score: '.'
@@ -19,14 +19,28 @@
 #	  'description' Marker name
 #         'curie' Marker MGI ID
 #	  'Dbxref'  ENSEMBL, NCBI, VISTA IDs
-#	  'bound_start ENSEMBL, NCBI only from the ensembl.gff
-#         'bound_end ENSEMBL, NCBI only from the ensembl/ncbi regulatory gff file
-#             VISTA: no bounds
-#         'mgi_type MGI feature type
-#         'so_term_name SO term
+#	  'bound_start ENSEMBL, NCBI from the ensembl/ncbi regulatory gff file
+#     'bound_end ENSEMBL, NCBI from the ensembl/ncbi regulatory gff file
+#     VISTA: no bounds
+#     'mgi_type MGI feature type
+#     'so_term_name SO term
 #
 # Usage:
 #     ${PYTHON} MGIreg.gff3.py 
+#
+# 1. Search MGI for all Mouse Marker with Ensembl (222) and VISTA (223)
+# 2. Search MGI for all Mouse Marker with NCBS (59), where Provider = 'NCBI' and Marker Type = 'Other Genome Feature'
+# 3. Search Ensembl GFF and save Seq ID , field 3 (gff term), bound_start, bound_end where:
+#       line contains 'ID', 'bound_start', 'bound_end'
+# 4. Search NCBI GFF and save Seq ID, field 3 (gff term), field 4 (bound_end), field 5 (bound_start) where:
+#       line contains 'RefSeqFE' and 'Dbxref=GeneID:'
+# 5. For each Marker in (1&2): 
+#   a. if VISTA, then use VISTA Marker info from MGI (1)
+#   b. if Ensembl then use Ensembl Marker info from MGI (1) and GFF (3)
+#   c. if NCBI, then use NCBI Marker info from MGI (3) and GFF (4)
+# 6. For VISTA, there is 1 MGI row per Marker
+# 7. For Ensembl, there is 1 GFF row per Marker
+# 8. For NCBI, there can be >= 1 GFF row per Marker
 #
 # History:
 #
@@ -318,7 +332,7 @@ def writeGffFile():
     column3 = ''     # SO term
     column4 = ''     # startCoordinate
     column5 = ''     # endCoordinate
-    column9 = ''
+    column9 = ''     # extra information
 
     # template for column nine
     column9EnsTemplate = 'ID=%s;Name=%s;description=%s;curie=%s;Dbxref=%s;bound_start=%s;bound_end=%s;mgi_type=%s;so_term_name=%s'
