@@ -28,12 +28,16 @@
 # Usage:
 #     ${PYTHON} MGIreg.gff3.py 
 #
-# 1. Search MGI for all Mouse Marker with Ensembl (222) and VISTA (223)
-# 2. Search MGI for all Mouse Marker with NCBS (59), where Provider = 'NCBI' and Marker Type = 'Other Genome Feature'
+# 1. Search MGI for all Mouse Marker with Ensembl (222) and VISTA (223) 
+#       where marker status = 'official'
+# 2. Search MGI for all Mouse Marker with NCBS (59), 
+#       where marker status = 'official' 
+#       and provider = 'NCBI' 
+#       and marker type = 'Other Genome Feature'
 # 3. Search Ensembl GFF and save Seq ID , field 3 (gff term), bound_start, bound_end where:
-#       line contains 'ID', 'bound_start', 'bound_end'
+#       where line contains 'ID', 'bound_start', 'bound_end'
 # 4. Search NCBI GFF and save Seq ID, field 3 (gff term), field 4 (bound_end), field 5 (bound_start) where:
-#       line contains 'RefSeqFE' and 'Dbxref=GeneID:'
+#       where line contains 'RefSeqFE' and 'Dbxref=GeneID:'
 # 5. For each Marker in (1&2): 
 #   a. if VISTA, then use VISTA Marker info from MGI (1)
 #   b. if Ensembl then use Ensembl Marker info from MGI (1) and GFF (3)
@@ -314,7 +318,8 @@ def writeGffFile():
 
     # template for column nine
     column9EnsTemplate = 'ID=%s;Name=%s;description=%s;curie=%s;Dbxref=%s;bound_start=%s;bound_end=%s;mgi_type=%s;so_term_name=%s'
-    column9NcbiTemplate = 'ID=%s;Name=%s;description=%s;curie=%s;Dbxref=%s;bound_start=%s;bound_end=%s;mgi_type=%s;so_term_name=%s'
+    column9NcbiTemplate1 = 'ID=%s;Name=%s;description=%s;curie=%s;Dbxref=%s;bound_start=%s;bound_end=%s;mgi_type=%s;so_term_name=%s'
+    column9NcbiTemplate2 = 'ID=%s;Name=%s;description=%s;curie=%s;Dbxref=%s;bound_start=%s;bound_end=%s'
     column9VisTemplate = 'ID=%s;Name=%s;description=%s;curie=%s;Dbxref=%s;mgi_type=%s;so_term_name=%s'
 
     # components of column 9
@@ -365,6 +370,7 @@ def writeGffFile():
 
         # only 1 GFF row per Marker
         if provider == 'VISTA':
+
             column3 = soTermName
             column9 = column9VisTemplate % (iid % displayId, r['symbol'], r['name'], r['markerID'], dbxref, r['mcvTerm'], soTermName)
             fp.write(column1 + TAB)
@@ -381,6 +387,8 @@ def writeGffFile():
         # > 1 GFF row per Marker
         if seqID in boundDict:
 
+            #print MGI level row here
+
             for b in boundDict[seqID]:
                 bound_start = b[0]
                 bound_end = b[1]
@@ -391,7 +399,10 @@ def writeGffFile():
                     column9 = column9EnsTemplate % (iid % displayId, r['symbol'], r['name'], r['markerID'], dbxref, bound_start, bound_end, r['mcvTerm'], soTermName)
                 elif provider == 'NCBI':
                     column3 = gffTerm
-                    column9 = column9NcbiTemplate % (iid % displayId, r['symbol'], r['name'], r['markerID'], dbxref, bound_start, bound_end, r['mcvTerm'], soTermName)
+                    if column3 == 'biological_region':
+                        column9 = column9NcbiTemplate1 % (iid % displayId, r['symbol'], r['name'], r['markerID'], dbxref, bound_start, bound_end, r['mcvTerm'], soTermName)
+                    else:
+                        column9 = column9NcbiTemplate2 % (iid % displayId, r['symbol'], r['name'], r['markerID'], dbxref, bound_start, bound_end)
 
                 fp.write(column1 + TAB)
                 fp.write(column2 + TAB)
