@@ -10,21 +10,21 @@
 #
 # test TR directory
 #
-TRDIR=/mgi/all/wts2_projects/800/WTS2-813/VISTA
+TRDIR=/mgi/all/wts2_projects/1500/WTS2-1543/VISTA
 export TRDIR
 
 #
 # used by other wrappers in bin directory :
 #  copydownloads.sh, copyinputs.sh, runTest.sh
 #
-BIOTYPE_FILE_NAME=VISTA_mm9_mm10_b39.gff3
+BIOTYPE_FILE_NAME=VISTA_20240827_mm39.gff3
 export BIOTYPE_FILE_NAME
 
 #
 # Reload the gene models (true/false)?  If false, only the associations
 # will be deleted/reloaded.
 #
-RELOAD_GENEMODELS=false
+RELOAD_GENEMODELS=true
 export RELOAD_GENEMODELS
 
 # Full path to the default biotype file 
