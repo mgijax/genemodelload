@@ -23,7 +23,7 @@ usage ()
 {
     echo "Usage: publishAssocFile provider assoc_file"
     echo "       where"
-    echo "           provider = ensembl, ensemblreg, ncbi"
+    echo "           provider = ensembl, ensemblreg, ncbi, vistareg"
     echo "           assoc_file = path to the association file"
     exit 1
 }
@@ -57,6 +57,9 @@ else
     elif [ "`echo $1 | grep -i '^ncbi$'`" != "" ]
     then
         CONFIG=genemodel_ncbi.config
+    elif [ "`echo $1 | grep -i '^vistareg$'`" != "" ]
+    then
+        CONFIG=genemodel_vistareg.config
     else
         usage
     fi
