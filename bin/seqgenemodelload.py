@@ -68,9 +68,6 @@ CRT = '\n'
 SPACE = ' '
 SCOLON = ';'
 
-# Biotype Translation Type
-TRANSTYPE='Raw Biotype to Marker Type'
-
 # MGI_User key for the load
 CREATEDBY_KEY = os.environ['USERKEY']
 
