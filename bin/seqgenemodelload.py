@@ -6,17 +6,17 @@
 Usage='createSeqGeneModelInput.py provider (ensembl | ncbi | ensemblreg | vistareg)'
 #
 # Env Vars:
-#        1. BCP_FILE_PATH
+#    1. BCP_FILE_PATH
 #	 2. PROVIDER_LOGICALDB
 #	 3. USERKEY
+#
 # Inputs: 
-#	1. mgd database to resolve gmId to sequence key and
-#	      translate raw biotype to _MarkerType_key 
-#       2. provider file, from stdin, mapping gmId to raw biotype
+#	1. mgd database to resolve gmId to sequence key and translate raw biotype to _MarkerType_key 
+#   2. provider file, from stdin, mapping gmId to raw biotype
 #
 # Outputs:
 #	 1. SEQ_GeneModel bcp file, tab-delimited
-#           1. _Sequence_key
+#       1. _Sequence_key
 #	    2. _GMMarkerType_key
 #	    3. raw biotype 
 #	    4. exonCount (null)
@@ -115,9 +115,11 @@ def loadMarkerTypeKeyLookup():
     print("loadMarkerTypeKeyLookup()")
 
     # load the biotype translation into a lookup
-    results = db.sql('''SELECT distinct t.term, m._Marker_Type_key
-        FROM MRK_BiotypeMapping m, VOC_Term t
-        WHERE m._biotypeterm_key = t._Term_key''', 'auto')
+    results = db.sql('''
+        select distinct t.term, m._Marker_Type_key
+        from MRK_BiotypeMapping m, VOC_Term t
+        where m._biotypeterm_key = t._Term_key
+        ''', 'auto')
     for r in results:
         markerTypeKeyByRawBioTypeLookup[r['term']] = r['_Marker_Type_key']
 
@@ -139,11 +141,13 @@ def loadSequenceKeyLookup():
         print('LogicalDB name not in database: %s' % ldbName)
         sys.exit(1)
     ldbKey = results[0]['_LogicalDB_key']
-    results = db.sql('''SELECT accId, _Object_key as seqKey
-                FROM ACC_Accession
-                WHERE _MGIType_key = 19
-                AND _LogicalDB_key = %s
-                AND preferred = 1''' % ldbKey, 'auto')
+    results = db.sql('''
+        select accId, _Object_key as seqKey
+        from ACC_Accession
+        where _MGIType_key = 19
+        and _LogicalDB_key = %s
+        and preferred = 1
+        ''' % ldbKey, 'auto')
     for r in results:
         if r['accId'] not in seqKeyByGMIDLookup:
             seqKeyByGMIDLookup[r['accId']] = []
@@ -151,8 +155,7 @@ def loadSequenceKeyLookup():
         seqKeyByGMIDLookup[r['accId']].append(r['seqKey'])
     #print(seqKeyByGMIDLookup)
 
-# Purpose:  Load lookup of raw biotype by gene model ID for
-#	    either Ensembl (file format the same)
+# Purpose:  Load lookup of raw biotype by gene model ID for either Ensembl (file format the same)
 # Returns: nothing
 # Assumes: inFile is a valid file descriptor
 # Effects: nothing
@@ -164,18 +167,18 @@ def loadEnsemblRawBioTypeByGMIDLookup():
     print('loadEnsemblRawBioTypeByGMIDLookup()')
 
     for line in inFile.readlines():
-        #print('biotype file line: %s' % line)
+        print('biotype file line: %s' % line)
         columnList = str.split(line, TAB)
 
         #
         # if header, skip it
         #
         if columnList[0].find('#') == 0:
-            print('skipping header...%s' % (columnList))
+            #print('skipping header...%s' % (columnList))
             continue
 
         attributeList = str.split(columnList[8], SCOLON)
-        gmId = (str.split(attributeList[0], '"'))[1].strip()
+        gmId = (str.split(attributeList[0],'"'))[1].strip()
 
         biotype = ''
 
@@ -194,8 +197,53 @@ def loadEnsemblRawBioTypeByGMIDLookup():
                 continue
         rawBioTypeByGMIDLookup[gmId] = biotype
 
-# Purpose:  Load lookup of raw biotype by gene model ID for
-#           either NCBI
+# Purpose:  Load lookup of raw biotype by gene model ID for Ensembl Reg (file format the same)
+# Returns: nothing
+# Assumes: inFile is a valid file descriptor
+# Effects: nothing
+# Throws: nothing
+
+def loadEnsemblRegRawBioTypeByGMIDLookup():
+    global rawBioTypeByGMIDLookup
+
+    print('loadEnsemblRegRawBioTypeByGMIDLookup()')
+
+    for line in inFile.readlines():
+        #print('biotype file line: %s' % line)
+        columnList = str.split(line, TAB)
+
+        #
+        # if header, skip it
+        #
+        if columnList[0].find('#') == 0:
+            #print('skipping header...%s' % (columnList))
+            continue
+
+        attributeList = str.split(columnList[8], SCOLON)
+
+        # ID=enhancer:ENSMUSR1_937P4
+        gmId = (str.split(attributeList[0],':'))[1].strip()
+
+        biotype = ''
+
+        for a in attributeList:
+            #print('a: %s' % a)
+            # feature_type=Enhancer
+            if str.strip(a).startswith('feature_type'):
+                biotype = a.split('=')[1].strip()
+                #print('biotype: %s' % biotype)
+        # there are redundant id/biotype lines in the input, all IDs have the
+        # same biotype for each of the redundant lines so save only one pair
+        # but just in case check
+        if gmId in rawBioTypeByGMIDLookup:
+            b = rawBioTypeByGMIDLookup[gmId]
+            if b != biotype:
+                print('Differing biotypes for %s: %s and %s' % (gmId, b, biotype))
+                continue
+        print(gmId)
+        rawBioTypeByGMIDLookup[gmId] = biotype
+
+# Purpose:  Load lookup of raw biotype by gene model ID for either NCBI
 # Returns: nothing
 # Assumes: inFile is a valid file descriptor
 # Effects: nothing
@@ -240,11 +288,13 @@ def init():
         bcpFilePath = os.environ['BCP_FILE_PATH']
         bcpFile = open(bcpFilePath, 'w')
     except:
-        'Could not open file for writing %s\n' % bcpFilePath
-        sys.exit(1)
+        'Could not open file for writing %s\n' % bcpFilePath sys.exit(1)
 
-    if provider in ('ensembl', 'ensemblreg', 'vistareg'):
+    if provider in ('ensembl', 'vistareg'):
         loadEnsemblRawBioTypeByGMIDLookup()
+
+    elif provider in ('ensemblreg'):
+        loadEnsemblRegRawBioTypeByGMIDLookup()
 
     elif provider == 'ncbi':
         loadNCBIRawBioTypeByGMIDLookup()
@@ -297,7 +347,6 @@ def run ():
                     cdate, TAB, cdate, CRT) )
 
     print('\n%s %s gene model Ids in the database but not in the input file' % (notInInputCtr, provider))
-
     print('\n%s %s gene model Ids not loaded because unable to translate biotype\n' % (noTranslationCtr, provider))
 
 #
