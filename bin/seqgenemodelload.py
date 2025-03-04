@@ -44,6 +44,9 @@ Usage='createSeqGeneModelInput.py provider (ensembl | ncbi | ensemblreg | vistar
 #  Date        SE   Change Description
 #  ----------  ---  -------------------------------------------------------
 #
+#  03/04/2025  lec  added loadEnsemblRegRawBioTypeByGMIDLookup
+#   input file for ensemblreg has changed
+#
 #  04/14/2023  sc   Update to parse ensemblreg raw biotypes
 #
 #  01/20/2010  sc   Initial development
@@ -96,7 +99,6 @@ markerTypeKeyByRawBioTypeLookup = {} # {rawBioType:_MarkerType_key}
 
 # loaded from db by provider - maps a gmId to its _Sequence_key(s) i
 # Only NCBI has multiple sequences per gmID
-
 seqKeyByGMIDLookup = {} # {gmId:list of seqKeys, ...}
 
 # Provider we are loading 'ncbi', 'ensembl'
@@ -129,7 +131,6 @@ def loadMarkerTypeKeyLookup():
 # Effects: nothing
 # Throws: nothing
 
-
 def loadSequenceKeyLookup():
     global seqKeyByGMIDLookup
 
@@ -151,7 +152,6 @@ def loadSequenceKeyLookup():
     for r in results:
         if r['accId'] not in seqKeyByGMIDLookup:
             seqKeyByGMIDLookup[r['accId']] = []
-
         seqKeyByGMIDLookup[r['accId']].append(r['seqKey'])
     #print(seqKeyByGMIDLookup)
 
@@ -266,6 +266,7 @@ def loadNCBIRawBioTypeByGMIDLookup():
             rawBioTypeByGMIDLookup[gmId] = biotype
             if gmId == '654820' or gmId == '170942':
                 print('line: %s' % line)
+
 # Purpose: Initialize globals; load lookups 
 # Returns: nothing
 # Assumes: nothing
@@ -343,8 +344,7 @@ def run ():
 
             bcpFile.write('%s%s%s%s%s%s%s%s%s%s%s%s%s%s%s%s' % \
                 (seqKey, TAB, markerTypeKey, TAB, rawBioType, TAB, \
-                    TAB, TAB, CREATEDBY_KEY, TAB, CREATEDBY_KEY, TAB, \
-                    cdate, TAB, cdate, CRT) )
+                    TAB, TAB, CREATEDBY_KEY, TAB, CREATEDBY_KEY, TAB, cdate, TAB, cdate, CRT) )
 
     print('\n%s %s gene model Ids in the database but not in the input file' % (notInInputCtr, provider))
     print('\n%s %s gene model Ids not loaded because unable to translate biotype\n' % (noTranslationCtr, provider))
