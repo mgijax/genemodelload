@@ -5,6 +5,7 @@ CHANGES:
 wts2-1392/e4g-155/ENSEMBL Regulatory 113
         modified:   bin/seqgenemodelload.py
         modified:   genemodel_ensemblreg.config.default
+	modified:   copydownloads.sh
 
 TAG: genemodelload-6-0-25-?
 DATE: 01/10/2025
