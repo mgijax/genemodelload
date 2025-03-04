@@ -17,7 +17,7 @@ export TRDIR
 # used by other wrappers in bin directory :
 #  copydownloads.sh, copyinputs.sh
 #
-BIOTYPE_FILE_NAME=mus_musculus.GRCm39.Regulatory_Build.regulatory_features.20240230.gff
+BIOTYPE_FILE_NAME=mus_musculus.GRCm39.Regulatory_Build.regulatory_features.20240230.gff.gz
 export BIOTYPE_FILE_NAME
 
 #
