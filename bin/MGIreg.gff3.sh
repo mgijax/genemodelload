@@ -61,13 +61,17 @@ touch ${LOG}
 
 echo `date`: Start MGIreg.gff3 public report | tee -a ${LOG}
 
-# unzip and copy to input dir the ensembl gff we get the bounds from
+# unzip and copy to input dir the ensembl gff
 echo "gunzip -c ${ENSEMBL_GFF} > ${ENSEMBL_GFF_DEFAULT}" | tee -a ${LOG}
-gunzip -c ${ENSEMBL_GFF} > ${ENSEMBL_GFF_DEFAULT}
+gunzip -c ${ENSEMBL_GFF} > ${ENSEMBL_GFF_DEFAULT} | tee -a ${LOG}
 
-# unzip and copy to input dir the ncbi gff we get the bounds from
+# unzip and copy to input dir the ncbi gff
 echo "gunzip -c ${NCBI_GFF} > ${NCBI_GFF_DEFAULT}" | tee -a ${LOG}
-gunzip -c ${NCBI_GFF} > ${NCBI_GFF_DEFAULT}
+gunzip -c ${NCBI_GFF} > ${NCBI_GFF_DEFAULT} | tee -a ${LOG}
+
+# copy to input dir the vista gff
+echo "${VISTA_GFF} > ${VISTA_GFF_DEFAULT}" | tee -a ${LOG}
+cp ${VISTA_GFF} ${VISTA_GFF_DEFAULT} | tee -a ${LOG}
 
 echo `date`: $i | tee -a ${LOG}
 ${PYTHON} ${GENEMODELLOAD}/bin/MGIreg.gff3.py >> ${LOG} 2>&1
@@ -75,11 +79,10 @@ ${PYTHON} ${GENEMODELLOAD}/bin/MGIreg.gff3.py >> ${LOG} 2>&1
 #
 # Copy report to ftp site
 #
-cd ${OUTPUTDIR}
-
-cat MGIreg.gff3 | gzip -cf9 > MGIreg.gff3.gz
-touch MGIreg.gff3.gz
-cp -p MGIreg.gff3.gz ${DISTRIBDIR}/
+#cd ${OUTPUTDIR}
+#cat MGIreg.gff3 | gzip -cf9 > MGIreg.gff3.gz
+#touch MGIreg.gff3.gz
+#cp -p MGIreg.gff3.gz ${DISTRIBDIR}/
 
 echo `date`: End MGIreg.gff3 public report | tee -a ${LOG}
 

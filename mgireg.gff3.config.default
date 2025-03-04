@@ -10,30 +10,28 @@
 MOUSE_ASSEMBLY="GRCm39"
 export MOUSE_ASSEMBLY
 
-# Full path the the ensembl.gff file
-# Used by the MGIreg.gff3 script that creates this gff3 file
-ENSEMBL_GFF=${DATADOWNLOADS}/ftp.ensembl.org/pub/current_regulation/mus_musculus/mus_musculus.GRCm39.Regulatory_Build.regulatory_features.20220822.gff.gz
-export ENSEMBL_GFF
-
-NCBI_GFF=${DATADOWNLOADS}/ftp.ncbi.nih.gov/genomes/refseq/vertebrate_mammalian/Mus_musculus/annotation_releases/GCF_000001635.27-RS_2024_02/GCF_000001635.27_GRCm39_genomic.gff.gz
-export NCBI_GFF
-
-# Local unzipped version of ENSEMBL_GFF
-ENSEMBL_GFF_DEFAULT=${INPUTDIR}/ensembl.gff
-export ENSEMBL_GFF_DEFAULT
-
-# Local unzipped version of NCBI_GFF
-NCBI_GFF_DEFAULT=${INPUTDIR}/ncbi.gff
-export NCBI_GFF_DEFAULT
-
-# source url for ENSEMBL_GFF
-ENSEMBL_GFF_URL=http://ftp.ensembl.org/pub/current_regulation/mus_musculus/mus_musculus.GRCm39.Regulatory_Build.regulatory_features.20220822.gff.gz
-export ENSEMBL_GFF_URL
-
-# source url for NCBI_GFF
-NCBI_GFF_URL=https://ftp.ncbi.nih.gov/genomes/refseq/vertebrate_mammalian/Mus_musculus/annotation_releases/GCF_000001635.27-RS_2024_02/GCF_000001635.27_GRCm39_genomic.gff.gz
-export NCBI_GFF_URL
-
 # ftp distribution directory
 DISTRIBDIR=${FTPROOT}/pub/mgigff3
 export DISTRIBDIR
+
+ENSEMBL_FILE=mus_musculus.GRCm39.Regulatory_Build.regulatory_features.20220822.gff
+ENSEMBL_FTP="ftp.ensembl.org/pub/current_regulation/mus_musculus/mus_musculus.GRCm39.Regulatory_Build.regulatory_features.20220822.gff.gz"
+ENSEMBL_GFF_URL=http:${ENSEMBL_FTP}
+ENSEMBL_GFF=${DATADOWNLOADS}/ftp.ensembl.org/pub/current_regulation/mus_musculus/mus_musculus.GRCm39.Regulatory_Build.regulatory_features.20220822.gff.gz
+ENSEMBL_GFF_DEFAULT=${INPUTDIR}/ensembl.gff
+export ENSEMBL_FILE ENSEMBL_FTP ENSEMBL_GFF_URL ENSEMBL_GFF ENSEMBL_GFF_DEFAULT
+
+NCBI_FILE=GCF_000001635.27_GRCm39_genomic.gff
+NCBI_FTP="ftp.ncbi.nih.gov/genomes/refseq/vertebrate_mammalian/Mus_musculus/annotation_releases/GCF_000001635.27-RS_2024_02/GCF_000001635.27_GRCm39_genomic.gff.gz"
+NCBI_GFF_URL=https://${NCBI_FTP}
+NCBI_GFF=${DATADOWNLOADS}/${NCBI_FTP}
+NCBI_GFF_DEFAULT=${INPUTDIR}/ncbi.gff
+export NCBI_FILE NCBI_FTP NCBI_GFF_URL NCBI_GFF NCBI_GFF_DEFAULT
+
+VISTA_FILE=locus.tsv
+VISTA_FTP="enhancer.lbl.gov/cgi-bin/imagedb3.pl?search.result=yes;form=search;action=search;page_size=20000;show=1;search.form=no;search.org=Mouse;search.sequence=1"
+# VISTA : Sophia generated this fle
+VISTA_GFF=/mgi/all/wts2_projects/800/WTS2-813/VISTA/gff3/VISTA_mm9_mm10_b39.gff3
+VISTA_GFF_DEFAULT=${INPUTDIR}/vista.gff
+export VISTA_FILE VISTA_FTP VISTA_GFF VISTA_GFF_DEFAULT
+
