@@ -311,7 +311,7 @@ else
         ${ENS_WRAPPER} ensembl_transcriptseqload.config false >> ${LOG} 2>&1
         ${ENS_WRAPPER} ensembl_proteinseqload.config false >> ${LOG} 2>&1
     fi
-    if [ ${PROVIDER} = "ensemblreg" ]
+    if [ ${PROVIDER} = "ensemblreg" -o ${PROVIDER} = "vistareg" ]
     then
         echo "Creating MGIreg.gff3 file" | tee -a ${LOG}
         ${GENEMODELLOAD}/bin/MGIreg.gff3.sh
@@ -319,7 +319,7 @@ else
 fi
 
 # regenerate the MGIreg.gff3 file if we are reloading gene models or just reloading associations
-if [ ${PROVIDER} = "ensemblreg" ]
+if [ ${PROVIDER} = "ensemblreg" -o ${PROVIDER} = "vistareg" ]
 then
     echo "Creating MGIreg.gff3 file" | tee -a ${LOG}
     ${GENEMODELLOAD}/bin/MGIreg.gff3.sh
@@ -335,7 +335,7 @@ date >> ${LOG}
 echo "Archive input files" | tee -a ${LOG}
 if [ ${PROVIDER} = "ensembl" ]
 then
-for FILE in ${GM_FILE_DEFAULT} ${ASSOC_FILE_DEFAULT} ${BIOTYPE_FILE_DEFAULT} ${TRANSCRIPT_FILE_DEFAULT} ${PROTEIN_FILE_DEFAULT} ${LOGDIR}
+for FILE in ${GM_FILE_DEFAULT} ${ASSOC_FILE_DEFAULT} ${TRANSCRIPT_FILE_DEFAULT} ${PROTEIN_FILE_DEFAULT} ${LOGDIR}
 do
     ARC_FILE=`basename ${FILE}`.${TIMESTAMP}
     rm -rf ${ARCHIVEDIR}/${ARC_FILE}
@@ -345,7 +345,7 @@ done
 fi
 if [ ${PROVIDER} = "ncbi" ]
 then
-for FILE in ${GM_FILE_DEFAULT} ${ASSOC_FILE_DEFAULT} ${BIOTYPE_FILE_DEFAULT} ${PROTEIN_FILE_DEFAULT} ${LOGDIR}
+for FILE in ${GM_FILE_DEFAULT} ${ASSOC_FILE_DEFAULT} ${PROTEIN_FILE_DEFAULT} ${LOGDIR}
 do
     ARC_FILE=`basename ${FILE}`.${TIMESTAMP}
     rm -rf ${ARCHIVEDIR}/${ARC_FILE}
@@ -355,7 +355,7 @@ done
 fi
 if [ ${PROVIDER} = "ensemblreg" ]
 then
-for FILE in ${GM_FILE_DEFAULT} ${ASSOC_FILE_DEFAULT} ${BIOTYPE_FILE_DEFAULT} ${LOGDIR}
+for FILE in ${GM_FILE_DEFAULT} ${ASSOC_FILE_DEFAULT} ${LOGDIR}
 do
     ARC_FILE=`basename ${FILE}`.${TIMESTAMP}
     rm -rf ${ARCHIVEDIR}/${ARC_FILE}
@@ -365,7 +365,7 @@ done
 fi
 if [ ${PROVIDER} = "vistareg" ]
 then
-for FILE in ${GM_FILE_DEFAULT} ${ASSOC_FILE_DEFAULT} ${BIOTYPE_FILE_DEFAULT} ${LOGDIR}
+for FILE in ${GM_FILE_DEFAULT} ${ASSOC_FILE_DEFAULT} ${LOGDIR}
 do
     ARC_FILE=`basename ${FILE}`.${TIMESTAMP}
     rm -rf ${ARCHIVEDIR}/${ARC_FILE}
@@ -378,6 +378,21 @@ fi
 # Touch the "lastrun" file to note when the load was run.
 #
 touch ${LASTRUN_FILE}
+
+# If reloading gene modesl, remove lastrun so that the snpcacheload will run from the Pipeline
+if [ ${RELOAD_GENEMODELS} = "true" ]
+then
+# Remove snpcacheload/output/lastrun so that the snpcacheload will run from the Pipeline
+case `uname -n` in
+bhmgiapp01)
+       ssh mgiadmin@bhmgidb03lp 'rm -rf /data/loads/mgi/snpcacheload/output/lastrun'
+       ;;
+bhmgidevapp01)
+       ssh mgiadmin@bhmgidb05ld 'rm -rf /data/loads/mgi/snpcacheload/output/lastrun'
+       ;;
+*) ;;
+esac
+fi
 
 #
 # mail the log
