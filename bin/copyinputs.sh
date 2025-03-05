@@ -56,7 +56,6 @@ then
 #
 # ensembl
 #
-cp -r /data/downloads/ftp.ensembl.org/pub/current_gtf/mus_musculus/${BIOTYPE_FILE_NAME} ${BIOTYPE_FILE_DEFAULT}
 cp -r /data/downloads/ftp.ensembl.org/pub/current_fasta/mus_musculus/cdna/${TRANSCRIPT_FILE_NAME} ${TRANSCRIPT_FILE_DEFAULT}
 cp -r /data/downloads/ftp.ensembl.org/pub/current_fasta/mus_musculus/pep/${PROTEIN_FILE_NAME} ${PROTEIN_FILE_DEFAULT}
 cp -r /data/downloads/ftp.ensembl.org/pub/current_fasta/mus_musculus/ncrna/${NCRNA_FILE_NAME} ${NCRNA_FILE_DEFAULT}
@@ -72,7 +71,6 @@ then
 #
 # ncbi/entrezgene
 #
-cp -r /data/downloads/entrezgene/${BIOTYPE_FILE_NAME} ${BIOTYPE_FILE_DEFAULT}
 cp -r ${TRDIR}/GeneModelLoad/ncbi_genemodels.txt ${INPUTDIR}
 cp -r ${TRDIR}/AssociationLoad/ncbi_assoc.txt ${INPUTDIR}
 
@@ -81,7 +79,6 @@ then
 #
 # ensembl regulatory
 #
-cp -r ${TRDIR}/gtf/${BIOTYPE_FILE_NAME} ${INPUTDIR}/ensemblreg_biotypes.gz
 cp -r ${TRDIR}/GeneModelLoad/ensemblreg_genemodels.txt ${INPUTDIR}
 cp -r ${TRDIR}/AssociationLoad/ensemblreg_assoc.txt ${INPUTDIR}
 
@@ -92,7 +89,6 @@ then
 #
 cp -r ${TRDIR}/GeneModelLoad/VISTA_genemodels.txt ${INPUTDIR}/vistareg_genemodels.txt
 cp -r ${TRDIR}/AssociationLoad/MGI_VISTA_association_load ${INPUTDIR}/vistareg_assoc.txt
-cp -r ${TRDIR}/gtf/VISTA_mm9_mm10_b39.gtf.gz ${INPUTDIR}/vistareg_biotypes.gz
 
 else
     echo "variable GM_PROVIDER has not been set"
