@@ -18,7 +18,7 @@ ENSEMBL_FILE=mus_musculus.GRCm39.Regulatory_Build.regulatory_features.20240230.g
 ENSEMBL_FTP="ftp.ensembl.org/pub/current_regulation/mus_musculus/mus_musculus.GRCm39.Regulatory_Build.regulatory_features.20240230.gff.gz"
 ENSEMBL_GFF_URL=http:${ENSEMBL_FTP}
 ENSEMBL_GFF=${DATADOWNLOADS}/ftp.ensembl.org/pub/current_regulation/mus_musculus/mus_musculus.GRCm39.Regulatory_Build.regulatory_features.20240230.gff.gz
-ENSEMBL_GFF_DEFAULT=${INPUTDIR}/ensembl.gff
+ENSEMBL_GFF_DEFAULT=${INPUTDIR}/ensemblreg.gff
 export ENSEMBL_FILE ENSEMBL_FTP ENSEMBL_GFF_URL ENSEMBL_GFF ENSEMBL_GFF_DEFAULT
 
 NCBI_FILE=GCF_000001635.27_GRCm39_genomic.gff
