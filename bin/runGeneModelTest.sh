@@ -13,7 +13,6 @@
 # edit these configuration values:
 #
 # TRDIR				/mgi/all/wts_projects/?/?
-# BIOTYPE_FILE_NAME		genemodelload
 # TRANSCRIPT_FILE_NAME		genemodelload
 # PROTEIN_FILE_NAME		genemodelload
 # NCRNA_FILE_NAME		genemodelload
