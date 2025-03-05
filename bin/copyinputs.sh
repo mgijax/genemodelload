@@ -79,6 +79,7 @@ then
 #
 # ensembl regulatory
 #
+cp -r ${DATADOWNLOADS}/ftp.ensembl.org/pub/current_regulation/mus_musculus/mus_musculus.GRCm39.Regulatory_Build.regulatory_features.20240230.gff.gz ${INPUTDIR}/ensembl.gff
 cp -r ${TRDIR}/GeneModelLoad/ensemblreg_genemodels.txt ${INPUTDIR}
 cp -r ${TRDIR}/AssociationLoad/ensemblreg_assoc.txt ${INPUTDIR}
 

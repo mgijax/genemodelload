@@ -4,11 +4,9 @@
 ###########################################################################
 #
 #  Purpose:
-#
 #       This script is a wrapper around process that creates the MGI i
 #       regulatory marker gff report
 #  Usage:
-#
 #       MGIreg.gff3.sh
 #  Env Vars:
 #  Inputs:

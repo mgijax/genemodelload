@@ -72,17 +72,18 @@ then
 #
 # ensembl
 #
+rm -rf /data/downloads/ftp.ensembl.org/pub/current_regulation/mus_musculus/mus_musculus.GRCm39.Regulatory_Build.regulatory_features.20240230.gff.gz
 rm -rf /data/downloads/ftp.ensembl.org/pub/current_fasta/mus_musculus/cdna/${TRANSCRIPT_FILE_NAME}
 rm -rf /data/downloads/ftp.ensembl.org/pub/current_fasta/mus_musculus/pep/${PROTEIN_FILE_NAME}
 rm -rf /data/downloads/ftp.ensembl.org/pub/current_fasta/mus_musculus/ncrna/${NCRNA_FILE_NAME}
+scp bhmgiapp01:/data/downloads/ftp.ensembl.org/pub/current_regulation/mus_musculus/mus_musculus.GRCm39.Regulatory_Build.regulatory_features.20240230.gff.gz /data/downloads/ftp.ensembl.org/pub/current_regulation/mus_musculus/
 scp bhmgiapp01:/data/downloads/ftp.ensembl.org/pub/current_fasta/mus_musculus/cdna/${TRANSCRIPT_FILE_NAME} /data/downloads/ftp.ensembl.org/pub/current_fasta/mus_musculus/cdna
 scp bhmgiapp01:/data/downloads/ftp.ensembl.org/pub/current_fasta/mus_musculus/pep/${PROTEIN_FILE_NAME} /data/downloads/ftp.ensembl.org/pub/current_fasta/mus_musculus/pep
 scp bhmgiapp01:/data/downloads/ftp.ensembl.org/pub/current_fasta/mus_musculus/ncrna/${NCRNA_FILE_NAME} /data/downloads/ftp.ensembl.org/pub/current_fasta/mus_musculus/ncrna
+ls -l /data/downloads/ftp.ensembl.org/pub/current_regulation/mus_musculus/mus_musculus.GRCm39.Regulatory_Build.regulatory_features.20240230.gff.gz
 ls -l /data/downloads/ftp.ensembl.org/pub/current_fasta/mus_musculus/cdna/${TRANSCRIPT_FILE_NAME}
 ls -l /data/downloads/ftp.ensembl.org/pub/current_fasta/mus_musculus/pep/${PROTEIN_FILE_NAME}
 ls -l /data/downloads/ftp.ensembl.org/pub/current_fasta/mus_musculus/ncrna/${NCRNA_FILE_NAME}
-
-ls -l ${INPUTDIR}/ensembl_biotypes.gz
 
 cp -r ${TRDIR}/GeneModelLoad/ensembl_genemodels.txt ${INPUTDIR}
 cp -r ${TRDIR}/AssociationLoad/ensembl_assoc.txt ${INPUTDIR}
@@ -106,7 +107,6 @@ then
 cp -r ${TRDIR}/GeneModelLoad/ensemblreg_genemodels.txt ${INPUTDIR}
 cp -r ${TRDIR}/AssociationLoad/ensemblreg_assoc.txt ${INPUTDIR}
 scp bhmgiapp01:${DATADOWNLOADS}/ftp.ensembl.org/pub/current_regulation/mus_musculus/mus_musculus.GRCm39.Regulatory_Build.regulatory_features.20240230.gff.gz ${DATADOWNLOADS}/ftp.ensembl.org/pub/current_regulation/mus_musculus/
-ls -l ${INPUTDIR}/ensemblreg_biotypes.gz
 ls -l ${INPUTDIR}/ensemblreg_genemodels.txt
 ls -l ${INPUTDIR}/ensemblreg_assoc.txt
 ls -l ${DATADOWNLOADS}/ftp.ensembl.org/pub/current_regulation/mus_musculus/mus_musculus.GRCm39.Regulatory_Build.regulatory_features.20240230.gff.gz
@@ -118,7 +118,6 @@ then
 #
 cp -r ${TRDIR}/GeneModelLoad/VISTA_genemodels.txt ${INPUTDIR}/vistareg_genemodels.txt
 cp -r ${TRDIR}/AssociationLoad/MGI_VISTA_association_load ${INPUTDIR}/vistareg_assoc.txt
-ls -l ${INPUTDIR}/vistareg_biotypes.gz
 ls -l ${INPUTDIR}/vistareg_genemodels.txt
 ls -l ${INPUTDIR}/vistareg_assoc.txt
 
