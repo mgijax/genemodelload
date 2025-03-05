@@ -14,7 +14,7 @@
 #
 #  Env Vars:
 #
-#      	BIOTYPE_FILE_DEFAULT
+#	GM_FILE_DEFAULT
 #	SEQGENEMODELLOAD_LOGFILE
 #	BCP_FILE_PATH
 #	PROVIDER_LOGICALDB
@@ -23,7 +23,7 @@
 #	MGD_DBSERVER
 #	MGD_DBUSER
 #
-#  Inputs: ${BIOTYPE_FILE_DEFAULT}
+#  Inputs: ${GM_FILE_DEFAULT}
 #
 #  Outputs:
 #       - SEQ_GeneModel bcp file
@@ -126,15 +126,15 @@ date >> ${LOG}
 #
 # Make sure the input file exists
 #
-if [ ! -f ${BIOTYPE_FILE_DEFAULT} ]
+if [ ! -f ${GM_FILE_DEFAULT} ]
 then
-    echo "Input file does not exist: ${BIOTYPE_FILE_DEFAULT}" | tee -a ${LOG}
+    echo "Input file does not exist: ${GM_FILE_DEFAULT}" | tee -a ${LOG}
     exit 1
 fi
 
 echo "Creating bcp file" | tee -a  ${LOG}
-echo ${BIOTYPE_FILE_DEFAULT}, ${PROVIDER}, ${CONFIG} | tee -a ${LOG}
-gunzip -c ${BIOTYPE_FILE_DEFAULT} | ${PYTHON} ./seqgenemodelload.py ${PROVIDER} >> ${LOG} 2>&1
+echo ${GM_FILE_DEFAULT}, ${PROVIDER}, ${CONFIG} | tee -a ${LOG}
+${PYTHON} ./seqgenemodelload.py ${GM_FILE_DEFAULT} >> ${LOG} 2>&1
 STAT=$?
 if [ $STAT -ne 0 ]
 then

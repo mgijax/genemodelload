@@ -40,6 +40,7 @@
 #          4) End Coordinate
 #          5) Strand (+ or -)
 #          6) Description
+#          7) Raw Biotype/Feature Type
 #
 #      - Association input file with the following tab-delimited fields:
 #
@@ -268,11 +269,11 @@ fi
 #
 # Convert the gene model file into a QC-ready version that can be used to
 # run the sanity/QC reports against. This involves doing the following:
-# 1) Extract columns 1 thru 6
+# 1) Extract columns 1 thru 7
 # 2) Extract only lines that have alphanumerics (excludes blank lines)
 # 3) Remove any Ctrl-M characters (dos2unix)
 #
-cat ${GM_FILE} | cut -d'	' -f1-6 | grep '[0-9A-Za-z]' > ${GM_FILE_QC}
+cat ${GM_FILE} | cut -d'	' -f1-7 | grep '[0-9A-Za-z]' > ${GM_FILE_QC}
 dos2unix ${GM_FILE_QC} ${GM_FILE_QC} 2>/dev/null
 
 #

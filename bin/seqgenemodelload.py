@@ -3,7 +3,7 @@
 # Purpose:
 #       creates bcp file for SEQ_GeneModel for a given provider
 #
-Usage='createSeqGeneModelInput.py provider (ensembl | ncbi | ensemblreg | vistareg)'
+Usage='createSeqGeneModelInput.py inputFile (ensembl | ncbi | ensemblreg | vistareg)'
 #
 # Env Vars:
 #    1. BCP_FILE_PATH
@@ -12,7 +12,7 @@ Usage='createSeqGeneModelInput.py provider (ensembl | ncbi | ensemblreg | vistar
 #
 # Inputs: 
 #	1. mgd database to resolve gmId to sequence key and translate raw biotype to _MarkerType_key 
-#   2. provider file, from stdin, mapping gmId to raw biotype
+#   2. input file from GM_FILE_DEFAULT, which maps gmId to raw biotype (column 1,7)
 #
 # Outputs:
 #	 1. SEQ_GeneModel bcp file, tab-delimited
@@ -98,11 +98,7 @@ markerTypeKeyByRawBioTypeLookup = {} # {rawBioType:_MarkerType_key}
 # Only NCBI has multiple sequences per gmID
 seqKeyByGMIDLookup = {} # {gmId:list of seqKeys, ...}
 
-# Provider we are loading 'ncbi', 'ensembl'
-provider = ''
-
-# Purpose:  Load biotype translation Lookup; Lookup raw biotype
-#           to get MGI Marker Type Key
+# Purpose:  Load biotype translation Lookup; Lookup raw biotype to get MGI Marker Type Key
 # Returns: nothing
 # Assumes: there is a connection to the database
 # Effects: nothing 
@@ -115,14 +111,13 @@ def loadMarkerTypeKeyLookup():
 
     # load the biotype translation into a lookup
     results = db.sql('''
-        select distinct t.term, m._Marker_Type_key
-        from MRK_BiotypeMapping m, VOC_Term t
-        where m._biotypeterm_key = t._Term_key
+        select distinct t.term, m._Marker_Type_key from MRK_BiotypeMapping m, VOC_Term t where m._biotypeterm_key = t._Term_key
         ''', 'auto')
     for r in results:
         markerTypeKeyByRawBioTypeLookup[r['term']] = r['_Marker_Type_key']
+    #print(markerTypeKeyByRawBioTypeLookup_
 
-# Purpose:  Load  sequence key lookup by seqId for a given provider
+# Purpose:  Load sequence key lookup by seqId for a given provider
 # Returns: nothing
 # Assumes: there is a connection to the database
 # Effects: nothing
@@ -134,7 +129,7 @@ def loadSequenceKeyLookup():
     print('loadSequenceKeyLookup() : ' + os.environ['PROVIDER_LOGICALDB'])
 
     ldbName =  os.environ['PROVIDER_LOGICALDB']
-    results = db.sql('''SELECT _LogicalDB_key FROM ACC_LogicalDB WHERE name = '%s' ''' % ldbName, 'auto')
+    results = db.sql('''select _LogicalDB_key from ACC_LogicalDB where name = '%s' ''' % ldbName, 'auto')
     if len(results) == 0:
         print('LogicalDB name not in database: %s' % ldbName)
         sys.exit(1)
@@ -152,118 +147,6 @@ def loadSequenceKeyLookup():
         seqKeyByGMIDLookup[r['accId']].append(r['seqKey'])
     #print(seqKeyByGMIDLookup)
 
-# Purpose:  Load lookup of raw biotype by gene model ID for either Ensembl (file format the same)
-# Returns: nothing
-# Assumes: inFile is a valid file descriptor
-# Effects: nothing
-# Throws: nothing
-
-def loadEnsemblRawBioTypeByGMIDLookup():
-    global rawBioTypeByGMIDLookup
-
-    print('loadEnsemblRawBioTypeByGMIDLookup()')
-
-    for line in inFile.readlines():
-        print('biotype file line: %s' % line)
-        columnList = str.split(line, TAB)
-
-        #
-        # if header, skip it
-        #
-        if columnList[0].find('#') == 0:
-            #print('skipping header...%s' % (columnList))
-            continue
-
-        attributeList = str.split(columnList[8], SCOLON)
-        gmId = (str.split(attributeList[0],'"'))[1].strip()
-
-        biotype = ''
-
-        for a in attributeList:
-            #print('a: %s' % a)
-            if str.strip(a).startswith('gene_biotype'):
-                biotype = a.split('"')[1]
-                #print('biotype: %s' % biotype)
-        # there are redundant id/biotype lines in the input, all IDs have the
-        # same biotype for each of the redundant lines so save only one pair
-        # but just in case check
-        if gmId in rawBioTypeByGMIDLookup:
-            b = rawBioTypeByGMIDLookup[gmId]
-            if b != biotype:
-                print('Differing biotypes for %s: %s and %s' % (gmId, b, biotype))
-                continue
-        rawBioTypeByGMIDLookup[gmId] = biotype
-
-# Purpose:  Load lookup of raw biotype by gene model ID for Ensembl Reg (file format the same)
-# Returns: nothing
-# Assumes: inFile is a valid file descriptor
-# Effects: nothing
-# Throws: nothing
-
-def loadEnsemblRegRawBioTypeByGMIDLookup():
-    global rawBioTypeByGMIDLookup
-
-    print('loadEnsemblRegRawBioTypeByGMIDLookup()')
-
-    for line in inFile.readlines():
-        #print('biotype file line: %s' % line)
-        columnList = str.split(line, TAB)
-
-        #
-        # if header, skip it
-        #
-        if columnList[0].find('#') == 0:
-            #print('skipping header...%s' % (columnList))
-            continue
-
-        attributeList = str.split(columnList[8], SCOLON)
-
-        # ID=enhancer:ENSMUSR1_937P4
-        gmId = (str.split(attributeList[0],':'))[1].strip()
-
-        biotype = ''
-
-        for a in attributeList:
-            #print('a: %s' % a)
-            # feature_type=Enhancer
-            if str.strip(a).startswith('feature_type'):
-                biotype = a.split('=')[1].strip()
-                #print('biotype: %s' % biotype)
-        # there are redundant id/biotype lines in the input, all IDs have the
-        # same biotype for each of the redundant lines so save only one pair
-        # but just in case check
-        if gmId in rawBioTypeByGMIDLookup:
-            b = rawBioTypeByGMIDLookup[gmId]
-            if b != biotype:
-                print('Differing biotypes for %s: %s and %s' % (gmId, b, biotype))
-                continue
-        print(gmId)
-        rawBioTypeByGMIDLookup[gmId] = biotype
-
-# Purpose:  Load lookup of raw biotype by gene model ID for either NCBI
-# Returns: nothing
-# Assumes: inFile is a valid file descriptor
-# Effects: nothing
-# Throws: nothing
-
-def loadNCBIRawBioTypeByGMIDLookup():
-    global rawBioTypeByGMIDLookup
-
-    print('loadNCBIRawBioTypeByGMIDLookup()')
-
-    # get the header
-    header = inFile.readline()
-
-    for line in inFile.readlines():
-        columnList =  str.split(line, TAB)
-        taxid = columnList[0]
-        if str.strip(taxid) == '10090':
-            gmId = columnList[1]
-            biotype = columnList[9]
-            rawBioTypeByGMIDLookup[gmId] = biotype
-            if gmId == '654820' or gmId == '170942':
-                print('line: %s' % line)
-
 # Purpose: Initialize globals; load lookups 
 # Returns: nothing
 # Assumes: nothing
@@ -271,35 +154,29 @@ def loadNCBIRawBioTypeByGMIDLookup():
 # Throws: nothing
 
 def init():
-    global inFile, provider, bcpFilePath, bcpFile
+    global inFile, bcpFilePath, bcpFile
 
     print('%s' % mgi_utils.date())
     print('Initializing')
 
-    inFile = sys.stdin
     if len(sys.argv) != 2:
             print(Usage)
             sys.exit(1)
 
-    provider = sys.argv[1]
+    inFile = open(sys.argv[1], 'r')
+
     try:
         bcpFilePath = os.environ['BCP_FILE_PATH']
         bcpFile = open(bcpFilePath, 'w')
     except:
-        'Could not open file for writing %s\n' % bcpFilePath sys.exit(1)
-
-    if provider in ('ensembl', 'vistareg'):
-        loadEnsemblRawBioTypeByGMIDLookup()
-
-    elif provider in ('ensemblreg'):
-        loadEnsemblRegRawBioTypeByGMIDLookup()
-
-    elif provider == 'ncbi':
-        loadNCBIRawBioTypeByGMIDLookup()
-
-    else:
-        print('Provider not recognized: %s' % provider)
+        print('Could not open file for writing %s\n') % bcpFilePath 
         sys.exit(1)
+
+    for line in inFile.readlines():
+        columnList = str.split(line[:-1], TAB)
+        gmId = columnList[0]
+        biotype = columnList[6]
+        rawBioTypeByGMIDLookup[gmId] = biotype
 
     loadSequenceKeyLookup()
     loadMarkerTypeKeyLookup()
@@ -312,7 +189,7 @@ def init():
 
 def run ():
 
-    print('Creating bcp file for %s ' % provider)
+    print('Creating bcp file')
 
     # current count of gm IDs found in database, but not in input
     notInInputCtr = 0
@@ -343,8 +220,8 @@ def run ():
                 (seqKey, TAB, markerTypeKey, TAB, rawBioType, TAB, \
                     TAB, TAB, CREATEDBY_KEY, TAB, CREATEDBY_KEY, TAB, cdate, TAB, cdate, CRT) )
 
-    print('\n%s %s gene model Ids in the database but not in the input file' % (notInInputCtr, provider))
-    print('\n%s %s gene model Ids not loaded because unable to translate biotype\n' % (noTranslationCtr, provider))
+    print('\n%s gene model Ids in the database but not in the input file' % (notInInputCtr))
+    print('\n%s gene model Ids not loaded because unable to translate biotype\n' % (noTranslationCtr))
 
 #
 # Main

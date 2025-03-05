@@ -48,6 +48,7 @@
 #          4) End Coordinate
 #          5) Strand (+ or -)
 #          6) Description
+#          7) Raw Biotype/Feature Type
 #
 #      - Association input file with the following tab-delimited fields:
 #
@@ -309,6 +310,7 @@ def loadTempTables ():
         endCoordinate = tokens[3]
         strand = tokens[4]
         description = tokens[5]
+        featureType = tokens[6]
 
         if len(re.findall('[^0-9]',startCoordinate)) > 0:
             print('Invalid start coordinate (line ' + str(count) + ')')
@@ -330,7 +332,7 @@ def loadTempTables ():
 
         fpGMBCP.write(gmID + TAB + chromosome + TAB +
                       startCoordinate + TAB + endCoordinate + TAB +
-                      strand + TAB + description + NL)
+                      strand + TAB + description + TAB + featureType + NL)
 
         line = fpGM.readline()
         count += 1
@@ -390,8 +392,7 @@ def loadTempTables ():
     sys.stdout.flush()
 
     bcpCmd = '%s %s %s %s "/" %s "\\t" "\\n" mgd' % \
-        (bcpCommand, db.get_sqlServer(), db.get_sqlDatabase(),gmTempTable,
-        gmBCPFile)
+        (bcpCommand, db.get_sqlServer(), db.get_sqlDatabase(),gmTempTable, gmBCPFile)
 
     rc = os.system(bcpCmd)
     if rc != 0:
@@ -402,8 +403,7 @@ def loadTempTables ():
     sys.stdout.flush()
 
     bcpCmd = '%s %s %s %s "/" %s "\\t" "\\n" mgd' % \
-        (bcpCommand, db.get_sqlServer(), db.get_sqlDatabase(),assocTempTable,
-        assocBCPFile)
+        (bcpCommand, db.get_sqlServer(), db.get_sqlDatabase(),assocTempTable, assocBCPFile)
 
     rc = os.system(bcpCmd)
     if rc != 0:
@@ -427,11 +427,8 @@ def createInvMarkerReport ():
     fpInvMrkRpt.write(str.center('Invalid Marker Report',110) + NL)
     fpInvMrkRpt.write(str.center(provider,110) + NL)
     fpInvMrkRpt.write(str.center('(' + timestamp + ')',110) + 2*NL)
-    fpInvMrkRpt.write('%-12s  %-20s  %-20s  %-20s  %-30s%s' %
-                     ('MGI ID','Gene Model ID','Associated Object',
-                      'Marker Status','Reason',NL))
-    fpInvMrkRpt.write(12*'-' + '  ' + 20*'-' + '  ' + 20*'-' + '  ' + \
-                      20*'-' + '  ' + 30*'-' + NL)
+    fpInvMrkRpt.write('%-12s  %-20s  %-20s  %-20s  %-30s%s' % ('MGI ID','Gene Model ID','Associated Object', 'Marker Status','Reason',NL))
+    fpInvMrkRpt.write(12*'-' + '  ' + 20*'-' + '  ' + 20*'-' + '  ' + 20*'-' + '  ' + 30*'-' + NL)
 
     #
     # Find any MGI IDs from the association file that:
@@ -546,11 +543,8 @@ def createSecMarkerReport ():
     fpSecMrkRpt.write(str.center('Secondary Marker Report',108) + NL)
     fpSecMrkRpt.write(str.center(provider,108) + NL)
     fpSecMrkRpt.write(str.center('(' + timestamp + ')',108) + 2*NL)
-    fpSecMrkRpt.write('%-16s  %-20s  %-50s  %-16s%s' %
-                     ('Secondary MGI ID','Gene Model ID',
-                      'Marker Symbol','Primary MGI ID',NL))
-    fpSecMrkRpt.write(16*'-' + '  ' + 20*'-' + '  ' + 50*'-' + '  ' + \
-                      16*'-' + NL)
+    fpSecMrkRpt.write('%-16s  %-20s  %-50s  %-16s%s' % ('Secondary MGI ID','Gene Model ID', 'Marker Symbol','Primary MGI ID',NL))
+    fpSecMrkRpt.write(16*'-' + '  ' + 20*'-' + '  ' + 50*'-' + '  ' + 16*'-' + NL)
 
     #
     # Find any MGI IDs from the association file that are secondary IDs
@@ -584,8 +578,7 @@ def createSecMarkerReport ():
         mgiID = r['mgiID']
         gmID = r['gmID']
 
-        fpSecMrkRpt.write('%-16s  %-20s  %-50s  %-16s%s' %
-            (mgiID, gmID, r['symbol'], r['accID'], NL))
+        fpSecMrkRpt.write('%-16s  %-20s  %-50s  %-16s%s' % (mgiID, gmID, r['symbol'], r['accID'], NL))
 
         #
         # If the MGI ID and gene model ID are found in the association
@@ -622,8 +615,7 @@ def createMissingGMIDReport ():
     fpMissGMRpt.write(str.center('Missing Gene Model ID Report',80) + NL)
     fpMissGMRpt.write(str.center(provider,80) + NL)
     fpMissGMRpt.write(str.center('(' + timestamp + ')',80) + 2*NL)
-    fpMissGMRpt.write('%-12s  %-20s%s' %
-                     ('MGI ID','Gene Model ID',NL))
+    fpMissGMRpt.write('%-12s  %-20s%s' % ('MGI ID','Gene Model ID',NL))
     fpMissGMRpt.write(12*'-' + '  ' + 20*'-' + NL)
 
     #
@@ -685,11 +677,8 @@ def createChrDiscrepReport ():
     fpChrDiscrepRpt.write(str.center('Chromosome Discrepancy Report',96) + NL)
     fpChrDiscrepRpt.write(str.center(provider,96) + NL)
     fpChrDiscrepRpt.write(str.center('(' + timestamp + ')',96) + 2*NL)
-    fpChrDiscrepRpt.write('%-5s  %-20s  %-3s  %-12s  %-50s  %-3s%s' %
-                         ('Load?', 'Gene Model ID','Chr','MGI ID',
-                          'Marker Symbol','Chr',NL))
-    fpChrDiscrepRpt.write(5*'-' + '  ' + 20*'-' + '  ' + 3*'-' + '  ' + 12*'-' + '  ' +
-                          50*'-' + '  ' + 3*'-' + NL)
+    fpChrDiscrepRpt.write('%-5s  %-20s  %-3s  %-12s  %-50s  %-3s%s' % ('Load?', 'Gene Model ID','Chr','MGI ID', 'Marker Symbol','Chr',NL))
+    fpChrDiscrepRpt.write(5*'-' + '  ' + 20*'-' + '  ' + 3*'-' + '  ' + 12*'-' + '  ' + 50*'-' + '  ' + 3*'-' + NL)
 
     #
     # Find any cases where the marker for the MGI ID in the association
@@ -797,8 +786,7 @@ def createDupGMIDReport ():
     fpDupGMIDRpt.write(str.center('Duplicate GM ID Report',96) + NL)
     fpDupGMIDRpt.write(str.center(provider,96) + NL)
     fpDupGMIDRpt.write(str.center('(' + timestamp + ')',96) + 2*NL)
-    fpDupGMIDRpt.write('%-5s  %-20s  %-3s  %s' %
-                         ('Load?', 'Gene Model ID','Chr',NL))
+    fpDupGMIDRpt.write('%-5s  %-20s  %-3s  %s' % ('Load?', 'Gene Model ID','Chr',NL))
     fpDupGMIDRpt.write(5*'-' + '  ' + 20*'-' + '  ' + 3*'-' + NL)
 
     #
