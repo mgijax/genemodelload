@@ -3,7 +3,7 @@
 # Purpose:
 #       creates bcp file for SEQ_GeneModel for a given provider
 #
-Usage='createSeqGeneModelInput.py inputFile (ensembl | ncbi | ensemblreg | vistareg)'
+Usage='createSeqGeneModelInput.py inputFile (GM_FILE_DEFAULT)'
 #
 # Env Vars:
 #    1. BCP_FILE_PATH
@@ -13,6 +13,7 @@ Usage='createSeqGeneModelInput.py inputFile (ensembl | ncbi | ensemblreg | vista
 # Inputs: 
 #	1. mgd database to resolve gmId to sequence key and translate raw biotype to _MarkerType_key 
 #   2. input file from GM_FILE_DEFAULT, which maps gmId to raw biotype (column 1,7)
+#   this is the same file as is used by the assemblyseqload
 #
 # Outputs:
 #	 1. SEQ_GeneModel bcp file, tab-delimited
@@ -43,12 +44,9 @@ Usage='createSeqGeneModelInput.py inputFile (ensembl | ncbi | ensemblreg | vista
 #
 #  Date        SE   Change Description
 #  ----------  ---  -------------------------------------------------------
-#
-#  03/04/2025  lec  added loadEnsemblRegRawBioTypeByGMIDLookup
-#   input file for ensemblreg has changed
+#  03/05/2025  lec  conveted to using input file GM_FILE_DEFAULT, columns 1,7
 #
 #  04/14/2023  sc   Update to parse ensemblreg raw biotypes
-#
 #  01/20/2010  sc   Initial development
 #
 ###########################################################################
@@ -160,10 +158,8 @@ def init():
     print('Initializing')
 
     if len(sys.argv) != 2:
-            print(Usage)
-            sys.exit(1)
-
-    inFile = open(sys.argv[1], 'r')
+        print(Usage)
+        sys.exit(1)
 
     try:
         bcpFilePath = os.environ['BCP_FILE_PATH']
@@ -172,11 +168,13 @@ def init():
         print('Could not open file for writing %s\n') % bcpFilePath 
         sys.exit(1)
 
+    inFile = open(sys.argv[1], 'r')
     for line in inFile.readlines():
         columnList = str.split(line[:-1], TAB)
         gmId = columnList[0]
         biotype = columnList[6]
         rawBioTypeByGMIDLookup[gmId] = biotype
+    inFile.close()
 
     loadSequenceKeyLookup()
     loadMarkerTypeKeyLookup()
@@ -194,8 +192,8 @@ def run ():
     # current count of gm IDs found in database, but not in input
     notInInputCtr = 0
 
-    # current count of gm IDs found in database, but input raw biotype
-    # will not translate
+    # current count of gm IDs found in database, 
+    # but input raw biotype will not translate
     noTranslationCtr = 0
 
     for gmId in list(seqKeyByGMIDLookup.keys()):
@@ -222,6 +220,7 @@ def run ():
 
     print('\n%s gene model Ids in the database but not in the input file' % (notInInputCtr))
     print('\n%s gene model Ids not loaded because unable to translate biotype\n' % (noTranslationCtr))
+    bcpFile.close()
 
 #
 # Main
@@ -229,5 +228,3 @@ def run ():
 
 init()
 run()
-inFile.close()
-bcpFile.close()
