@@ -103,13 +103,10 @@ then
 #
 # ensembl regulatory
 #
-rm -rf /data/downloads/ftp.ensembl.org/pub/current_regulation/mus_musculus/mus_musculus.GRCm39.Regulatory_Build.regulatory_features.20240230.gff.gz
 cp -r ${TRDIR}/GeneModelLoad/ensemblreg_genemodels.txt ${INPUTDIR}
 cp -r ${TRDIR}/AssociationLoad/ensemblreg_assoc.txt ${INPUTDIR}
-scp bhmgiapp01:${DATADOWNLOADS}/ftp.ensembl.org/pub/current_regulation/mus_musculus/mus_musculus.GRCm39.Regulatory_Build.regulatory_features.20240230.gff.gz ${DATADOWNLOADS}/ftp.ensembl.org/pub/current_regulation/mus_musculus/
 ls -l ${INPUTDIR}/ensemblreg_genemodels.txt
 ls -l ${INPUTDIR}/ensemblreg_assoc.txt
-ls -l ${DATADOWNLOADS}/ftp.ensembl.org/pub/current_regulation/mus_musculus/mus_musculus.GRCm39.Regulatory_Build.regulatory_features.20240230.gff.gz
 
 elif [ "${GM_PROVIDER}" = "VISTAReg" ]
 then
@@ -125,6 +122,13 @@ else
     echo "variable GM_PROVIDER has not been set"
     exit 1
 fi
+
+rm -rf ${DATADOWNLOADS}/ftp.ensembl.org/pub/current_regulation/mus_musculus/mus_musculus.GRCm39.Regulatory_Build.regulatory_features.20240230.gff.gz
+rm -rf ${DATADOWNLOADS}/ftp.ncbi.nih.gov/genomes/refseq/vertebrate_mammalian/Mus_musculus/annotation_releases/GCF_000001635.27-RS_2024_02/GCF_000001635.27_GRCm39_genomic.gff.gz
+scp bhmgiapp01:${DATADOWNLOADS}/ftp.ensembl.org/pub/current_regulation/mus_musculus/mus_musculus.GRCm39.Regulatory_Build.regulatory_features.20240230.gff.gz ${DATADOWNLOADS}/ftp.ensembl.org/pub/current_regulation/mus_musculus/
+scp bhmgiapp01:${DATADOWNLOADS}/ftp.ncbi.nih.gov/genomes/refseq/vertebrate_mammalian/Mus_musculus/annotation_releases/GCF_000001635.27-RS_2024_02/GCF_000001635.27_GRCm39_genomic.gff.gz ${DATADOWNLOADS}/ftp.ncbi.nih.gov/genomes/refseq/vertebrate_mammalian/Mus_musculus/annotation_releases
+ls -l ${DATADOWNLOADS}/ftp.ensembl.org/pub/current_regulation/mus_musculus/mus_musculus.GRCm39.Regulatory_Build.regulatory_features.20240230.gff.gz
+ls -l ${DATADOWNLOADS}/ftp.ncbi.nih.gov/genomes/refseq/vertebrate_mammalian/Mus_musculus/annotation_releases/GCF_000001635.27-RS_2024_02/GCF_000001635.27_GRCm39_genomic.gff.gz
 
 #touch ${LASTDOWNLOAD_FILE}
 
