@@ -1,4 +1,5 @@
 '''
+#
 # Report:
 #       Tab-delimited MGIreg.gff3 file of Ensembl, NCBI, VISTA regulatory region coordinates
 #
@@ -52,8 +53,7 @@
 #
 # History:
 #
-# 01/02/2025    lec
-#   wts2-1538/wts2-1543/e4g-9/Add NCBI regulatory regions/biological_region to MGIreg.gff3 file
+# 01/02/2025    lec     wts2-1538/e4g-9/MGI Regulatory GFF changes: MGIreg.gff3
 #
 '''
  

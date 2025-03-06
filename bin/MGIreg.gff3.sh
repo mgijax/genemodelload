@@ -12,18 +12,14 @@
 #
 #  Modification History:
 #
-#  03/06/2025  lec   Initial development
+#  03/06/2025  lec   wts2-1538/e4g-9/MGI Regulatory GFF changes: MGIreg.gff3
 #
 ###########################################################################
-
 
 cd `dirname $0`
 
 COMMON_CONFIG=genemodel_common.config
 GFF_CONFIG=mgireg.gff3.config
-#
-# verify & source the configuration file
-#
 
 if [ -f ../${COMMON_CONFIG} ]
 then
