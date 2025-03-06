@@ -88,6 +88,7 @@ cp -r ${TRDIR}/GeneModelLoad/ensembl_genemodels.txt ${INPUTDIR}
 cp -r ${TRDIR}/AssociationLoad/ensembl_assoc.txt ${INPUTDIR}
 ls -l ${INPUTDIR}/ensembl_genemodels.txt
 ls -l  ${INPUTDIR}/ensembl_assoc.txt
+
 elif [ "${GM_PROVIDER}" = "NCBI" ]
 then
 #
