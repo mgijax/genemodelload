@@ -4,22 +4,15 @@
 ###########################################################################
 #
 #  Purpose:
-#       This script is a wrapper around process that creates the MGI i
-#       regulatory marker gff report
+#       This script is a wrapper for MGIreg.gff3.py
 #  Usage:
 #       MGIreg.gff3.sh
-#  Env Vars:
-#  Inputs:
-#  Outputs:
-#  Exit Codes:
+#
 ###########################################################################
 #
 #  Modification History:
 #
-#  Date        SE   Change Description
-#  ----------  ---  -------------------------------------------------------
-#
-#  05/18/2022  sc   Initial development
+#  03/06/2025  lec   Initial development
 #
 ###########################################################################
 
