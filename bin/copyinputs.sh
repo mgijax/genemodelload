@@ -79,7 +79,6 @@ then
 #
 # ensembl regulatory
 #
-cp -r ${DATADOWNLOADS}/ftp.ensembl.org/pub/current_regulation/mus_musculus/mus_musculus.GRCm39.Regulatory_Build.regulatory_features.20240230.gff.gz ${INPUTDIR}/ensemblreg.gff
 cp -r ${TRDIR}/GeneModelLoad/ensemblreg_genemodels.txt ${INPUTDIR}
 cp -r ${TRDIR}/AssociationLoad/ensemblreg_assoc.txt ${INPUTDIR}
 
@@ -95,6 +94,10 @@ else
     echo "variable GM_PROVIDER has not been set"
     exit 1
 fi
+
+cp -r ${DATADOWNLOADS}/ftp.ensembl.org/pub/current_regulation/mus_musculus/mus_musculus.GRCm39.Regulatory_Build.regulatory_features.20240230.gff.gz ${INPUTDIR}/ensemblreg.gff
+cp -r ${DATADOWNLOADS}/ftp.ncbi.nih.gov/genomes/refseq/vertebrate_mammalian/Mus_musculus/annotation_releases/GCF_000001635.27-RS_2024_02/GCF_000001635.27_GRCm39_genomic.gff.gz ${INPUTDIR}/ncbireg.gff
+cp /mgi/all/wts2_projects/800/WTS2-813/VISTA/gff3/VISTA_mm9_mm10_b39.gff3 ${INPUTDIR}/vistareg.gff
 
 ls -l ${INPUTDIR}
 

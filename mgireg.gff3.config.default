@@ -25,13 +25,13 @@ NCBI_FILE=GCF_000001635.27_GRCm39_genomic.gff
 NCBI_FTP="ftp.ncbi.nih.gov/genomes/refseq/vertebrate_mammalian/Mus_musculus/annotation_releases/GCF_000001635.27-RS_2024_02/GCF_000001635.27_GRCm39_genomic.gff.gz"
 NCBI_GFF_URL=https://${NCBI_FTP}
 NCBI_GFF=${DATADOWNLOADS}/${NCBI_FTP}
-NCBI_GFF_DEFAULT=${INPUTDIR}/ncbi.gff
+NCBI_GFF_DEFAULT=${INPUTDIR}/ncbireg.gff
 export NCBI_FILE NCBI_FTP NCBI_GFF_URL NCBI_GFF NCBI_GFF_DEFAULT
 
 VISTA_FILE=locus.tsv
 VISTA_FTP="enhancer.lbl.gov/cgi-bin/imagedb3.pl?search.result=yes;form=search;action=search;page_size=20000;show=1;search.form=no;search.org=Mouse;search.sequence=1"
 # VISTA : Sophia generated this fle
 VISTA_GFF=/mgi/all/wts2_projects/800/WTS2-813/VISTA/gff3/VISTA_mm9_mm10_b39.gff3
-VISTA_GFF_DEFAULT=${INPUTDIR}/vista.gff
+VISTA_GFF_DEFAULT=${INPUTDIR}/vistareg.gff
 export VISTA_FILE VISTA_FTP VISTA_GFF VISTA_GFF_DEFAULT
 
