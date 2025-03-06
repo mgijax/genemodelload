@@ -2,10 +2,10 @@
 #
 #  mgireg.gff3.config.default
 #
-#  This file sets up the environment variables that are needed for 
-#  generating the MGIreg.gff3 file
+#  sets up the environment variables for MGIreg.gff3.sh
 #
 ###########################################################################
+#
 #
 MOUSE_ASSEMBLY="GRCm39"
 export MOUSE_ASSEMBLY

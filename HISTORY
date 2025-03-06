@@ -3,19 +3,12 @@ DATE: 03/04/2025
 STAFF: lec
 CHANGES: 
 wts2-1392/e4g-155/ENSEMBL Regulatory 113
-        modified:   bin/seqgenemodelload.py
-        modified:   genemodel_ensemblreg.config.default
-	modified:   copydownloads.sh
-
-TAG: genemodelload-6-0-25-?
-DATE: 01/10/2025
-STAFF: lec
-CHANGES: 
-wts2-1591/e4g-9/Add NCBI regulatory regions/biological_region to MGIreg.gff3 file
+wts2-1538/e4g-9/MGI Regulatory GFF changes: MGIreg.gff3 
+#        modified:   bin/seqgenemodelload.py
+#        modified:   genemodel_ensemblreg.config.default
+#	 modified:   copydownloads.sh
 #        modified:   MGIreg.gff3.py
 #        modified:   MGIreg.gff3.sh
-#        modified:   genemodelload.sh
-#        modified:   ../mgireg.gff3.config.default
 
 TAG: genemodelload-6-0-25-2
 TAG: genemodelload-6-0-25-1
