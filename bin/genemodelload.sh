@@ -229,11 +229,10 @@ ${GENEMODELLOAD}/bin/biotypemapping.sh | tee -a ${LOG}
 STAT=$?
 if [ ${STAT} -ne 0 ]
 then
-        message="${message} ${GENEMODELLOAD}/bin/biotypemapping.sh failed"
+	echo "${PROVIDER} ${GENEMODELLOAD}/bin/biotypemapping.sh failed" | tee -a ${LOG}
 else
-        message="${message} ${GENEMODELLOAD}/bin/biotypemapping.sh successful"
+	echo "${PROVIDER} ${GENEMODELLOAD}/bin/biotypemapping.sh successful" | tee -a ${LOG}
 fi
-echo ${message} | tee -a ${LOG}
 
 fi
 
@@ -268,7 +267,6 @@ fi
 #
 echo "" >> ${LOG}
 date >> ${LOG}
-message=${PROVIDER}
 if [ ${RELOAD_GENEMODELS} = "true" ]
 then
     echo "Load gene models and associations for ${PROVIDER}" | tee -a ${LOG}
@@ -279,12 +277,10 @@ then
     STAT=$?
     if [ ${STAT} -ne 0 ]
     then
-	message="${message} seqgenemodelload.sh failed"
-        echo ${message} | tee -a ${LOG}
+        echo "${PROVIDER} seqgenemodelload.sh failed" | tee -a ${LOG}
 	exit 1
     else
-	message="${message} seqgenemodelload.sh successful" 
-        echo ${message} | tee -a ${LOG}
+        echo "${PROVIDER} seqgenemodelload.sh successful" | tee -a ${LOG}
     fi
 
     if [ ${PROVIDER} = "ensembl" ]
@@ -385,11 +381,11 @@ then
 # Remove snpcacheload/output/lastrun so that the snpcacheload will run from the Pipeline
 case `uname -n` in
 bhmgiapp01)
-       echo "removing mgiadmin@bhmgidb03lp rm -rf /data/loads/mgi/snpcacheload/output/lastrun"
+       echo "removing mgiadmin@bhmgidb03lp rm -rf /data/loads/mgi/snpcacheload/output/lastrun" | tee -a ${LOG}
        ssh mgiadmin@bhmgidb03lp 'rm -rf /data/loads/mgi/snpcacheload/output/lastrun'
        ;;
 bhmgidevapp01)
-       echo "removing mgiadmin@bhmgidb05ld rm -rf /data/loads/mgi/snpcacheload/output/lastrun"
+       echo "removing mgiadmin@bhmgidb05ld rm -rf /data/loads/mgi/snpcacheload/output/lastrun" | tee -a ${LOG}
        ssh mgiadmin@bhmgidb05ld 'rm -rf /data/loads/mgi/snpcacheload/output/lastrun'
        ;;
 *) ;;
@@ -399,6 +395,6 @@ fi
 #
 # mail the log
 #
-cat ${LOG} | mailx -s "Gene Model Load Completed: ${message}" ${MAIL_LOG}
+cat ${LOG} | mailx -s "Gene Model Load Completed: ${PROVIDER}" ${MAIL_LOG}
 
 exit 0
