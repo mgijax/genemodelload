@@ -379,7 +379,7 @@ fi
 #
 touch ${LASTRUN_FILE}
 
-# If reloading gene modesl, remove lastrun so that the snpcacheload will run from the Pipeline
+# If reloading gene models, remove lastrun so that the snpcacheload will run from the Pipeline
 if [ ${RELOAD_GENEMODELS} = "true" ]
 then
 # Remove snpcacheload/output/lastrun so that the snpcacheload will run from the Pipeline
