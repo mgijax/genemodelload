@@ -310,7 +310,6 @@ def loadTempTables ():
         endCoordinate = tokens[3]
         strand = tokens[4]
         description = tokens[5]
-        featureType = tokens[6]
 
         if len(re.findall('[^0-9]',startCoordinate)) > 0:
             print('Invalid start coordinate (line ' + str(count) + ')')
@@ -332,7 +331,7 @@ def loadTempTables ():
 
         fpGMBCP.write(gmID + TAB + chromosome + TAB +
                       startCoordinate + TAB + endCoordinate + TAB +
-                      strand + TAB + description + TAB + featureType + NL)
+                      strand + TAB + description + NL)
 
         line = fpGM.readline()
         count += 1
