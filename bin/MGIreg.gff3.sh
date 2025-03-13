@@ -66,10 +66,10 @@ ${PYTHON} ${GENEMODELLOAD}/bin/MGIreg.gff3.py >> ${LOG} 2>&1
 #
 # Copy report to ftp site
 #
-#cd ${OUTPUTDIR}
-#cat MGIreg.gff3 | gzip -cf9 > MGIreg.gff3.gz
-#touch MGIreg.gff3.gz
-#cp -p MGIreg.gff3.gz ${DISTRIBDIR}/
+cd ${OUTPUTDIR}
+cat MGIreg.gff3 | gzip -cf9 > MGIreg.gff3.gz
+touch MGIreg.gff3.gz
+cp -p MGIreg.gff3.gz ${DISTRIBDIR}/
 
 echo `date`: End MGIreg.gff3 public report | tee -a ${LOG}
 
