@@ -150,7 +150,8 @@ def writeHeader():
 # File url: %s
 # File date used: %s
 #
-#''' % (date, mAssembly, ensemblFile, ensembl, ensemblTimeStamp, vistaFile, vista, vistaTimeStamp, ncbiFile, ncbi, ncbiTimeStamp))
+#
+''' % (date, mAssembly, ensemblFile, ensembl, ensemblTimeStamp, vistaFile, vista, vistaTimeStamp, ncbiFile, ncbi, ncbiTimeStamp))
 
 def init():
     global mcvToSOLookup
