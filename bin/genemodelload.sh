@@ -311,7 +311,7 @@ fi
 
 # regenerate the MGIreg.gff3 file
 echo "Creating MGIreg.gff3 file" | tee -a ${LOG}
-${MRKCACHELOAD}/mrklocation.csh | tee -a ${LOG}
+${GENEMODELLOAD}/bin/runGeneModelCache.sh | tee -a ${LOG}
 ${GENEMODELLOAD}/bin/MGIreg.gff3.sh | tee -a ${LOG}
 
 TIMESTAMP=`date '+%Y%m%d.%H%M'`
