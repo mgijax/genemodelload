@@ -310,9 +310,11 @@ else
 fi
 
 # regenerate the MGIreg.gff3 file
-echo "Creating MGIreg.gff3 file" | tee -a ${LOG}
-${GENEMODELLOAD}/bin/runGeneModelCache.sh | tee -a ${LOG}
-${GENEMODELLOAD}/bin/MGIreg.gff3.sh | tee -a ${LOG}
+# only use during testing
+# these are called from the loadadmin/prod/sunday tasks
+#echo "Creating MGIreg.gff3 file" | tee -a ${LOG}
+#${GENEMODELLOAD}/bin/runGeneModelCache.sh | tee -a ${LOG}
+#${GENEMODELLOAD}/bin/MGIreg.gff3.sh | tee -a ${LOG}
 
 TIMESTAMP=`date '+%Y%m%d.%H%M'`
 
