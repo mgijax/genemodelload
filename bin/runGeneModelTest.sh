@@ -160,6 +160,13 @@ fi
 ${GENEMODELLOAD}/bin/runGeneModelCache.sh
 
 #
+# step 8
+#
+# run MGI Reg Gff3
+#
+${GENEMODELLOAD}/bin/MGIreg.gff3.sh
+
+#
 # contact MGI-SE-Admin : load EMBOSS sequences
 # wiki : sw:Emboss
 #
