@@ -6,7 +6,6 @@
 # The gff is generated each time the Ensembl Reg, VISTA Reg gene model associations are reloaded.
 # see genemodelload.sh
 #
-# column0 = '###'
 # column1 = chromosome
 # column2 = provider (MGI, Ensembl, NCBI, VISTA)
 # column3 = MCV term
@@ -98,7 +97,6 @@ ensemblProvider = 'Ensembl'
 ncbiProvider = 'NCBI'
 vistaProvider = 'VISTA'
 
-column0 = '###'
 column1 = ''
 column2 = ''
 column3 = ''
@@ -399,7 +397,6 @@ def setParentColumns(provider,r,n,counter):
     column9 += n[4]
 
 def writeMGIRow():
-    fp.write(column0 + CRT)
     fp.write(column1 + TAB)
     fp.write(column2 + TAB)
     fp.write(column3 + TAB)
