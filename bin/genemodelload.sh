@@ -307,19 +307,12 @@ else
         ${ENS_WRAPPER} ensembl_transcriptseqload.config false >> ${LOG} 2>&1
         ${ENS_WRAPPER} ensembl_proteinseqload.config false >> ${LOG} 2>&1
     fi
-    if [ ${PROVIDER} = "ensemblreg" -o ${PROVIDER} = "vistareg" ]
-    then
-        echo "Creating MGIreg.gff3 file" | tee -a ${LOG}
-        ${GENEMODELLOAD}/bin/MGIreg.gff3.sh
-    fi
 fi
 
-# regenerate the MGIreg.gff3 file if we are reloading gene models or just reloading associations
-if [ ${PROVIDER} = "ensemblreg" -o ${PROVIDER} = "vistareg" ]
-then
-    echo "Creating MGIreg.gff3 file" | tee -a ${LOG}
-    ${GENEMODELLOAD}/bin/MGIreg.gff3.sh
-fi
+# regenerate the MGIreg.gff3 file
+echo "Creating MGIreg.gff3 file" | tee -a ${LOG}
+${MRKCACHELOAD}/mrklocation.csh | tee -a ${LOG}
+${GENEMODELLOAD}/bin/MGIreg.gff3.sh | tee -a ${LOG}
 
 TIMESTAMP=`date '+%Y%m%d.%H%M'`
 
