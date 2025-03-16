@@ -133,7 +133,7 @@ def writeHeader():
 # Nomenclature, identifiers, and cross references come from MGI. Provider representations of regulatory
 # features are preserved in MGI, with no attempt to identify regulatory feature equivalence between providers.
 # 
-# The following lists information about the regulatory feature providers: the file, its modification date, and its URL
+# The following lists information about the provider files used to load regulatory features into MGI: the file, its modification date, and its URL
 # ----------------------------------
 # Ensembl Regulatory Build
 # File: %s
