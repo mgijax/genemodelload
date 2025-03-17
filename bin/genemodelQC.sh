@@ -413,19 +413,6 @@ then
     GM_FILE_ERROR=1
 fi
 
-# 3/9/2023 - moved this to the python script
-#checkDupFields ${GM_FILE_QC} ${GM_SANITY_RPT} 1 "Gene Model IDs"
-#if [ $? -ne 0 ]
-#then
-#    GM_FILE_ERROR=1
-#fi
-
-checkColumns ${GM_FILE_QC} ${GM_SANITY_RPT} ${GM_FILE_COLUMNS}
-if [ $? -ne 0 ]
-then
-    GM_FILE_ERROR=1
-fi
-
 checkLineCount ${GM_FILE_QC} ${GM_SANITY_RPT} ${GM_FILE_MINIMUM_SIZE}
 if [ $? -ne 0 ]
 then
