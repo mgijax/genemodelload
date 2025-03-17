@@ -230,7 +230,10 @@ def init():
             'silencer',
             'splice enhancer',
             'transcriptional cis regulatory region',
-            'transcription factor binding site'
+            'transcription factor binding site',
+            'intronic regulatory region,',
+            'imprinting control region,',
+            'locus control region'
             )
         --and a.accid in ('MGI:6889016')
         order by c.chromosome, c.startcoordinate
