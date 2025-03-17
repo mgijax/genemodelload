@@ -376,7 +376,6 @@ def setMGIColumns(r, dbx):
     column9 = idTag + r['markerid'] + ';'
     column9 += nameTag + r['symbol'] + ';'
     column9 += descTag + r['name'] + ';'
-    column9 += columnSynonym + ';'
     column9 += geneIdTag + r['markerid'] + ';'
 
     if r['provider'] == 'MGI':
@@ -386,7 +385,8 @@ def setMGIColumns(r, dbx):
         column9 += dbxRefTag + dbx
 
     column9 += mgiTypeTag + r['featureType'] + ';'
-    column9 += soTag + r['soTermName']
+    column9 += soTag + r['soTermName'] + ';'
+    column9 += columnSynonym
 
 def setParentColumns(provider,r,n,counter):
     global column2,column3,column4,column5,column7,column9
