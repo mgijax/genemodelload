@@ -93,6 +93,7 @@ dbxRefEnsembl = 'Dbxref=ENSEMBL:'
 dbxRefNCBI = 'Dbxref=GeneID:'
 dbxRefVista = 'Dbxref=VISTA:'
 
+mgiProvider = 'MGI:'
 ensemblProvider = 'Ensembl'
 ncbiProvider = 'NCBI'
 vistaProvider = 'VISTA'
@@ -106,6 +107,7 @@ column6 = '.'
 column7 = ''
 column8 = '.'
 column9 = ''
+columnSynonym = ''
 
 def writeHeader():
     global fp
@@ -363,6 +365,7 @@ def initGFF():
 
 def setMGIColumns(r, dbx):
     global column1,column2,column3,column4,column5,column7,column9
+    global columnSynonym
 
     column1 = r['chromosome']
     column2 = 'MGI'
@@ -373,10 +376,11 @@ def setMGIColumns(r, dbx):
     column9 = idTag + r['markerid'] + ';'
     column9 += nameTag + r['symbol'] + ';'
     column9 += descTag + r['name'] + ';'
+    column9 += columnSynonym + ';'
     column9 += geneIdTag + r['markerid'] + ';'
 
     if r['provider'] == 'MGI':
-        column9 += dbxRefTag + r['markerid'] + ';'
+        column9 += dbxRefTag + mgiProvider + r['markerid'] + ';'
     else:
         #column9 += dbxRefTag + r['provider'] + ':' + r['providerId'] + ';'
         column9 += dbxRefTag + dbx
@@ -421,6 +425,7 @@ def writeParentRow():
 
 def processAll():
     global column1,column2,column3,column4,column5,column6,column7,column8,column9
+    global columnSynonym
 
     synonyms = {}
     sresults = db.sql('''
@@ -454,6 +459,7 @@ def processAll():
         if key not in synonyms:
             synonyms[key] = []
         synonyms[key].append(value)
+    #print(str(len(synonyms)))
 
     results = db.sql('''select * from markers ''', 'auto')
 
@@ -469,6 +475,17 @@ def processAll():
 
         if r['strand'] == None:
             r['strand'] = ''
+
+        # Synonym=synonym1[Ref_ID:1, Ref_ID:2,etc,],
+        columnSynonym = ''
+        if key in synonyms:
+            prepSynonym = synonymTag
+            for s in synonyms[key]:
+                prepSynonym += ',' + s['synonym']
+                if s['refid'] != None:
+                    prepSynonym += '[Ref_ID:' + s['refid'] + ']'
+            prepSynonym = prepSynonym.replace("=,","=")
+            columnSynonym += prepSynonym
 
         # parent row
 
@@ -569,24 +586,12 @@ def processAll():
         else:
             # mgi row
             setMGIColumns(r, r['provider'] + ':' + r['markerID'] + ';')
-
-            # Synonym=synonym1[Ref_ID:1, Ref_ID:2,etc,],
-            columnSynonym = ''
-            if key in synonyms:
-                prepSynonym = ';' + synonymTag
-                for s in synonyms[key]:
-                    prepSynonym += ',' + s['synonym']
-                    if s['refid'] != None:
-                        prepSynonym += '[Ref_ID:' + s['refid'] + ']'
-                prepSynonym = prepSynonym.replace("=,","=")
-                columnSynonym += prepSynonym
-            column9 += columnSynonym
             writeMGIRow()
 
             column9 = idTag + r['markerid'] + '_1;'
             column9 += parentTag + r['markerid'] + ';'
             column9 += geneIdTag + r['markerid'] + ';'
-            column9 += dbxRefTag + r['markerid']
+            column9 += dbxRefTag + mgiProvider + r['markerid']
             writeParentRow()
 
 #
