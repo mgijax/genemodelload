@@ -14,7 +14,7 @@
 #
 #  Env Vars:
 #
-#	GM_FILE_DEFAULT
+#      	BIOTYPE_FILE_DEFAULT
 #	SEQGENEMODELLOAD_LOGFILE
 #	BCP_FILE_PATH
 #	PROVIDER_LOGICALDB
@@ -23,7 +23,7 @@
 #	MGD_DBSERVER
 #	MGD_DBUSER
 #
-#  Inputs: ${GM_FILE_DEFAULT}
+#  Inputs: ${BIOTYPE_FILE_DEFAULT}
 #
 #  Outputs:
 #       - SEQ_GeneModel bcp file
@@ -80,6 +80,10 @@ elif [ "`echo $1 | grep -i '^ncbi$'`" != "" ]
 then
     PROVIDER=ncbi
     CONFIG=genemodel_ncbi.config
+elif [ "`echo $1 | grep -i '^ensemblreg$'`" != "" ]
+then
+    PROVIDER=ensemblreg
+    CONFIG=genemodel_ensemblreg.config
 elif [ "`echo $1 | grep -i '^vistareg$'`" != "" ]
 then
     PROVIDER=vistareg
@@ -122,15 +126,15 @@ date >> ${LOG}
 #
 # Make sure the input file exists
 #
-if [ ! -f ${GM_FILE_DEFAULT} ]
+if [ ! -f ${BIOTYPE_FILE_DEFAULT} ]
 then
-    echo "Input file does not exist: ${GM_FILE_DEFAULT}" | tee -a ${LOG}
+    echo "Input file does not exist: ${BIOTYPE_FILE_DEFAULT}" | tee -a ${LOG}
     exit 1
 fi
 
 echo "Creating bcp file" | tee -a  ${LOG}
-echo ${GM_FILE_DEFAULT}, ${PROVIDER}, ${CONFIG} | tee -a ${LOG}
-${PYTHON} ./seqgenemodelload-old.py ${GM_FILE_DEFAULT} >> ${LOG} 2>&1
+echo ${BIOTYPE_FILE_DEFAULT}, ${PROVIDER}, ${CONFIG} | tee -a ${LOG}
+gunzip -c ${BIOTYPE_FILE_DEFAULT} | ${PYTHON} ./seqgenemodelload.py ${PROVIDER} >> ${LOG} 2>&1
 STAT=$?
 if [ $STAT -ne 0 ]
 then
