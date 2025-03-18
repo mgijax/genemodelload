@@ -220,7 +220,7 @@ def init():
             'intronic regulatory region,',
             'insulatorresponse', 
             'insulator binding site',	
-            'locus control region'
+            'locus control region',
             'matrix attachment site',	
             'open chromatin region',
             'origin of replication',
