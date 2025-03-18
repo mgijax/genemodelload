@@ -134,7 +134,7 @@ fi
 
 echo "Creating bcp file" | tee -a  ${LOG}
 echo ${BIOTYPE_FILE_DEFAULT}, ${PROVIDER}, ${CONFIG} | tee -a ${LOG}
-gunzip -c ${BIOTYPE_FILE_DEFAULT} | ${PYTHON} ./seqgenemodelload.py ${PROVIDER} >> ${LOG} 2>&1
+gunzip -c ${BIOTYPE_FILE_DEFAULT} | ${PYTHON} ./seqgenemodelload-old.py ${PROVIDER} >> ${LOG} 2>&1
 STAT=$?
 if [ $STAT -ne 0 ]
 then
