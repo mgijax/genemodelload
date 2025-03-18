@@ -215,12 +215,12 @@ def init():
             'CTCF binding site',	
             'enhancer',	
             'histone modification',	
-            'imprinting control', 
+            'imprinting control region,',
             'insulator',
-            'intronic regulatory region',
+            'intronic regulatory region,',
             'insulatorresponse', 
             'insulator binding site',	
-            'locus control region',	
+            'locus control region'
             'matrix attachment site',	
             'open chromatin region',
             'origin of replication',
@@ -230,10 +230,7 @@ def init():
             'silencer',
             'splice enhancer',
             'transcriptional cis regulatory region',
-            'transcription factor binding site',
-            'intronic regulatory region,',
-            'imprinting control region,',
-            'locus control region'
+            'transcription factor binding site'
             )
         --and a.accid in ('MGI:6889016')
         order by c.chromosome, c.startcoordinate
