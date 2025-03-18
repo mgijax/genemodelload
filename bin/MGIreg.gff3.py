@@ -215,7 +215,7 @@ def init():
             'CTCF binding site',	
             'enhancer',	
             'histone modification',	
-            'imprinting control region,',
+            'imprinting control region',
             'insulator',
             'intronic regulatory region,',
             'insulatorresponse', 
