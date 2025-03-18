@@ -217,7 +217,7 @@ def init():
             'histone modification',	
             'imprinting control region',
             'insulator',
-            'intronic regulatory region,',
+            'intronic regulatory region',,
             'insulatorresponse', 
             'insulator binding site',	
             'locus control region',
