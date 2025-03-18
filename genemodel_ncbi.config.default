@@ -14,11 +14,24 @@ TRDIR=/mgi/all/wts2_projects/1400/WTS2-1435/NCBI
 export TRDIR
 
 #
+# used by other wrappers in bin directory :
+#  copydownloads.sh, copyinputs.sh, runTest.sh
+#
+BIOTYPE_FILE_NAME=gene_info.gz
+export BIOTYPE_FILE_NAME
+
+#
 # Reload the gene models (true/false)?  If false, only the associations
 # will be deleted/reloaded.
 #
 RELOAD_GENEMODELS=false
 export RELOAD_GENEMODELS
+
+# Full path to the default biotype file
+# Used to create gene model ID to biotype mapping for createSeqGeneTrapInput.py
+#
+BIOTYPE_FILE_DEFAULT=${INPUTDIR}/ncbi_biotypes.gz
+export BIOTYPE_FILE_DEFAULT
 
 #
 # Gene model provider name.
