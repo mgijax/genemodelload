@@ -10,7 +10,7 @@
 #
 # test TR directory
 #
-TRDIR=/mgi/all/wts2_projects/1500/WTS2-1591/ENSEMBL
+TRDIR=/mgi/all/wts2_projects/1600/WTS2-1670/ENSEMBL
 export TRDIR
 
 #
@@ -26,7 +26,7 @@ export TRANSCRIPT_FILE_NAME NCRNA_FILE_NAME PROTEIN_FILE_NAME
 # Reload the gene models (true/false)?  If false, only the associations
 # will be deleted/reloaded.
 #
-RELOAD_GENEMODELS=false
+RELOAD_GENEMODELS=true
 export RELOAD_GENEMODELS
 
 # Full path to the default transcript file 
