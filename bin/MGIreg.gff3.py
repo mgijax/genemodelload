@@ -24,6 +24,7 @@
 #   Dbxref=
 #   Synonym=
 #   Parent=
+# colunn10 = Regulates_expression_of
 #
 # each provider requires:
 #   . "MGI" master row : writeMGIRow()
@@ -72,6 +73,9 @@ date = mgi_utils.date('%m/%d/%Y %H:%M:%S') #("%Y-%m-%d")
 # mapping of MCV ID to SO ID and Term
 mcvToSOLookup = {}
 
+# mapping marker organizer -> relationship partipant
+markerRelationshipLookup = {}
+
 ensemblMGI = {}
 ncbiMGI = {}
 vistaMGI = {}
@@ -88,6 +92,7 @@ soTag = 'so_term_name='
 dbxRefTag = 'Dbxref='
 synonymTag = 'Synonym='
 parentTag = 'Parent='
+regulatesTag = 'Regulates_expression_of='
 
 dbxRefEnsembl = 'Dbxref=ENSEMBL:'
 dbxRefNCBI = 'Dbxref=GeneID:'
@@ -107,6 +112,7 @@ column6 = '.'
 column7 = ''
 column8 = '.'
 column9 = ''
+column10 = ''
 columnSynonym = ''
 
 def writeHeader():
@@ -156,7 +162,7 @@ def writeHeader():
 ''' % (date, mAssembly, ensemblFile, ensembl, ensemblTimeStamp, vistaFile, vista, vistaTimeStamp, ncbiFile, ncbi, ncbiTimeStamp))
 
 def init():
-    global mcvToSOLookup
+    global mcvToSOLookup, markerRelationshipLookup
     global ensemblMGI, ncbiMGI, vistaMGI
     
     #
@@ -287,6 +293,25 @@ def init():
             vistaMGI[key] = []
         vistaMGI[key].append(value)
 
+    # Marker -> Marker Relationships._category_key = 1013 | regulates_expression
+    markerRelationshipLookup = {}
+    results = db.sql('''
+        select m._marker_key, r._object_key_2, p.symbol, c.pubmedid
+        from markers m, mgi_relationship r, mrk_marker p, bib_citation_cache c
+        where m._marker_key = r._object_key_1
+        and r._category_key = 1013
+        and r._object_key_2 = p._marker_key
+        and r._refs_key = c._refs_key
+        and c.pubmedid is not null
+        order by m._marker_key, p.symbol
+        ''', 'auto')
+    for r in results:
+        key = r['_marker_key']
+        value = r['symbol'] + '[Ref_ID:PMID:' + r['pubmedid'] + ']'
+        if key not in markerRelationshipLookup:
+            markerRelationshipLookup[key] = []
+        markerRelationshipLookup[key].append(value)
+    
 def initGFF():
     global ensemblInfo
     global ncbiInfo
@@ -365,7 +390,7 @@ def initGFF():
     #print(vistaInfo)
 
 def setMGIColumns(r, dbx):
-    global column1,column2,column3,column4,column5,column7,column9
+    global column1,column2,column3,column4,column5,column7,column9,column10
     global columnSynonym
 
     column1 = r['chromosome']
@@ -389,6 +414,10 @@ def setMGIColumns(r, dbx):
     column9 += soTag + r['soTermName'] + ';'
     column9 += columnSynonym
 
+    key = r['_marker_key']
+    if key in markerRelationshipLookup:
+        column10 = regulatesTag + ",".join(markerRelationshipLookup[key])
+
 def setParentColumns(provider,r,n,counter):
     global column2,column3,column4,column5,column7,column9
 
@@ -411,7 +440,8 @@ def writeMGIRow():
     fp.write(column6 + TAB)
     fp.write(column7 + TAB)
     fp.write(column8 + TAB)
-    fp.write(column9 + CRT)
+    fp.write(column9 + TAB)
+    fp.write(column10 + CRT)
 
 def writeParentRow():
     fp.write(column1 + TAB)
@@ -422,10 +452,11 @@ def writeParentRow():
     fp.write(column6 + TAB)
     fp.write(column7 + TAB)
     fp.write(column8 + TAB)
-    fp.write(column9 + CRT)
+    fp.write(column9 + TAB)
+    fp.write(CRT)
 
 def processAll():
-    global column1,column2,column3,column4,column5,column6,column7,column8,column9
+    global column1,column2,column3,column4,column5,column6,column7,column8,column9,column10
     global columnSynonym
 
     synonyms = {}
