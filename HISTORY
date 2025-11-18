@@ -6,7 +6,6 @@ TAG: genemodelload-6-0-26-1
 DATE: 11/18/2025
 STAFF: lec
 wts2-1754/sprt-127/Add Regulates Expression relationship data to the MGIreg.gff3 file
-wts2-1756/sprt-128/Add Regulated By relationship data to the MGI.gff3 file
         modified:   HISTORY
         modified:   bin/MGIreg.gff3.py
 

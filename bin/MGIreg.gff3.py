@@ -74,7 +74,7 @@ date = mgi_utils.date('%m/%d/%Y %H:%M:%S') #("%Y-%m-%d")
 mcvToSOLookup = {}
 
 # mapping marker organizer -> relationship partipant
-markerRelationshipLookup = {}
+regulatesOfLookup = {}
 
 ensemblMGI = {}
 ncbiMGI = {}
@@ -92,7 +92,7 @@ soTag = 'so_term_name='
 dbxRefTag = 'Dbxref='
 synonymTag = 'Synonym='
 parentTag = 'Parent='
-regulatesTag = 'Regulates_expression_of='
+regulatesOfTag = 'Regulates_expression_of='
 
 dbxRefEnsembl = 'Dbxref=ENSEMBL:'
 dbxRefNCBI = 'Dbxref=GeneID:'
@@ -162,7 +162,7 @@ def writeHeader():
 ''' % (date, mAssembly, ensemblFile, ensembl, ensemblTimeStamp, vistaFile, vista, vistaTimeStamp, ncbiFile, ncbi, ncbiTimeStamp))
 
 def init():
-    global mcvToSOLookup, markerRelationshipLookup
+    global mcvToSOLookup, regulatesOfLookup
     global ensemblMGI, ncbiMGI, vistaMGI
     
     #
@@ -293,8 +293,8 @@ def init():
             vistaMGI[key] = []
         vistaMGI[key].append(value)
 
-    # Marker -> Marker Relationships._category_key = 1013 | regulates_expression
-    markerRelationshipLookup = {}
+    # Marker Regulates Of -> Marker Relationships._category_key = 1013 | regulates_expression
+    regulatesOfLookup = {}
     results = db.sql('''
         select m._marker_key, r._object_key_2, p.symbol, c.pubmedid
         from markers m, mgi_relationship r, mrk_marker p, bib_citation_cache c
@@ -308,9 +308,9 @@ def init():
     for r in results:
         key = r['_marker_key']
         value = r['symbol'] + '[Ref_ID:PMID:' + r['pubmedid'] + ']'
-        if key not in markerRelationshipLookup:
-            markerRelationshipLookup[key] = []
-        markerRelationshipLookup[key].append(value)
+        if key not in regulatesOfLookup:
+            regulatesOfLookup[key] = []
+        regulatesOfLookup[key].append(value)
     
 def initGFF():
     global ensemblInfo
@@ -415,8 +415,8 @@ def setMGIColumns(r, dbx):
     column9 += columnSynonym
 
     key = r['_marker_key']
-    if key in markerRelationshipLookup:
-        column10 = regulatesTag + ",".join(markerRelationshipLookup[key])
+    if key in regulatesOfLookup:
+        column10 = regulatesOfTag + ",".join(regulatesOfLookup[key])
 
 def setParentColumns(provider,r,n,counter):
     global column2,column3,column4,column5,column7,column9
