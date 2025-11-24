@@ -24,7 +24,7 @@
 #   Dbxref=
 #   Synonym=
 #   Parent=
-# colunn10 = Regulates_expression_of
+#   Regulates_expression_of=
 #
 # each provider requires:
 #   . "MGI" master row : writeMGIRow()
@@ -112,7 +112,6 @@ column6 = '.'
 column7 = ''
 column8 = '.'
 column9 = ''
-column10 = ''
 columnSynonym = ''
 
 def writeHeader():
@@ -296,18 +295,22 @@ def init():
     # Marker Regulates Of -> Marker Relationships._category_key = 1013 | regulates_expression
     regulatesOfLookup = {}
     results = db.sql('''
-        select m._marker_key, r._object_key_2, p.symbol, c.pubmedid
+        select distinct m._marker_key, r._object_key_2, p.symbol, c.pubmedid, c.mgiid
         from markers m, mgi_relationship r, mrk_marker p, bib_citation_cache c
         where m._marker_key = r._object_key_1
         and r._category_key = 1013
         and r._object_key_2 = p._marker_key
         and r._refs_key = c._refs_key
-        and c.pubmedid is not null
         order by m._marker_key, p.symbol
         ''', 'auto')
     for r in results:
         key = r['_marker_key']
-        value = r['symbol'] + '[Ref_ID:PMID:' + r['pubmedid'] + ']'
+        if r['pubmedid'] == None:
+            id = r['mgiid']
+        else:
+            id = 'PMID:' + r['pubmedid']
+
+        value = r['symbol'] + '[Ref_ID:' + id + ']'
         if key not in regulatesOfLookup:
             regulatesOfLookup[key] = []
         regulatesOfLookup[key].append(value)
@@ -390,7 +393,7 @@ def initGFF():
     #print(vistaInfo)
 
 def setMGIColumns(r, dbx):
-    global column1,column2,column3,column4,column5,column7,column9,column10
+    global column1,column2,column3,column4,column5,column7,column9
     global columnSynonym
 
     column1 = r['chromosome']
@@ -416,7 +419,7 @@ def setMGIColumns(r, dbx):
 
     key = r['_marker_key']
     if key in regulatesOfLookup:
-        column10 = regulatesOfTag + ",".join(regulatesOfLookup[key])
+        column9 += ';' + regulatesOfTag + ",".join(regulatesOfLookup[key])
 
 def setParentColumns(provider,r,n,counter):
     global column2,column3,column4,column5,column7,column9
@@ -440,8 +443,7 @@ def writeMGIRow():
     fp.write(column6 + TAB)
     fp.write(column7 + TAB)
     fp.write(column8 + TAB)
-    fp.write(column9 + TAB)
-    fp.write(column10 + CRT)
+    fp.write(column9 + CRT)
 
 def writeParentRow():
     fp.write(column1 + TAB)
@@ -456,7 +458,7 @@ def writeParentRow():
     fp.write(CRT)
 
 def processAll():
-    global column1,column2,column3,column4,column5,column6,column7,column8,column9,column10
+    global column1,column2,column3,column4,column5,column6,column7,column8,column9
     global columnSynonym
 
     synonyms = {}
@@ -487,7 +489,10 @@ def processAll():
         ''', 'auto')
     for r in sresults:
         key = r['_marker_key']
-        value = r
+        if r['refid'] != None:
+            value = r['synonym'] + '[Ref_ID:' + r['refid'] + ']'
+        else:
+            value = r['synonym']
         if key not in synonyms:
             synonyms[key] = []
         synonyms[key].append(value)
@@ -511,13 +516,7 @@ def processAll():
         # Synonym=synonym1[Ref_ID:1, Ref_ID:2,etc,],
         columnSynonym = ''
         if key in synonyms:
-            prepSynonym = synonymTag
-            for s in synonyms[key]:
-                prepSynonym += ',' + s['synonym']
-                if s['refid'] != None:
-                    prepSynonym += '[Ref_ID:' + s['refid'] + ']'
-            prepSynonym = prepSynonym.replace("=,","=")
-            columnSynonym += prepSynonym
+            columnSynonym = synonymTag + ",".join(synonyms[key])
 
         # parent row
 
