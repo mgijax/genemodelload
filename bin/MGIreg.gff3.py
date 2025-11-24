@@ -113,6 +113,7 @@ column7 = ''
 column8 = '.'
 column9 = ''
 columnSynonym = ''
+columnRegulates = ''
 
 def writeHeader():
     global fp
@@ -309,7 +310,6 @@ def init():
             id = r['mgiid']
         else:
             id = 'PMID:' + r['pubmedid']
-
         value = r['symbol'] + '[Ref_ID:' + id + ']'
         if key not in regulatesOfLookup:
             regulatesOfLookup[key] = []
@@ -394,7 +394,7 @@ def initGFF():
 
 def setMGIColumns(r, dbx):
     global column1,column2,column3,column4,column5,column7,column9
-    global columnSynonym
+    global columnSynonym, columnRegulates
 
     column1 = r['chromosome']
     column2 = 'MGI'
@@ -416,10 +416,7 @@ def setMGIColumns(r, dbx):
     column9 += mgiTypeTag + r['featureType'] + ';'
     column9 += soTag + r['soTermName'] + ';'
     column9 += columnSynonym
-
-    key = r['_marker_key']
-    if key in regulatesOfLookup:
-        column9 += ';' + regulatesOfTag + ",".join(regulatesOfLookup[key])
+    column9 += columnRegulates
 
 def setParentColumns(provider,r,n,counter):
     global column2,column3,column4,column5,column7,column9
@@ -459,9 +456,9 @@ def writeParentRow():
 
 def processAll():
     global column1,column2,column3,column4,column5,column6,column7,column8,column9
-    global columnSynonym
+    global columnSynonym, columnRegulates
 
-    synonyms = {}
+    synonymLookup = {}
     sresults = db.sql('''
         (
         select s._object_key as _marker_key, s.synonym, null as refid
@@ -493,10 +490,10 @@ def processAll():
             value = r['synonym'] + '[Ref_ID:' + r['refid'] + ']'
         else:
             value = r['synonym']
-        if key not in synonyms:
-            synonyms[key] = []
-        synonyms[key].append(value)
-    #print(str(len(synonyms)))
+        if key not in synonymLookup:
+            synonymLookup[key] = []
+        synonymLookup[key].append(value)
+    #print(str(len(synonymLookup)))
 
     results = db.sql('''select * from markers ''', 'auto')
 
@@ -515,8 +512,13 @@ def processAll():
 
         # Synonym=synonym1[Ref_ID:1, Ref_ID:2,etc,],
         columnSynonym = ''
-        if key in synonyms:
-            columnSynonym = synonymTag + ",".join(synonyms[key])
+        if key in synonymLookup:
+            columnSynonym = ';' + synonymTag + ",".join(synonymLookup[key])
+
+        # Regulates_expression_of=Tgfbr2[Ref_ID:PMID:25190800],etc.
+        columnRegulates = ''
+        if key in regulatesOfLookup:
+            columnRegulates = ';' + regulatesOfTag + ",".join(regulatesOfLookup[key])
 
         # parent row
 
