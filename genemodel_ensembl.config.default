@@ -10,7 +10,7 @@
 #
 # test TR directory
 #
-TRDIR=/mgi/all/wts2_projects/1600/WTS2-1670/ENSEMBL
+TRDIR=/mgi/all/wts2_projects/1700/WTS2-1787/ENSEMBL
 export TRDIR
 
 #
