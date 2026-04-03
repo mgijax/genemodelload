@@ -10,14 +10,14 @@
 #
 # test TR directory
 #
-TRDIR=/mgi/all/wts2_projects/1500/WTS2-1543/VISTA
+TRDIR=/mgi/all/wts2_projects/1800/WTS2-1834/VISTA
 export TRDIR
 
 #
 # Reload the gene models (true/false)?  If false, only the associations
 # will be deleted/reloaded.
 #
-RELOAD_GENEMODELS=false
+RELOAD_GENEMODELS=true
 export RELOAD_GENEMODELS
 
 # Gene model provider name.
