@@ -17,7 +17,7 @@ export TRDIR
 # Reload the gene models (true/false)?  If false, only the associations
 # will be deleted/reloaded.
 #
-RELOAD_GENEMODELS=true
+RELOAD_GENEMODELS=false
 export RELOAD_GENEMODELS
 
 # Gene model provider name.
