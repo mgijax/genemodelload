@@ -14,10 +14,10 @@ export MOUSE_ASSEMBLY
 DISTRIBDIR=${FTPROOT}/pub/mgigff3
 export DISTRIBDIR
 
-ENSEMBL_FILE=mus_musculus.GRCm39.Regulatory_Build.regulatory_features.20240230.gff
-ENSEMBL_FTP="ftp.ensembl.org/pub/current_regulation/mus_musculus/mus_musculus.GRCm39.Regulatory_Build.regulatory_features.20240230.gff.gz"
+ENSEMBL_FILE=Mus_musculus.GRCm39.regulatory_features.v116.gff3
+ENSEMBL_FTP="ftp.ensembl.org/pub/current/regulation/mus_musculus/GRCm39/annotation/Mus_musculus.GRCm39.regulatory_features.v116.gff3.gz
 ENSEMBL_GFF_URL=http:${ENSEMBL_FTP}
-ENSEMBL_GFF=${DATADOWNLOADS}/ftp.ensembl.org/pub/current_regulation/mus_musculus/mus_musculus.GRCm39.Regulatory_Build.regulatory_features.20240230.gff.gz
+ENSEMBL_GFF=${DATADOWNLOADS}/ftp.ensembl.org/pub/current/regulation/mus_musculus/GRCm39/annotation/Mus_musculus.GRCm39.regulatory_features.v116.gff3.gz
 ENSEMBL_GFF_DEFAULT=${INPUTDIR}/ensemblreg.gff
 export ENSEMBL_FILE ENSEMBL_FTP ENSEMBL_GFF_URL ENSEMBL_GFF ENSEMBL_GFF_DEFAULT
 
