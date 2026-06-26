@@ -15,7 +15,7 @@ DISTRIBDIR=${FTPROOT}/pub/mgigff3
 export DISTRIBDIR
 
 ENSEMBL_FILE=Mus_musculus.GRCm39.regulatory_features.v116.gff3
-ENSEMBL_FTP="ftp.ensembl.org/pub/current/regulation/mus_musculus/GRCm39/annotation/Mus_musculus.GRCm39.regulatory_features.v116.gff3.gz
+ENSEMBL_FTP="ftp.ensembl.org/pub/current/regulation/mus_musculus/GRCm39/annotation/Mus_musculus.GRCm39.regulatory_features.v116.gff3.gz"
 ENSEMBL_GFF_URL=http:${ENSEMBL_FTP}
 ENSEMBL_GFF=${DATADOWNLOADS}/ftp.ensembl.org/pub/current/regulation/mus_musculus/GRCm39/annotation/Mus_musculus.GRCm39.regulatory_features.v116.gff3.gz
 ENSEMBL_GFF_DEFAULT=${INPUTDIR}/ensemblreg.gff
