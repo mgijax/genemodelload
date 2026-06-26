@@ -75,11 +75,11 @@ then
 rm -rf /data/downloads/ftp.ensembl.org/pub/current_fasta/mus_musculus/cdna/${TRANSCRIPT_FILE_NAME}
 rm -rf /data/downloads/ftp.ensembl.org/pub/current_fasta/mus_musculus/pep/${PROTEIN_FILE_NAME}
 rm -rf /data/downloads/ftp.ensembl.org/pub/current_fasta/mus_musculus/ncrna/${NCRNA_FILE_NAME}
-scp bhmgiapp01:/data/downloads/ftp.ensembl.org/pub/current_regulation/mus_musculus/mus_musculus.GRCm39.Regulatory_Build.regulatory_features.20240230.gff.gz /data/downloads/ftp.ensembl.org/pub/current_regulation/mus_musculus/
+scp bhmgiapp01:/data/downloads/ftp.ensembl.org/pub/current/regulation/mus_musculus/GRCm39/annotation/Mus_musculus.GRCm39.regulatory_features.v116.gff3.gz /data/downloads/ftp.ensembl.org/pub/current/regulation/mus_musculus/GRCm39/annotation
 scp bhmgiapp01:/data/downloads/ftp.ensembl.org/pub/current_fasta/mus_musculus/cdna/${TRANSCRIPT_FILE_NAME} /data/downloads/ftp.ensembl.org/pub/current_fasta/mus_musculus/cdna
 scp bhmgiapp01:/data/downloads/ftp.ensembl.org/pub/current_fasta/mus_musculus/pep/${PROTEIN_FILE_NAME} /data/downloads/ftp.ensembl.org/pub/current_fasta/mus_musculus/pep
 scp bhmgiapp01:/data/downloads/ftp.ensembl.org/pub/current_fasta/mus_musculus/ncrna/${NCRNA_FILE_NAME} /data/downloads/ftp.ensembl.org/pub/current_fasta/mus_musculus/ncrna
-ls -l /data/downloads/ftp.ensembl.org/pub/current_regulation/mus_musculus/mus_musculus.GRCm39.Regulatory_Build.regulatory_features.20240230.gff.gz
+ls -l /data/downloads/ftp.ensembl.org/pub/current/regulation/mus_musculus/GRCm39/annotation/Mus_musculus.GRCm39.regulatory_features.v116.gff3.gz
 ls -l /data/downloads/ftp.ensembl.org/pub/current_fasta/mus_musculus/cdna/${TRANSCRIPT_FILE_NAME}
 ls -l /data/downloads/ftp.ensembl.org/pub/current_fasta/mus_musculus/pep/${PROTEIN_FILE_NAME}
 ls -l /data/downloads/ftp.ensembl.org/pub/current_fasta/mus_musculus/ncrna/${NCRNA_FILE_NAME}
@@ -123,13 +123,6 @@ else
     echo "variable GM_PROVIDER has not been set"
     exit 1
 fi
-
-rm -rf ${DATADOWNLOADS}/ftp.ensembl.org/pub/current_regulation/mus_musculus/mus_musculus.GRCm39.Regulatory_Build.regulatory_features.20240230.gff.gz
-rm -rf ${DATADOWNLOADS}/ftp.ncbi.nih.gov/genomes/refseq/vertebrate_mammalian/Mus_musculus/annotation_releases/GCF_000001635.27-RS_2024_02/GCF_000001635.27_GRCm39_genomic.gff.gz
-scp bhmgiapp01:${DATADOWNLOADS}/ftp.ensembl.org/pub/current_regulation/mus_musculus/mus_musculus.GRCm39.Regulatory_Build.regulatory_features.20240230.gff.gz ${DATADOWNLOADS}/ftp.ensembl.org/pub/current_regulation/mus_musculus/
-scp bhmgiapp01:${DATADOWNLOADS}/ftp.ncbi.nih.gov/genomes/refseq/vertebrate_mammalian/Mus_musculus/annotation_releases/GCF_000001635.27-RS_2024_02/GCF_000001635.27_GRCm39_genomic.gff.gz ${DATADOWNLOADS}/ftp.ncbi.nih.gov/genomes/refseq/vertebrate_mammalian/Mus_musculus/annotation_releases/GCF_000001635.27-RS_2024_02
-ls -l ${DATADOWNLOADS}/ftp.ensembl.org/pub/current_regulation/mus_musculus/mus_musculus.GRCm39.Regulatory_Build.regulatory_features.20240230.gff.gz
-ls -l ${DATADOWNLOADS}/ftp.ncbi.nih.gov/genomes/refseq/vertebrate_mammalian/Mus_musculus/annotation_releases/GCF_000001635.27-RS_2024_02/GCF_000001635.27_GRCm39_genomic.gff.gz
 
 #touch ${LASTDOWNLOAD_FILE}
 
