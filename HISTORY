@@ -2,6 +2,14 @@
 03/17/2025: see http://bhmgiwk01lp.jax.org/mediawiki/index.php?title=sw:Genemodelload#New_Assembly_Sequence_Load_Input_File_(column_7)
 **********************************
 
+TAG: genemodelload-6-0-28-1
+DATE: 06/26/2026
+STAFF: lec
+ftp.ensembl.org/pub/current/regulation/mus_musculus/GRCm39/annotation/Mus_musculus.GRCm39.regulatory_features.*gff3.gz
+	modified:  mgireg.gff3.config.default
+	modified:  bin/copydownloads.sh
+	modified:  copyinputs.sh
+
 TAG: genemodelload-6-0-27-3
 TAG: genemodelload-6-0-27-2
 DATE: 04/03/2026
