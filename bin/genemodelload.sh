@@ -374,14 +374,17 @@ touch ${LASTRUN_FILE}
 if [ ${RELOAD_GENEMODELS} = "true" ]
 then
 # Remove snpcacheload/output/lastrun so that the snpcacheload will run from the Pipeline
+# Remove strainmarkerload/patched/lastrun so that the strainmarkerload/bin/patched will run from the Pipeline
 case `uname -n` in
 bhmgiapp01)
        echo "removing mgiadmin@bhmgidb03lp rm -rf /data/loads/mgi/snpcacheload/output/lastrun" | tee -a ${LOG}
        ssh mgiadmin@bhmgidb03lp 'rm -rf /data/loads/mgi/snpcacheload/output/lastrun'
+       rm -rf /data/loads/mgi/strainmarkerload/patched/lastrun
        ;;
 bhmgidevapp01)
        echo "removing mgiadmin@bhmgidb05ld rm -rf /data/loads/mgi/snpcacheload/output/lastrun" | tee -a ${LOG}
        ssh mgiadmin@bhmgidb05ld 'rm -rf /data/loads/mgi/snpcacheload/output/lastrun'
+       rm -rf /data/loads/mgi/strainmarkerload/patched/lastrun
        ;;
 *) ;;
 esac
